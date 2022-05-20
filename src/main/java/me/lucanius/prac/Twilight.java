@@ -1,7 +1,9 @@
 package me.lucanius.prac;
 
 import lombok.Getter;
-import me.lucanius.prac.profile.ProfileService;
+import me.lucanius.prac.service.loadout.LoadoutService;
+import me.lucanius.prac.service.profile.Profile;
+import me.lucanius.prac.service.profile.ProfileService;
 import me.lucanius.prac.storage.MongoServer;
 import me.lucanius.prac.storage.builder.MongoBuilder;
 import me.lucanius.prac.tools.CC;
@@ -32,6 +34,7 @@ public final class Twilight extends JavaPlugin {
     private MongoServer mongo;
     private CommandFramework framework;
     private ProfileService profiles;
+    private LoadoutService loadouts;
 
     private boolean disabling = false;
 
@@ -41,9 +44,9 @@ public final class Twilight extends JavaPlugin {
 
         long start = System.currentTimeMillis();
 
-        this.config = new ConfigFile(this, "config.yml");
+        config = new ConfigFile(this, "config.yml");
 
-        this.mongo = new MongoBuilder().host(config.getString("MONGO.HOST"))
+        mongo = new MongoBuilder().host(config.getString("MONGO.HOST"))
                 .port(config.getInt("MONGO.PORT"))
                 .database(config.getString("MONGO.DATABASE"))
                 .auth(config.getBoolean("MONGO.AUTH.ENABLED"))
@@ -51,10 +54,11 @@ public final class Twilight extends JavaPlugin {
                 .pass(config.getString("MONGO.AUTH.PASS"))
                 .authDb(config.getString("MONGO.AUTH.AUTH-DB"))
                 .build();
-        this.framework = new CommandFramework(this);
-        this.profiles = new ProfileService(this);
+        framework = new CommandFramework(this);
+        profiles = new ProfileService(this);
+        loadouts = new LoadoutService(this);
 
-        this.registration.init("me.lucanius.prac.listeners").init("me.lucanius.prac.commands");
+        registration.init("me.lucanius.prac.listeners").init("me.lucanius.prac.commands");
 
         Tools.log(CC.BAR);
         Tools.log(CC.MAIN + "Twilight&r &av" + getDescription().getVersion() + " &7~ &blucA#0999");
@@ -65,6 +69,11 @@ public final class Twilight extends JavaPlugin {
     @Override
     public void onDisable() {
         disabling = true;
+
+        profiles.getAll().forEach(Profile::save);
+        loadouts.save();
+
+        mongo.dispose();
     }
 
     public Collection<? extends Player> getOnline() {
