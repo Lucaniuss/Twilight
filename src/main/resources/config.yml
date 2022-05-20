@@ -1,0 +1,9 @@
+MONGO:
+  HOST: 127.0.0.1
+  PORT: 27017
+  DATABASE: "Twilight"
+  AUTH:
+    ENABLED: true
+    USER: " "
+    PASS: " "
+    AUTH-DB: "admin"
