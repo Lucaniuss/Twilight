@@ -1,7 +1,7 @@
 package me.lucanius.prac.listeners;
 
 import me.lucanius.prac.Twilight;
-import me.lucanius.prac.profile.Profile;
+import me.lucanius.prac.service.profile.Profile;
 import me.lucanius.prac.tools.CC;
 import me.lucanius.prac.tools.Scheduler;
 import me.lucanius.prac.tools.events.Events;
@@ -21,6 +21,7 @@ public class DataListener {
 
     public DataListener() {
         Events.subscribe(AsyncPlayerPreLoginEvent.class, event -> plugin.getProfiles().getOrCreate(event.getUniqueId()).load());
+
         Events.subscribe(PlayerJoinEvent.class, event -> {
             final Player player = event.getPlayer();
             final UUID uniqueId = player.getUniqueId();
