@@ -1,5 +1,5 @@
 name: Twilight
 version: 1.0
-main: me.lucanius.prac.Twilight
+main: me.lucanius.twilight.Twilight
 authors:
   - Lucanius
