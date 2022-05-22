@@ -16,8 +16,8 @@ public class TwilightCommand extends AbstractCommand {
     public void onCommand(CommandArgs cmd) {
         final CommandSender sender = cmd.getSender();
         sender.sendMessage(CC.BAR);
-        sender.sendMessage(CC.translate(CC.MAIN + "Twilight&r &av" + plugin.getDescription().getVersion() + " &7~ &blucA#0999"));
-        sender.sendMessage(CC.translate(CC.PREFIX + "https://github.com/Lucaniuss/Twilight"));
+        sender.sendMessage(CC.translate(CC.MAIN + CC.BOLD + "Twilight&r &av" + plugin.getDescription().getVersion() + " &7- &blucA#0999"));
+        sender.sendMessage(CC.translate(CC.ICON + CC.SECOND + "https://github.com/Lucaniuss/Twilight"));
         sender.sendMessage(CC.BAR);
     }
 }
