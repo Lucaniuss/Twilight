@@ -10,9 +10,7 @@ import me.lucanius.prac.tools.Scheduler;
 import me.lucanius.prac.tools.Tools;
 import org.bson.Document;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * @author Lucanius
@@ -24,22 +22,28 @@ public class Profile {
     private final static Twilight plugin = Twilight.getInstance();
     private final static UpdateOptions options = new UpdateOptions().upsert(true);
 
-    private final Map<String, PersonalLoadout[]> loadouts;
     private final UUID uniqueId;
+    private final String idToString;
+    private final List<PersonalLoadout[]> loadouts;
 
+    private ProfileState state;
+    private int pingRange;
     private boolean loaded;
 
     public Profile(UUID uniqueId) {
-        this.loadouts = new HashMap<>();
         this.uniqueId = uniqueId;
+        this.idToString = uniqueId.toString();
+        this.loadouts = new ArrayList<>();
 
+        this.state = ProfileState.LOBBY;
+        this.pingRange = -1;
         this.loaded = false;
 
-        plugin.getLoadouts().getAll().forEach(loadout -> loadouts.put(loadout.getName(), new PersonalLoadout[0]));
+        plugin.getLoadouts().getAll().forEach(loadout -> loadouts.add(new PersonalLoadout[3]));
     }
 
     public void load() {
-        Document document = plugin.getMongo().getProfiles().find(Filters.eq("uniqueId", uniqueId.toString())).first();
+        Document document = plugin.getMongo().getProfiles().find(Filters.eq("uniqueId", idToString)).first();
         if (document == null) {
             Scheduler.runAsync(this::save);
             loaded = true;
@@ -65,8 +69,8 @@ public class Profile {
             return;
         }
 
-        Document document = new Document();
+        Document document = new Document("uniqueId", idToString);
 
-        plugin.getMongo().getProfiles().replaceOne(Filters.eq("uniqueId", uniqueId.toString()), document, options);
+        plugin.getMongo().getProfiles().replaceOne(Filters.eq("uniqueId", idToString), document, options);
     }
 }

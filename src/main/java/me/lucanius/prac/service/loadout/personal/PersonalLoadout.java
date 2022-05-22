@@ -11,7 +11,7 @@ import org.bukkit.inventory.ItemStack;
 @Data @AllArgsConstructor
 public class PersonalLoadout {
 
-    private final int i;
+    private final int number;
 
     private String kitName;
     private ItemStack[] contents;
