@@ -5,6 +5,7 @@ import me.lucanius.prac.tools.config.ConfigFile;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -27,9 +28,9 @@ public class LoadoutService {
 
     public void load() {
         loadouts.clear();
-        config.getConfigurationSection("LOADOUTS").getKeys(false).forEach(key ->
-                loadouts.add(new Loadout(config, key))
-        );
+
+        Optional.ofNullable(config.getConfigurationSection("LOADOUTS")).ifPresent(section ->
+                section.getKeys(false).forEach(key -> loadouts.add(new Loadout(config, key))));
     }
 
     public void save() {
