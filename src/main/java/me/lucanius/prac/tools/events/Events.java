@@ -19,10 +19,11 @@ import java.util.Arrays;
 public final class Events {
 
     private final Twilight plugin = Twilight.getInstance();
+    private final EventsListener listener = new EventsListener();
 
     @SneakyThrows
     public <E extends Event> void subscribe(Class<E> clazz, EventsExecutor<E> handler, EventPriority priority, boolean ignoreCancelled) {
-        getHandlers(clazz).register(new RegisteredListener(plugin.getEventsListener(), handler, priority, plugin, ignoreCancelled));
+        getHandlers(clazz).register(new RegisteredListener(listener, handler, priority, plugin, ignoreCancelled));
     }
 
     public <E extends Event> void subscribe(Class<E> clazz, EventsExecutor<E> handler, boolean ignoreCancelled) {

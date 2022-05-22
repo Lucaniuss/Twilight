@@ -1,8 +1,11 @@
 package me.lucanius.prac.tools;
 
 import lombok.experimental.UtilityClass;
+import net.minecraft.server.v1_8_R3.EntityPlayer;
+import net.minecraft.server.v1_8_R3.Packet;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 /**
@@ -48,5 +51,17 @@ public final class Tools {
 
     public void log(String str) {
         Bukkit.getConsoleSender().sendMessage(CC.translate(CC.MAIN + "[Twilight] &f" + str));
+    }
+
+    public EntityPlayer getEntityPlayer(Player player) {
+        return ((CraftPlayer) player).getHandle();
+    }
+
+    public int getPing(Player player) {
+        return getEntityPlayer(player).ping;
+    }
+
+    public void sendPacket(Player player, Packet<?> packet) {
+        getEntityPlayer(player).playerConnection.sendPacket(packet);
     }
 }

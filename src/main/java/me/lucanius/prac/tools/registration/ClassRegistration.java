@@ -16,9 +16,7 @@ import java.util.jar.JarFile;
  * I don't know who the author is.
  * @edited Lucanius
  */
-public final class ClassRegistration {
-
-    private final Twilight plugin = Twilight.getInstance();
+public class ClassRegistration {
 
     public ClassRegistration init(String packageName) {
         for (Class<?> clazz : getClassesInPackage(packageName)) {
@@ -33,7 +31,7 @@ public final class ClassRegistration {
     @SneakyThrows
     public Collection<Class<?>> getClassesInPackage(String packageName) {
         final Collection<Class<?>> classes = new ArrayList<>();
-        final CodeSource codeSource = plugin.getClass().getProtectionDomain().getCodeSource();
+        final CodeSource codeSource = Twilight.class.getProtectionDomain().getCodeSource();
         final URL resource = codeSource.getLocation();
 
         final String relPath = packageName.replace(".", "/");
@@ -50,16 +48,9 @@ public final class ClassRegistration {
             if (entryName.endsWith(".class") && entryName.startsWith(relPath) && entryName.length() > relPath.length() + "/".length()) {
                 className = entryName.replace("/", ".").replace("\\", ".").replace(".class", "");
             }
+
             if (className != null) {
-                Class<?> clazz = null;
-                try {
-                    clazz = Class.forName(className);
-                } catch (final ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
-                if (clazz != null) {
-                    classes.add(clazz);
-                }
+                classes.add(Class.forName(className));
             }
         }
 

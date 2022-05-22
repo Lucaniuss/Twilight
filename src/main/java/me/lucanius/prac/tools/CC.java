@@ -38,11 +38,11 @@ public final class CC {
     public final String RESET = ChatColor.RESET.toString();
     public final String MAGIC = ChatColor.MAGIC.toString();
 
-    public final String BAR = GRAY + ITALIC + "------------------------------------------------";
-    public final String SMALL_BAR = GRAY + ITALIC + "------------------------";
+    public final String BAR = GRAY + STRIKE_THROUGH + "------------------------------------------------";
+    public final String SMALL_BAR = GRAY + STRIKE_THROUGH + "------------------";
     public final String MAIN = DARK_GREEN;
-    public final String SECOND = YELLOW;
-    public final String PREFIX = GRAY + BOLD + " ◈ ";
+    public final String SECOND = GREEN;
+    public final String ICON = GRAY + BOLD + " ◈ ";
 
     public String translate(String string) {
         return ChatColor.translateAlternateColorCodes('&', string);
