@@ -5,10 +5,8 @@ import me.lucanius.twilight.service.queue.abstr.AbstractQueue;
 import me.lucanius.twilight.service.queue.abstr.AbstractQueueData;
 import me.lucanius.twilight.service.queue.callback.QueueCallback;
 import me.lucanius.twilight.service.queue.data.DuoQueueData;
-import me.lucanius.twilight.tools.Tools;
 import org.bukkit.entity.Player;
 
-import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -19,15 +17,9 @@ public class DuoQueue extends AbstractQueue<Set<Player>> {
 
     @Override
     public void enqueue(Set<Player> element, Loadout loadout) {
-        Optional<Player> leader = element.stream().findFirst();
-        boolean isPresent = leader.isPresent();
-
         DuoQueueData data = new DuoQueueData(
                 element,
-                loadout,
-                this,
-                isPresent ? Tools.getPing(leader.get()) : 0,
-                isPresent ? plugin.getProfiles().get(leader.get().getUniqueId()).getPingRange() : -1
+                loadout
         );
 
         // TODO: Send messages

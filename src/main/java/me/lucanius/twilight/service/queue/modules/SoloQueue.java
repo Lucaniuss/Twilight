@@ -19,7 +19,6 @@ public class SoloQueue extends AbstractQueue<Player> {
         SoloQueueData data = new SoloQueueData(
                 element,
                 loadout,
-                this,
                 Tools.getPing(element),
                 plugin.getProfiles().get(element.getUniqueId()).getPingRange()
         );

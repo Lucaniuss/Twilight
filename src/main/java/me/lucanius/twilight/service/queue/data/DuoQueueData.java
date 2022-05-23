@@ -2,7 +2,6 @@ package me.lucanius.twilight.service.queue.data;
 
 import me.lucanius.twilight.service.loadout.Loadout;
 import me.lucanius.twilight.service.queue.abstr.AbstractQueueData;
-import me.lucanius.twilight.service.queue.modules.DuoQueue;
 import me.lucanius.twilight.tools.CC;
 import org.bukkit.entity.Player;
 
@@ -14,8 +13,8 @@ import java.util.Set;
  */
 public class DuoQueueData extends AbstractQueueData<Set<Player>> {
 
-    public DuoQueueData(Set<Player> element, Loadout loadout, DuoQueue queue, int playerPing, int pingRange) {
-        super(element, loadout, queue, playerPing, pingRange);
+    public DuoQueueData(Set<Player> element, Loadout loadout) {
+        super(element, loadout, plugin.getQueues().getDuoQueue(), 0, -1);
     }
 
     @Override

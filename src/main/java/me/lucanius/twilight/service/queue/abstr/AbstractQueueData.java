@@ -2,6 +2,7 @@ package me.lucanius.twilight.service.queue.abstr;
 
 import lombok.Getter;
 import lombok.Setter;
+import me.lucanius.twilight.Twilight;
 import me.lucanius.twilight.service.loadout.Loadout;
 import me.lucanius.twilight.tools.CC;
 
@@ -11,6 +12,8 @@ import me.lucanius.twilight.tools.CC;
  */
 @Getter @Setter
 public abstract class AbstractQueueData<E> {
+
+    protected final static Twilight plugin = Twilight.getInstance();
 
     protected final E element;
 

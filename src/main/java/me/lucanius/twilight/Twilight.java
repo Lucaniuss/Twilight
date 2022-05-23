@@ -18,6 +18,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Collection;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * @author Lucanius
@@ -28,7 +30,9 @@ public final class Twilight extends JavaPlugin {
 
     @Getter private static Twilight instance;
 
-    private ClassRegistration registration;
+    private final Random random = ThreadLocalRandom.current();
+    private final ClassRegistration registration = new ClassRegistration();
+
     private ConfigFile config;
 
     private MongoServer mongo;
@@ -48,7 +52,6 @@ public final class Twilight extends JavaPlugin {
 
         long start = System.currentTimeMillis();
 
-        registration = new ClassRegistration();
         config = new ConfigFile(this, "config.yml");
 
         mongo = new MongoBuilder()

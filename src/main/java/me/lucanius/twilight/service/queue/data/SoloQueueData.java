@@ -2,7 +2,6 @@ package me.lucanius.twilight.service.queue.data;
 
 import me.lucanius.twilight.service.loadout.Loadout;
 import me.lucanius.twilight.service.queue.abstr.AbstractQueueData;
-import me.lucanius.twilight.service.queue.modules.SoloQueue;
 import me.lucanius.twilight.tools.CC;
 import org.bukkit.entity.Player;
 
@@ -12,8 +11,8 @@ import org.bukkit.entity.Player;
  */
 public class SoloQueueData extends AbstractQueueData<Player> {
 
-    public SoloQueueData(Player element, Loadout loadout, SoloQueue queue, int playerPing, int pingRange) {
-        super(element, loadout, queue, playerPing, pingRange);
+    public SoloQueueData(Player element, Loadout loadout, int playerPing, int pingRange) {
+        super(element, loadout, plugin.getQueues().getSoloQueue(), playerPing, pingRange);
     }
 
     @Override
