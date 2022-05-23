@@ -4,9 +4,12 @@ import lombok.experimental.UtilityClass;
 import net.minecraft.server.v1_8_R3.EntityPlayer;
 import net.minecraft.server.v1_8_R3.Packet;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Sound;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.potion.PotionEffect;
 
 /**
  * @author Lucanius
@@ -63,5 +66,28 @@ public final class Tools {
 
     public void sendPacket(Player player, Packet<?> packet) {
         getEntityPlayer(player).playerConnection.sendPacket(packet);
+    }
+
+    public void clearPlayer(Player player) {
+        player.resetMaxHealth();
+        player.setHealth(player.getMaxHealth());
+        player.setFoodLevel(20);
+        player.setSaturation(20);
+        player.setFireTicks(0);
+        player.setFallDistance(0);
+
+        player.getActivePotionEffects().stream().map(PotionEffect::getType).forEach(player::removePotionEffect);
+
+        PlayerInventory inventory = player.getInventory();
+        inventory.setHeldItemSlot(0);
+        inventory.clear();
+        inventory.setArmorContents(null);
+        player.updateInventory();
+
+        Scheduler.run(() -> { // This can't be async, so we make sure this will not throw an exception
+            player.setWalkSpeed(0.2f);
+            player.setFlySpeed(0.2f);
+            player.setGameMode(GameMode.SURVIVAL);
+        });
     }
 }

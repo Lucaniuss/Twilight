@@ -3,6 +3,7 @@ package me.lucanius.twilight;
 import lombok.Getter;
 import me.lucanius.twilight.layout.BoardLayout;
 import me.lucanius.twilight.service.loadout.LoadoutService;
+import me.lucanius.twilight.service.lobby.LobbyService;
 import me.lucanius.twilight.service.profile.Profile;
 import me.lucanius.twilight.service.profile.ProfileService;
 import me.lucanius.twilight.service.queue.QueueService;
@@ -37,6 +38,7 @@ public final class Twilight extends JavaPlugin {
 
     private MongoServer mongo;
     private CommandFramework framework;
+    private LobbyService lobby;
     private ProfileService profiles;
     private LoadoutService loadouts;
     private QueueService queues;
@@ -64,6 +66,7 @@ public final class Twilight extends JavaPlugin {
                 .authDb(config.getString("MONGO.AUTH.AUTH-DB"))
                 .build();
         framework = new CommandFramework(this);
+        lobby = new LobbyService(this);
         profiles = new ProfileService(this);
         loadouts = new LoadoutService(this);
         queues = new QueueService(this);
