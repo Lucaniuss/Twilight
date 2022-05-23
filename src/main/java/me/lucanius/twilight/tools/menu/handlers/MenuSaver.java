@@ -1,5 +1,6 @@
 package me.lucanius.twilight.tools.menu.handlers;
 
+import lombok.Getter;
 import lombok.experimental.UtilityClass;
 import me.lucanius.twilight.tools.menu.Menu;
 
@@ -14,7 +15,7 @@ import java.util.UUID;
 @UtilityClass
 public final class MenuSaver {
 
-    private final Map<UUID, Menu> cached = new HashMap<>();
+    @Getter private final Map<UUID, Menu> cached = new HashMap<>();
 
     public void add(UUID uniqueId, Menu menu) {
         cached.put(uniqueId, menu);

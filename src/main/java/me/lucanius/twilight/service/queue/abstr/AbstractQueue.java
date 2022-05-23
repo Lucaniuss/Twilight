@@ -4,6 +4,7 @@ import lombok.Getter;
 import me.lucanius.twilight.Twilight;
 import me.lucanius.twilight.service.loadout.Loadout;
 import me.lucanius.twilight.service.queue.callback.QueueCallback;
+import me.lucanius.twilight.service.queue.menu.abstr.AbstractQueueMenu;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,8 +18,18 @@ public abstract class AbstractQueue<E> {
 
     protected final static Twilight plugin = Twilight.getInstance();
 
-    private final List<AbstractQueueData<?>> queue = new ArrayList<>();
-    private int index = 0;
+    private final List<AbstractQueueData<?>> queue;
+    private final String name;
+
+    private int index;
+    protected AbstractQueueMenu menu;
+
+    public AbstractQueue(String name) {
+        this.queue = new ArrayList<>();
+        this.name = name;
+
+        this.index = 0;
+    }
 
     public abstract void enqueue(E element, Loadout loadout);
 

@@ -26,13 +26,15 @@ public class LobbyService extends AbstractHotbar {
                 : new SerializableLocation(0.5, 60, 0.5);
     }
 
-    public void toLobby(Player player, Profile profile) {
+    public void toLobby(Player player, Profile profile, boolean teleport) {
         profile.setState(ProfileState.LOBBY);
 
         Tools.clearPlayer(player);
         items.forEach(item -> player.getInventory().setItem(item.getSlot(), item.getItem()));
 
-        player.teleport(lobbyLocation.getBukkitLocation());
+        if (teleport) {
+            player.teleport(lobbyLocation.getBukkitLocation());
+        }
     }
 
     public void setLobbyLocation(SerializableLocation location) {

@@ -18,7 +18,9 @@ public class SoloQueueData extends AbstractQueueData<Player> {
     @Override
     public void sendMessage() {
         for (String s : messages) {
-            element.sendMessage(CC.translate(s));
+            element.sendMessage(CC.translate(s
+                    .replace("<loadout>", loadout.getName())
+            ));
         }
     }
 

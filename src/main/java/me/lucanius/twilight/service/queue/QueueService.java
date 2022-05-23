@@ -2,6 +2,7 @@ package me.lucanius.twilight.service.queue;
 
 import lombok.SneakyThrows;
 import me.lucanius.twilight.Twilight;
+import me.lucanius.twilight.service.loadout.Loadout;
 import me.lucanius.twilight.service.profile.ProfileState;
 import me.lucanius.twilight.service.queue.abstr.AbstractQueue;
 import me.lucanius.twilight.service.queue.abstr.AbstractQueueData;
@@ -45,6 +46,18 @@ public class QueueService {
 
     public AbstractQueueData<?> getData(UUID uniqueId) {
         return queueing.get(uniqueId);
+    }
+
+    public Collection<UUID> getQueued() {
+        return queueing.keySet();
+    }
+
+    public int getSize() {
+        return queueing.values().size();
+    }
+
+    public int getSize(Loadout loadout, AbstractQueue<?> queue) {
+        return (int) queueing.values().stream().filter(data -> data.getLoadout().equals(loadout) && data.getQueue().equals(queue)).count();
     }
 
     public void putData(UUID uniqueId, AbstractQueueData<?> queueData) {

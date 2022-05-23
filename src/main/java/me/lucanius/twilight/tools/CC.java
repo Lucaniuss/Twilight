@@ -39,6 +39,7 @@ public final class CC {
     public final String MAGIC = ChatColor.MAGIC.toString();
 
     public final String BAR = GRAY + STRIKE_THROUGH + "------------------------------------------------";
+    public final String MEDIUM_BAR = GRAY + STRIKE_THROUGH + "------------------------";
     public final String SMALL_BAR = GRAY + STRIKE_THROUGH + "------------------";
     public final String MAIN = DARK_GREEN;
     public final String SECOND = GREEN;

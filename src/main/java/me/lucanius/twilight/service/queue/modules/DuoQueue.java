@@ -5,6 +5,8 @@ import me.lucanius.twilight.service.queue.abstr.AbstractQueue;
 import me.lucanius.twilight.service.queue.abstr.AbstractQueueData;
 import me.lucanius.twilight.service.queue.callback.QueueCallback;
 import me.lucanius.twilight.service.queue.data.DuoQueueData;
+import me.lucanius.twilight.service.queue.menu.menus.DuoQueueMenu;
+import me.lucanius.twilight.service.queue.menu.menus.SoloQueueMenu;
 import org.bukkit.entity.Player;
 
 import java.util.Set;
@@ -14,6 +16,11 @@ import java.util.Set;
  * @since May 22, 2022
  */
 public class DuoQueue extends AbstractQueue<Set<Player>> {
+
+    public DuoQueue() {
+        super("Duo");
+        menu = new DuoQueueMenu(this);
+    }
 
     @Override
     public void enqueue(Set<Player> element, Loadout loadout) {

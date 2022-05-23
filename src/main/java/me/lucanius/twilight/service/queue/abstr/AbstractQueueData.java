@@ -14,13 +14,17 @@ import me.lucanius.twilight.tools.CC;
 public abstract class AbstractQueueData<E> {
 
     protected final static Twilight plugin = Twilight.getInstance();
+    protected final static String[] messages = new String[]{
+            " ",
+            CC.MAIN + CC.BOLD + "Searching for a game...",
+            CC.ICON + CC.WHITE + "Loadout: " + CC.SECOND + "<loadout>",
+            " "
+    };
 
     protected final E element;
 
     protected final Loadout loadout;
     protected final AbstractQueue<?> queue;
-
-    protected final String[] messages;
 
     private final long timeStamp;
     private final int playerPing, pingRange;
@@ -32,13 +36,6 @@ public abstract class AbstractQueueData<E> {
 
         this.loadout = loadout;
         this.queue = queue;
-
-        this.messages = new String[]{
-                " ",
-                CC.MAIN + CC.BOLD + "Searching for a game...",
-                CC.ICON + CC.WHITE + "Loadout: " + CC.SECOND + loadout.getName(),
-                " "
-        };
 
         this.timeStamp = System.currentTimeMillis();
         this.playerPing = playerPing;

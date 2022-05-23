@@ -126,6 +126,10 @@ public abstract class Menu {
     }
 
     public void update(Player player) {
+        if (player == null) {
+            return;
+        }
+
         Inventory inventory = player.getOpenInventory().getTopInventory();
         if (inventory == null) {
             return;

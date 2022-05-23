@@ -35,7 +35,7 @@ public class DataListener {
                 Scheduler.runAsync(profile::load);
             }
 
-            plugin.getLobby().toLobby(player, profile);
+            plugin.getLobby().toLobby(player, profile, true);
         });
     }
 }

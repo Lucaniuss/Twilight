@@ -19,6 +19,13 @@ public class QueueTask extends BukkitRunnable {
     @Override
     public void run() {
         plugin.getQueues().getAll().forEach(queue -> {
+
+            if (!queue.getQueue().isEmpty()) {
+                plugin.getQueues().getQueued().forEach(queued ->
+                        queue.getMenu().update(plugin.getServer().getPlayer(queued))
+                );
+            }
+
             Iterator<AbstractQueueData<?>> iterator = queue.getQueue().iterator();
             while (iterator.hasNext()) {
                 AbstractQueueData<?> first = iterator.next();

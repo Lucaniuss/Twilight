@@ -5,6 +5,7 @@ import me.lucanius.twilight.service.queue.abstr.AbstractQueue;
 import me.lucanius.twilight.service.queue.abstr.AbstractQueueData;
 import me.lucanius.twilight.service.queue.callback.QueueCallback;
 import me.lucanius.twilight.service.queue.data.SoloQueueData;
+import me.lucanius.twilight.service.queue.menu.menus.SoloQueueMenu;
 import me.lucanius.twilight.tools.Tools;
 import org.bukkit.entity.Player;
 
@@ -13,6 +14,11 @@ import org.bukkit.entity.Player;
  * @since May 22, 2022
  */
 public class SoloQueue extends AbstractQueue<Player> {
+
+    public SoloQueue() {
+        super("Solo");
+        menu = new SoloQueueMenu(this);
+    }
 
     @Override
     public void enqueue(Player element, Loadout loadout) {
