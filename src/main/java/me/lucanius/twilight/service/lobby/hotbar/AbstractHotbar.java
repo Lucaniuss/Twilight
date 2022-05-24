@@ -25,12 +25,11 @@ public class AbstractHotbar {
     protected final List<HotbarItem> queueItems;
 
     public AbstractHotbar() {
-        String click = " &7(Right-Click)";
         this.items = new ArrayList<>(
                 Arrays.asList(
-                        new HotbarItem(new ItemBuilder(Material.IRON_SWORD).setName(CC.MAIN + "Unranked" + click).build(), 0, HotbarContext.UNRANKED, HotbarType.LOBBY),
-                        new HotbarItem(new ItemBuilder(Material.DIAMOND_SWORD).setName(CC.MAIN + "Ranked" + click).build(), 1, HotbarContext.RANKED, HotbarType.LOBBY),
-                        new HotbarItem(new ItemBuilder(Material.BARRIER).setName(CC.MAIN + "Spectate" + click).build(), 2, HotbarContext.SPECTATE, HotbarType.LOBBY),
+                        new HotbarItem(new ItemBuilder(Material.IRON_SWORD).setName(CC.MAIN + "Unranked &7(Right-Click)").build(), 0, HotbarContext.UNRANKED, HotbarType.LOBBY),
+                        new HotbarItem(new ItemBuilder(Material.DIAMOND_SWORD).setName(CC.MAIN + "Ranked &7(Right-Click)").build(), 1, HotbarContext.RANKED, HotbarType.LOBBY),
+                        new HotbarItem(new ItemBuilder(Material.INK_SACK).setData(1).setName(CC.MAIN + "Leave Queue &7(Right-Click)").build(), 0, HotbarContext.LEAVE_QUEUE, HotbarType.QUEUE)
                 )
         );
 
@@ -45,9 +44,5 @@ public class AbstractHotbar {
 
     public HotbarItem get(HotbarContext context) {
         return items.stream().filter(i -> i.getContext() == context).findFirst().orElse(null);
-    }
-
-    public HotbarItem get(HotbarType type) {
-        return items.stream().filter(i -> i.getType() == type).findFirst().orElse(null);
     }
 }

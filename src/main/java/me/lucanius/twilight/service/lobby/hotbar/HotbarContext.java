@@ -7,6 +7,8 @@ package me.lucanius.twilight.service.lobby.hotbar;
 public enum HotbarContext {
 
     UNRANKED,
-    RANKED
+    RANKED,
+
+    LEAVE_QUEUE
 
 }
