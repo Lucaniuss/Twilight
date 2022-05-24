@@ -28,7 +28,6 @@ public class LoadoutService {
 
     public void load() {
         loadouts.clear();
-
         Optional.ofNullable(config.getConfigurationSection("LOADOUTS")).ifPresent(section ->
                 section.getKeys(false).forEach(key -> loadouts.add(new Loadout(config, key))));
     }
