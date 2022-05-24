@@ -32,7 +32,7 @@ public class ArenaGenerator {
 
     private int multiplier = 10000;
 
-    @SuppressWarnings("deprecation" )
+    @SuppressWarnings("deprecation")
     public ArenaGenerator(Arena arena) {
         this.arena = arena;
         this.world = arena.getMin().getBukkitWorld();
@@ -122,9 +122,9 @@ public class ArenaGenerator {
 
             Tools.log("&aArena successfully pasted!");
             Clickable clickable = new Clickable(
-                    CC.MAIN + CC.BOLD + "(Twilight) " + CC.SECOND + "Generated an arena! &7(Click to teleport)",
+                    CC.MAIN + CC.BOLD + "(Twilight) " + CC.SECOND + "Generated an arena! " + CC.GRAY + "(Click to teleport)",
                     CC.SECOND + CC.ITALIC + "Click to teleport",
-                    "/tp " + newArena.getMin().getX() + " " + newArena.getMin().getY() + " " + newArena.getMin().getZ()
+                    "/tp " + newArena.getA().getX() + " " + newArena.getA().getY() + " " + newArena.getA().getZ()
             );
             plugin.getOnline().stream().filter(online -> online.hasPermission("twilight.admin")).forEach(clickable::send);
         });
