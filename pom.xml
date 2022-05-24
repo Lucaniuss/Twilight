@@ -45,13 +45,15 @@
             <groupId>com.sk89q</groupId>
             <artifactId>worldedit</artifactId>
             <version>6.0.0-SNAPSHOT</version>
-            <scope>provided</scope>
+            <systemPath>${project.basedir}/libs/worldedit-6.0.0-SNAPSHOT.jar</systemPath>
+            <scope>system</scope>
         </dependency>
         <dependency> <!-- FastAsyncWorldEdit -->
             <groupId>com.boydti</groupId>
             <artifactId>fawe-api</artifactId>
             <version>latest</version>
-            <scope>provided</scope>
+            <systemPath>${project.basedir}/libs/FastAsyncWorldEdit.jar</systemPath>
+            <scope>system</scope>
         </dependency>
     </dependencies>
 

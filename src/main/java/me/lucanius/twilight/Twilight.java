@@ -16,12 +16,14 @@ import me.lucanius.twilight.tools.board.Board;
 import me.lucanius.twilight.tools.command.CommandFramework;
 import me.lucanius.twilight.tools.config.ConfigFile;
 import me.lucanius.twilight.tools.registration.ClassRegistration;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Collection;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
+import static org.bukkit.Bukkit.getPluginManager;
 
 /**
  * @author Lucanius
@@ -49,6 +51,7 @@ public final class Twilight extends JavaPlugin {
 
     private boolean disabling;
 
+    // Plugin Startup Logic
     @Override
     public void onEnable() {
         instance = this;
@@ -84,6 +87,7 @@ public final class Twilight extends JavaPlugin {
         Tools.log(CC.BAR);
     }
 
+    // PLugin Shutdown Logic
     @Override
     public void onDisable() {
         disabling = true;
