@@ -56,6 +56,10 @@ public class Arena {
 
         this.name = name;
 
+        if (copies == null) {
+            copies = new ArrayList<>();
+        }
+
         ConfigurationSection section = conf.getConfigurationSection(key + "COPIES");
         if (section != null) {
             for (String copy : section.getKeys(false)) {
@@ -109,10 +113,12 @@ public class Arena {
 
     public static Arena deserialize(String serialized) {
         String[] parts = serialized.split(";");
-        if (parts.length != 5) {
-            return null;
-        }
-
-        return new Arena(parts[0], new SerializableLocation(parts[1]), new SerializableLocation(parts[2]), new SerializableLocation(parts[3]), new SerializableLocation(parts[4]));
+        return new Arena(
+                parts[0],
+                new SerializableLocation(parts[1]),
+                new SerializableLocation(parts[2]),
+                new SerializableLocation(parts[3]),
+                new SerializableLocation(parts[4])
+        );
     }
 }
