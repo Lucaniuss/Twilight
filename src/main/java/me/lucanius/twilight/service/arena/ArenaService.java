@@ -54,7 +54,16 @@ public class ArenaService {
         return arena;
     }
 
+    public void destroy(Arena arena) {
+        arenas.remove(arena);
+    }
+
     public void register(Arena arena) {
         arenas.add(arena);
+    }
+
+    public void reload() {
+        save();
+        load();
     }
 }
