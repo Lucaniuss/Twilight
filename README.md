@@ -10,3 +10,11 @@ You can contact me on discord via my tag or server:
 
 ### Selling & Using
 You're free to use this for anything, including using it for your own projects. However, if you want to sell it, leave credits and a link to this repository.
+
+### Issues with Maven
+
+If your having issues with maven espically "could not find artifact (Could not find artifact com.sk89q:worldedit:pom:6.0.0-SNAPSHOT in spigot (https://maven.notfab.net/SpigotMC/)", The FAWE API
+
+You can manually download the world edit jar [Here](https://dev.bukkit.org/projects/worldedit/files/880435/)) + [Here for the FAWE API](https://ci.athion.net/job/FastAsyncWorldEdit/)
+
+Then create a "libs" folder within your project directory with those jars downloaded
