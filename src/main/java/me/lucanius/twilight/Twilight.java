@@ -2,6 +2,7 @@ package me.lucanius.twilight;
 
 import lombok.Getter;
 import me.lucanius.twilight.layout.BoardLayout;
+import me.lucanius.twilight.service.arena.ArenaService;
 import me.lucanius.twilight.service.loadout.LoadoutService;
 import me.lucanius.twilight.service.lobby.LobbyService;
 import me.lucanius.twilight.service.profile.Profile;
@@ -42,6 +43,7 @@ public final class Twilight extends JavaPlugin {
     private ProfileService profiles;
     private LoadoutService loadouts;
     private QueueService queues;
+    private ArenaService arenas;
 
     private Board board;
 
@@ -70,6 +72,7 @@ public final class Twilight extends JavaPlugin {
         profiles = new ProfileService(this);
         loadouts = new LoadoutService(this);
         queues = new QueueService(this);
+        arenas = new ArenaService(this);
 
         registration.init("me.lucanius.twilight.listeners").init("me.lucanius.twilight.commands.impl");
 
@@ -87,6 +90,7 @@ public final class Twilight extends JavaPlugin {
 
         profiles.getAll().forEach(Profile::save);
         loadouts.save();
+        arenas.save();
 
         mongo.dispose();
     }
