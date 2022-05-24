@@ -13,8 +13,6 @@ You're free to use this for anything, including using it for your own projects. 
 
 ### Issues with Maven
 
-If your having issues with maven espically "could not find artifact (Could not find artifact com.sk89q:worldedit:pom:6.0.0-SNAPSHOT in spigot (https://maven.notfab.net/SpigotMC/)", The FAWE API
+If you are having issues with the project due to maven, you'll have to open your IntelIJ project structure by going under file, selecting project structure, then selecting libraries clicking the + button then selecting java,
 
-You can manually download the world edit jar [Here](https://dev.bukkit.org/projects/worldedit/files/880435/)) + [Here for the FAWE API](https://ci.athion.net/job/FastAsyncWorldEdit/)
-
-Then create a "libs" folder within your project directory with those jars downloaded
+Then go to the project directory and select libs and confirm then click apply, restart your IDE (IntelIJ)
