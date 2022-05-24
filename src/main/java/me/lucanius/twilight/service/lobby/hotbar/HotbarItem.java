@@ -13,5 +13,6 @@ public class HotbarItem {
     private final ItemStack item;
     private final int slot;
     private final HotbarContext context;
+    private final HotbarType type;
 
 }

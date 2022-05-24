@@ -30,7 +30,7 @@ public class LobbyService extends AbstractHotbar {
         profile.setState(ProfileState.LOBBY);
 
         Tools.clearPlayer(player);
-        items.forEach(item -> player.getInventory().setItem(item.getSlot(), item.getItem()));
+        lobbyItems.forEach(item -> player.getInventory().setItem(item.getSlot(), item.getItem()));
 
         if (teleport) {
             player.teleport(lobbyLocation.getBukkitLocation());
