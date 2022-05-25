@@ -61,7 +61,11 @@ public class Loadout {
         this.edit = Serializer.deserializeItems(conf.getString(key + "EDIT"));
         this.refill = Serializer.deserializeItems(conf.getString(key + "REFILL"));
 
-        this.effects = Serializer.deserializeEffects(conf.getString(key + "EFFECTS"));
+        if (conf.contains(key + "EFFECTS") && !conf.getString(key + "EFFECTS").equals("")) {
+            this.effects = Serializer.deserializeEffects(conf.getString(key + "EFFECTS"));
+        } else {
+            this.effects = new ArrayList<>();
+        }
 
         this.type = LoadoutType.getOrDefault(conf.getString(key + "TYPE"));
 
@@ -89,7 +93,11 @@ public class Loadout {
         conf.set(key + "EDIT", Serializer.serializeItems(edit));
         conf.set(key + "REFILL", Serializer.serializeItems(refill));
 
-        conf.set(key + "EFFECTS", Serializer.serializeEffects(effects));
+        if (effects != null && !effects.isEmpty()) {
+            conf.set(key + "EFFECTS", Serializer.serializeEffects(effects));
+        } else {
+            conf.set(key + "EFFECTS", "");
+        }
 
         conf.set(key + "TYPE", type.name());
 
