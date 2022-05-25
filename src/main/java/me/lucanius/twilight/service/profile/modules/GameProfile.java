@@ -5,7 +5,7 @@ import lombok.Data;
 /**
  * @author Lucanius
  * @since May 25, 2022
- * Used to cache all GameStats for profile
+ * Used to cache all current game stats for each profile
  */
 @Data
 public class GameProfile {
