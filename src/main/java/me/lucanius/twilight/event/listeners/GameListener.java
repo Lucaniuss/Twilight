@@ -1,8 +1,6 @@
 package me.lucanius.twilight.event.listeners;
 
 import me.lucanius.twilight.Twilight;
-import me.lucanius.twilight.event.EventListener;
-import me.lucanius.twilight.event.TwilightEvent;
 import me.lucanius.twilight.event.bukkit.Events;
 import me.lucanius.twilight.event.events.GameStartEvent;
 import me.lucanius.twilight.service.game.Game;
