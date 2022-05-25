@@ -5,6 +5,7 @@ import lombok.Setter;
 import me.lucanius.twilight.Twilight;
 import me.lucanius.twilight.service.loadout.Loadout;
 import me.lucanius.twilight.tools.CC;
+import me.lucanius.twilight.tools.date.DateTools;
 
 /**
  * @author Lucanius
@@ -56,5 +57,9 @@ public abstract class AbstractQueueData<E> {
     public void increaseRange() {
         maxPing = Math.min(maxPing + 20, 1500);
         minPing = Math.max(minPing - 20, 0);
+    }
+
+    public String getTime() {
+        return DateTools.formatIntToMMSS((int) ((System.currentTimeMillis() - timeStamp) / 1000L));
     }
 }
