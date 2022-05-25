@@ -13,7 +13,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
  * @since May 25, 2022
  */
 @Getter
-public class MovementEvent extends AbstractEvent implements TwilightEvent {
+public class AsyncMovementEvent extends AbstractEvent implements TwilightEvent {
 
     private final PlayerMoveEvent originalEvent;
     private final Player player;
@@ -21,7 +21,7 @@ public class MovementEvent extends AbstractEvent implements TwilightEvent {
     private final Location to;
     private final Location from;
 
-    public MovementEvent(PlayerMoveEvent originalEvent) {
+    public AsyncMovementEvent(PlayerMoveEvent originalEvent) {
         this.originalEvent = originalEvent;
         this.player = originalEvent.getPlayer();
         this.profile = plugin.getProfiles().get(player.getUniqueId());

@@ -1,7 +1,7 @@
 package me.lucanius.twilight.event.movement;
 
 import me.lucanius.twilight.event.bukkit.Events;
-import me.lucanius.twilight.event.events.MovementEvent;
+import me.lucanius.twilight.event.events.AsyncMovementEvent;
 import me.lucanius.twilight.tools.Tools;
 
 /**
@@ -11,7 +11,7 @@ import me.lucanius.twilight.tools.Tools;
 public class MovementListener {
 
     public MovementListener() { // TESTING
-        Events.subscribe(MovementEvent.class, event -> {
+        Events.subscribe(AsyncMovementEvent.class, event -> {
             Tools.log(event.getPlayer().getName() + " triggered a movement event");
         });
     }

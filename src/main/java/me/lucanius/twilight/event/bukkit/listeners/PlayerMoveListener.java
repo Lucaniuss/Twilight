@@ -1,7 +1,7 @@
 package me.lucanius.twilight.event.bukkit.listeners;
 
 import me.lucanius.twilight.event.bukkit.Events;
-import me.lucanius.twilight.event.events.MovementEvent;
+import me.lucanius.twilight.event.events.AsyncMovementEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
 /**
@@ -14,6 +14,6 @@ public class PlayerMoveListener {
      * Running our custom MovementEvent through the Bukkit PlayerMoveEvent
      */
     public PlayerMoveListener() {
-        Events.subscribe(PlayerMoveEvent.class, MovementEvent::new);
+        Events.subscribe(PlayerMoveEvent.class, AsyncMovementEvent::new);
     }
 }
