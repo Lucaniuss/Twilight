@@ -7,11 +7,15 @@ package me.lucanius.twilight.event;
  */
 public interface EventProvider {
 
-    void subscribe(EventListener abstractEvent);
-
-    void subscribe(Class<?> event, EventListener listener);
+    void subscribe(Class<? extends AbstractEvent> event, EventListener listener);
 
     void unsubscribe(EventListener abstractEvent);
+
+    void unsubscribe(Class<? extends AbstractEvent> event);
+
+    boolean subbed(EventListener listener);
+
+    boolean subbed(Class<? extends AbstractEvent> event);
 
     void publish(TwilightEvent abstractEvent);
 
