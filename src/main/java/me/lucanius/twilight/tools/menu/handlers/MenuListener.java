@@ -3,7 +3,7 @@ package me.lucanius.twilight.tools.menu.handlers;
 import me.lucanius.twilight.tools.Scheduler;
 import me.lucanius.twilight.tools.menu.Button;
 import me.lucanius.twilight.tools.menu.Menu;
-import me.lucanius.twilight.tools.events.Events;
+import me.lucanius.twilight.event.bukkit.Events;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryAction;

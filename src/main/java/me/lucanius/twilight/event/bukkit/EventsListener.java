@@ -1,4 +1,4 @@
-package me.lucanius.twilight.tools.events;
+package me.lucanius.twilight.event.bukkit;
 
 import org.bukkit.event.Listener;
 

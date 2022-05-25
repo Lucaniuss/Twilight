@@ -3,6 +3,7 @@ package me.lucanius.twilight.event.listeners;
 import me.lucanius.twilight.Twilight;
 import me.lucanius.twilight.event.EventListener;
 import me.lucanius.twilight.event.TwilightEvent;
+import me.lucanius.twilight.event.bukkit.Events;
 import me.lucanius.twilight.event.events.GameStartEvent;
 import me.lucanius.twilight.service.game.Game;
 import me.lucanius.twilight.service.game.team.GameTeam;
@@ -25,6 +26,12 @@ import java.util.stream.Collectors;
 public class GameListener implements EventListener {
 
     private final Twilight plugin = Twilight.getInstance();
+
+    public GameListener() {
+        Events.subscribe(GameStartEvent.class, event -> {
+
+        });
+    }
 
     @Override
     public void onEvent(TwilightEvent twilightEvent) {

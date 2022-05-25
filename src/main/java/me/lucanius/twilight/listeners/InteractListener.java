@@ -4,7 +4,7 @@ import me.lucanius.twilight.Twilight;
 import me.lucanius.twilight.service.lobby.hotbar.context.HotbarContext;
 import me.lucanius.twilight.service.lobby.hotbar.HotbarItem;
 import me.lucanius.twilight.service.profile.Profile;
-import me.lucanius.twilight.tools.events.Events;
+import me.lucanius.twilight.event.bukkit.Events;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;

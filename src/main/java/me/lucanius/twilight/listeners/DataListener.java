@@ -6,7 +6,7 @@ import me.lucanius.twilight.service.profile.Profile;
 import me.lucanius.twilight.service.profile.ProfileService;
 import me.lucanius.twilight.tools.CC;
 import me.lucanius.twilight.tools.Scheduler;
-import me.lucanius.twilight.tools.events.Events;
+import me.lucanius.twilight.event.bukkit.Events;
 import me.lucanius.twilight.tools.functions.Condition;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;

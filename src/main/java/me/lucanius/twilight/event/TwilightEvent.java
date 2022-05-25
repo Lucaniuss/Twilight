@@ -5,5 +5,4 @@ package me.lucanius.twilight.event;
  * @since 25.05.2022 14:26
  * © Twilight - All Rights Reserved
  */
-public interface TwilightEvent {
-}
+public interface TwilightEvent {}

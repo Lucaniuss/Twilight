@@ -1,6 +1,7 @@
 package me.lucanius.twilight.event.helper;
 
 import com.google.common.base.Preconditions;
+import me.lucanius.twilight.event.AbstractEvent;
 import me.lucanius.twilight.event.EventListener;
 import me.lucanius.twilight.event.TwilightEvent;
 import me.lucanius.twilight.event.EventProvider;
@@ -29,6 +30,12 @@ public class StandardEventProvider implements EventProvider {
     public void subscribe(EventListener event) {
         Preconditions.checkState(!this.subscribers.contains(event), "Event already subscribed");
         this.subscribers.add(event);
+    }
+
+    @Override
+    public void subscribe(Class<?> event, EventListener listener) {
+        Preconditions.checkState(!this.subscribers.contains(listener), "Event already subscribed");
+        this.subscribers.add(listener);
     }
 
     @Override

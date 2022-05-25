@@ -3,7 +3,7 @@ package me.lucanius.twilight.tools.board;
 import lombok.Getter;
 import lombok.Setter;
 import me.lucanius.twilight.Twilight;
-import me.lucanius.twilight.tools.events.Events;
+import me.lucanius.twilight.event.bukkit.Events;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerJoinEvent;

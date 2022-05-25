@@ -9,6 +9,8 @@ public interface EventProvider {
 
     void subscribe(EventListener abstractEvent);
 
+    void subscribe(Class<?> event, EventListener listener);
+
     void unsubscribe(EventListener abstractEvent);
 
     void publish(TwilightEvent abstractEvent);

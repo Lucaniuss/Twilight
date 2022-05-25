@@ -1,8 +1,10 @@
-package me.lucanius.twilight.tools.events;
+package me.lucanius.twilight.event.bukkit;
 
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 import me.lucanius.twilight.Twilight;
+import me.lucanius.twilight.event.TwilightEvent;
+import me.lucanius.twilight.event.TwilightExecutor;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
@@ -36,6 +38,10 @@ public final class Events {
 
     public <E extends Event> void subscribe(Class<E> clazz, EventsExecutor<E> handler) {
         subscribe(clazz, handler, EventPriority.NORMAL, false);
+    }
+
+    public <E extends TwilightEvent> void subscribe(Class<E> event, TwilightExecutor<E> handler) {
+        plugin.getEvents().subscribe(event, handler);
     }
 
     @SneakyThrows
