@@ -15,6 +15,10 @@ public class Pairs<L, R> implements Pair<L, R> {
         this.right = right;
     }
 
+    public static <L, R> Pairs<L, R> of(L left, R right) {
+        return new Pairs<>(left, right);
+    }
+
     @Override
     public L getLeft() {
         return this.left;
