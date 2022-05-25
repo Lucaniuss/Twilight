@@ -76,7 +76,7 @@ public final class Twilight extends JavaPlugin {
 
         registration.init("me.lucanius.twilight.listeners").init("me.lucanius.twilight.commands.impl");
 
-        board = new Board(this, new BoardLayout(this));
+        board = new Board(this, new BoardLayout());
 
         Tools.log(CC.BAR);
         Tools.log(CC.MAIN + "Twilight&r &av" + getDescription().getVersion() + " &7~ &blucA#0999");

@@ -1,22 +1,18 @@
 package me.lucanius.twilight.layout;
 
-import lombok.RequiredArgsConstructor;
-import me.lucanius.twilight.Twilight;
+import me.lucanius.twilight.layout.provider.LinesProvider;
+import me.lucanius.twilight.service.profile.Profile;
 import me.lucanius.twilight.tools.CC;
 import me.lucanius.twilight.tools.board.BoardAdapter;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @author Lucanius
  * @since May 22, 2022
  */
-@RequiredArgsConstructor
-public class BoardLayout implements BoardAdapter {
-
-    private final Twilight plugin;
+public class BoardLayout extends LinesProvider implements BoardAdapter {
 
     @Override
     public String getTitle(Player player) {
@@ -25,14 +21,17 @@ public class BoardLayout implements BoardAdapter {
 
     @Override
     public List<String> getLines(Player player) {
-        final List<String> lines = new ArrayList<>();
+        Profile profile = plugin.getProfiles().get(player.getUniqueId());
 
-        lines.add(CC.SMALL_BAR);
-        lines.add("&fOnline: " + CC.SECOND + plugin.getOnline().size());
-        lines.add(" ");
-        lines.add("&7&olucanius.me");
-        lines.add(CC.SMALL_BAR);
+        switch (profile.getState()) {
+            case LOBBY:
+                return getLobby();
+            case PLAYING:
+                break;
+            case QUEUE:
+                return getQueue(player);
+        }
 
-        return lines;
+        return null;
     }
 }
