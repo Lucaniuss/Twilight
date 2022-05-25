@@ -1,6 +1,5 @@
 package me.lucanius.twilight.layout.provider;
 
-import me.lucanius.twilight.Twilight;
 import me.lucanius.twilight.service.game.Game;
 import me.lucanius.twilight.service.game.team.GameTeam;
 import me.lucanius.twilight.service.profile.Profile;
@@ -10,15 +9,16 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
  * @author Lucanius
  * @since May 25, 2022
  */
-public abstract class LinesProvider {
+public abstract class LinesProvider extends AbstractProvider {
 
-    protected final Twilight plugin = Twilight.getInstance();
+    private final String signature = CC.GRAY + CC.ITALIC + "lucanius.me";
 
     public List<String> getLobby() {
         List<String> lines = new ArrayList<>();
@@ -28,7 +28,7 @@ public abstract class LinesProvider {
         lines.add(CC.WHITE + "In Game: " + CC.SECOND + plugin.getGames().getSize());
         lines.add(CC.WHITE + "In Queue: " + CC.SECOND + plugin.getQueues().getSize());
         lines.add(" ");
-        lines.add(CC.GRAY + CC.ITALIC + "lucanius.me");
+        lines.add(signature);
         lines.add(CC.SMALL_BAR);
 
         return lines;
@@ -47,7 +47,7 @@ public abstract class LinesProvider {
         lines.add(CC.ICON + CC.WHITE + "Time: " + CC.SECOND + data.getTime());
         lines.add(CC.ICON + CC.WHITE + "Loadout: " + CC.SECOND + data.getLoadout().getName());
         lines.add(" ");
-        lines.add(CC.GRAY + CC.ITALIC + "lucanius.me");
+        lines.add(signature);
         lines.add(CC.SMALL_BAR);
 
         return lines;
@@ -58,22 +58,34 @@ public abstract class LinesProvider {
         UUID uniqueId = player.getUniqueId();
         Game game = plugin.getGames().get(profile);
         GameTeam opposingTeam = game.getOpposingTeam(uniqueId);
+        Optional<Player> enemy = Optional.ofNullable(opposingTeam.getFirstPlayer());
+        boolean isPresent = enemy.isPresent();
+        Profile enemyProfile = isPresent ? plugin.getProfiles().get(enemy.get().getUniqueId()) : plugin.getProfiles().getDummy();
+        String enemyName = isPresent ? enemy.get().getName() : "...";
 
         lines.add(CC.SMALL_BAR);
         switch (game.getState()) {
             case STARTING:
-                lines.add(CC.WHITE + "Fighting: " + CC.SECOND + opposingTeam.getFirstPlayer().getName());
+                lines.add(CC.WHITE + "Fighting: " + CC.SECOND + enemyName);
                 break;
             case ONGOING:
-                lines.add(CC.WHITE + "Fighting: " + CC.SECOND + opposingTeam.getFirstPlayer().getName());
+                lines.add(CC.WHITE + "Fighting: " + CC.SECOND + enemyName);
                 lines.add(CC.WHITE + "Duration: " + CC.SECOND + game.getTime());
+                switch (game.getLoadout().getType()) {
+                    case BOXING:
+                        lines.addAll(getBoxing(profile.getGameProfile(), enemyProfile.getGameProfile()));
+                        break;
+                    case BRIDGES:
+                        lines.addAll(getBridges(game));
+                        break;
+                }
                 break;
             case TERMINATED:
                 lines.add(CC.WHITE + "Game ended.");
                 break;
         }
         lines.add(" ");
-        lines.add(CC.GRAY + CC.ITALIC + "lucanius.me");
+        lines.add(signature);
         lines.add(CC.SMALL_BAR);
 
         return lines;
