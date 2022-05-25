@@ -124,4 +124,8 @@ public class Loadout {
 
         player.updateInventory();
     }
+
+    public boolean isBuild() {
+        return type == LoadoutType.BRIDGES;
+    }
 }

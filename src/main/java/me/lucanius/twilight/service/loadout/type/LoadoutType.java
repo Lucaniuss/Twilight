@@ -15,7 +15,8 @@ public enum LoadoutType {
 
     NONE(((victim, killer) -> {})),
     SUMO(((victim, killer) -> {})),
-    BOXING(((victim, killer) -> {}));
+    BOXING(((victim, killer) -> {})),
+    BRIDGES(((victim, killer) -> {}));
 
     private final LoadoutTypeCallable callable;
 
