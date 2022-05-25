@@ -1,4 +1,4 @@
-package me.lucanius.twilight.service.game;
+package me.lucanius.twilight.service.game.context;
 
 /**
  * @author Lucanius
