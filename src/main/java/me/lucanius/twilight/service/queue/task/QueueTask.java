@@ -9,6 +9,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.Optional;
 
 /**
  * @author Lucanius
@@ -24,16 +25,9 @@ public class QueueTask extends BukkitRunnable {
 
             MenuSaver.getCached().forEach((key, value) -> {
                 if (value instanceof AbstractQueueMenu) {
-                    value.update(plugin.getServer().getPlayer(key));
+                    Optional.ofNullable(plugin.getServer().getPlayer(key)).ifPresent(value::update);
                 }
             });
-            /*
-            if (!queue.getQueue().isEmpty()) {
-                plugin.getQueues().getQueued().forEach(queued ->
-                        queue.getMenu().update(plugin.getServer().getPlayer(queued))
-                );
-            }
-            */
 
             Iterator<AbstractQueueData<?>> iterator = queue.getQueue().iterator();
             while (iterator.hasNext()) {
