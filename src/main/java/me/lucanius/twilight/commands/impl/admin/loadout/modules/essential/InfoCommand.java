@@ -32,9 +32,9 @@ public class InfoCommand extends AbstractCommand {
 
         player.sendMessage(CC.BAR);
         player.sendMessage(CC.MAIN + CC.BOLD + "Loadout Information " + CC.GRAY + "- " + CC.MAIN + loadout.getName());
-        player.sendMessage(CC.ICON + CC.WHITE + "Slot: " + loadout.getSlot());
-        player.sendMessage(CC.ICON + CC.WHITE + "Icon: " + loadout.getIcon().getType().name());
-        player.sendMessage(CC.ICON + CC.WHITE + "Type: " + loadout.getType().name());
+        player.sendMessage(CC.ICON + CC.WHITE + "Slot: " + CC.SECOND + loadout.getSlot());
+        player.sendMessage(CC.ICON + CC.WHITE + "Icon: " + CC.SECOND + loadout.getIcon().getType().name());
+        player.sendMessage(CC.ICON + CC.WHITE + "Type: " + CC.SECOND + loadout.getType().name());
         player.sendMessage(CC.ICON + CC.WHITE + "Ranked: " + (loadout.isRanked() ? CC.GREEN + "✓" : CC.RED + "✗"));
         player.sendMessage(CC.ICON + CC.WHITE + "NoDamage: " + (loadout.isNoDamage() ? CC.GREEN + "✓" : CC.RED + "✗"));
         player.sendMessage(CC.ICON + CC.WHITE + "NoDrop: " + (loadout.isNoDrop() ? CC.GREEN + "✓" : CC.RED + "✗"));
@@ -46,7 +46,7 @@ public class InfoCommand extends AbstractCommand {
         new Clickable(
                 CC.SECOND + CC.ITALIC + "Click to get contents",
                 CC.SECOND + CC.ITALIC + "Click to get contents",
-                "/loadout getcontents " + loadout.getName() // TODO: Make this command
+                "/loadout getcontents " + loadout.getName()
         ).send(player);
         player.sendMessage(CC.BAR);
     }
