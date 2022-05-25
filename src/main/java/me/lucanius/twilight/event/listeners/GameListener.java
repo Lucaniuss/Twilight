@@ -2,7 +2,11 @@ package me.lucanius.twilight.event.listeners;
 
 import me.lucanius.twilight.Twilight;
 import me.lucanius.twilight.event.bukkit.Events;
+import me.lucanius.twilight.event.events.GameEndEvent;
 import me.lucanius.twilight.event.events.GameStartEvent;
+import me.lucanius.twilight.event.events.MovementEvent;
+import me.lucanius.twilight.event.movement.MovementListener;
+import me.lucanius.twilight.service.arena.Arena;
 import me.lucanius.twilight.service.game.Game;
 import me.lucanius.twilight.service.game.team.GameTeam;
 import me.lucanius.twilight.service.game.team.member.TeamMember;
@@ -11,11 +15,10 @@ import me.lucanius.twilight.service.profile.ProfileState;
 import me.lucanius.twilight.service.profile.modules.GameProfile;
 import me.lucanius.twilight.tools.Scheduler;
 import me.lucanius.twilight.tools.Tools;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.stream.Collectors;
 
 /**
  * @author Lucanius
@@ -28,30 +31,43 @@ public class GameListener {
     public GameListener() {
         Events.subscribe(GameStartEvent.class, event -> {
             Game game = event.getGame();
-            // TODO: Check if game is buildable, get arena copy and set it to game, cancel event when arena copy is null
+            if (game.getLoadout().isBuild()) {
+                Arena copy = game.getArena().getRandomCopy();
+                if (copy == null) {
+                    event.setCancelled(true);
+                    return;
+                }
 
+                game.setArenaCopy(copy);
+                if (!plugin.getEvents().subbed(MovementEvent.class)) {
+                    new MovementListener();
+                }
+            }
+
+            Collection<Player> players = new ArrayList<>();
             Collection<TeamMember> members = game.getMembers();
             members.forEach(member -> {
                 Profile profile = member.getProfile();
                 profile.setState(ProfileState.PLAYING);
                 GameProfile gameProfile = profile.getGameProfile();
 
+                GameTeam team = member.getTeam();
+
                 gameProfile.reset();
                 gameProfile.setGameId(game.getUniqueId());
-
-                GameTeam team = member.getTeam();
                 gameProfile.setTeam(team);
 
                 Player player = member.getPlayer();
                 Tools.clearPlayer(player);
 
                 if (team.getSpawn() == null) {
-                    team.setSpawn(team.getColor() == ChatColor.BLUE ? game.getArena().getA().getBukkitLocation() : game.getArena().getB().getBukkitLocation());
+                    team.detectSpawn(game.getArena());
                 }
                 player.teleport(team.getSpawn());
+
+                players.add(player);
             });
 
-            Collection<Player> players = members.stream().map(TeamMember::getPlayer).collect(Collectors.toList());
             Scheduler.run(() -> {
                 players.forEach(player -> plugin.getOnline().forEach(online -> {
                     online.hidePlayer(player);
@@ -62,6 +78,15 @@ public class GameListener {
             });
 
             // start new GameTask
+        });
+
+        Events.subscribe(GameEndEvent.class, event -> {
+            Game game = event.getGame();
+            if (game.getLoadout().isBuild() && plugin.getGames().hasBuild()) {
+                if (plugin.getEvents().subbed(MovementEvent.class)) {
+                    plugin.getEvents().unsubscribe(MovementEvent.class);
+                }
+            }
         });
     }
 }
