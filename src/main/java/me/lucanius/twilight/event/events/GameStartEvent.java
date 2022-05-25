@@ -18,7 +18,7 @@ public class GameStartEvent extends AbstractEvent implements TwilightEvent {
 
     public GameStartEvent(Game game) {
         this.game = game;
-        this.plugin.getEvents().publish(this);
+        this.call(this);
     }
 
 
