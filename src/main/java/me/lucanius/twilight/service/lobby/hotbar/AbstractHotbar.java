@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
  * @since May 23, 2022
  */
 @Getter
-public class AbstractHotbar {
+public abstract class AbstractHotbar {
 
     private final List<HotbarItem> items;
 
