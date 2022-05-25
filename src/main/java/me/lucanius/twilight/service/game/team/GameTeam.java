@@ -3,6 +3,7 @@ package me.lucanius.twilight.service.game.team;
 import lombok.Getter;
 import lombok.Setter;
 import me.lucanius.twilight.Twilight;
+import me.lucanius.twilight.service.arena.Arena;
 import me.lucanius.twilight.service.game.team.member.TeamMember;
 import me.lucanius.twilight.tools.Tools;
 import org.bukkit.ChatColor;
@@ -40,6 +41,10 @@ public class GameTeam {
         return members.stream().filter(player -> player.getUniqueId().equals(uniqueId)).findFirst().orElse(null);
     }
 
+    public Player getFirstPlayer() {
+        return members.stream().map(TeamMember::getPlayer).filter(Objects::nonNull).findFirst().orElse(null);
+    }
+
     public Player getRandomPlayer() {
         return members.get(plugin.getRandom().nextInt(members.size())).getPlayer();
     }
@@ -54,5 +59,9 @@ public class GameTeam {
 
     public String getFormattedName() {
         return color + name;
+    }
+
+    public void detectSpawn(Arena arena) {
+        spawn = color == ChatColor.BLUE ? arena.getA().getBukkitLocation() : color == ChatColor.RED ? arena.getB().getBukkitLocation() : null;
     }
 }
