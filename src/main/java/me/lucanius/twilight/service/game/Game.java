@@ -61,6 +61,10 @@ public class Game {
         return teams.stream().flatMap(team -> team.getMembers().stream()).filter(TeamMember::isAlive).map(TeamMember::getPlayer).collect(Collectors.toList());
     }
 
+    public Collection<TeamMember> getMembers() {
+        return teams.stream().flatMap(team -> team.getMembers().stream()).collect(Collectors.toList());
+    }
+
     public GameTeam getTeam(UUID uniqueId) {
         return teams.stream().filter(team -> team.getSpecific(uniqueId) != null).findFirst().orElse(null);
     }
