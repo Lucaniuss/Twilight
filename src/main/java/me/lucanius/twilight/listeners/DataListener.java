@@ -1,13 +1,16 @@
 package me.lucanius.twilight.listeners;
 
+import com.google.common.base.Preconditions;
 import me.lucanius.twilight.Twilight;
 import me.lucanius.twilight.service.profile.Profile;
+import me.lucanius.twilight.service.profile.ProfileService;
 import me.lucanius.twilight.tools.CC;
 import me.lucanius.twilight.tools.Scheduler;
 import me.lucanius.twilight.tools.events.Events;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.UUID;
 
@@ -18,14 +21,17 @@ import java.util.UUID;
 public class DataListener {
 
     private final Twilight plugin = Twilight.getInstance();
+    private final ProfileService service; // lazy init
 
     public DataListener() {
-        Events.subscribe(AsyncPlayerPreLoginEvent.class, event -> plugin.getProfiles().getOrCreate(event.getUniqueId()).load());
+        this.service = plugin.getProfiles();
+
+        Events.subscribe(AsyncPlayerPreLoginEvent.class, event -> this.service.getOrCreate(event.getUniqueId()).load());
 
         Events.subscribe(PlayerJoinEvent.class, event -> {
             final Player player = event.getPlayer();
             final UUID uniqueId = player.getUniqueId();
-            final Profile profile = plugin.getProfiles().get(uniqueId);
+            final Profile profile = this.service.get(uniqueId);
             if (profile == null) {
                 player.sendMessage(CC.RED + "Contact an administrator immediately or try to re-log!");
                 return;
@@ -38,6 +44,15 @@ public class DataListener {
             plugin.getLobby().toLobby(player, profile, true);
         });
 
-        // create PlayerQuitEvent and save user to mongo and remove from game if they are in game
+        Events.subscribe(PlayerQuitEvent.class, event -> {
+            final UUID uuid = event.getPlayer().getUniqueId();
+            final Profile profile = this.service.get(uuid);
+            Preconditions.checkNotNull(profile, "Profile cannot be null!");
+
+            this.service.getCache().put(uuid, profile);
+            this.service.remove(uuid);
+        });
+
+        //TODO: create PlayerQuitEvent and save user to mongo and remove from game if they are in game
     }
 }
