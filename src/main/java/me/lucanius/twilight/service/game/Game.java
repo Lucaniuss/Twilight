@@ -39,6 +39,7 @@ public class Game {
 
     private GameState state;
     private long timeStamp;
+    private Arena arenaCopy;
 
     public Game(GameContext context, Loadout loadout, Arena arena, AbstractQueue<?> queue, List<GameTeam> teams) {
         this.blocks = new HashSet<>();
@@ -51,6 +52,7 @@ public class Game {
 
         this.state = GameState.STARTING;
         this.timeStamp = System.currentTimeMillis();
+        this.arenaCopy = null;
     }
 
     public Collection<Player> getEveryone() {
