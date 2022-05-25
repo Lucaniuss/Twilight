@@ -49,8 +49,8 @@ public final class Twilight extends JavaPlugin {
     private QueueService queues;
     private ArenaService arenas;
     private GameService games;
-    private EventProvider events;
 
+    private EventProvider events;
     private Board board;
 
     private boolean disabling;
@@ -80,11 +80,13 @@ public final class Twilight extends JavaPlugin {
         queues = new QueueService(this);
         arenas = new ArenaService(this);
         games = new GameService(this);
+
         events = new StandardEventProvider();
-
-        registration.init("me.lucanius.twilight.listeners").init("me.lucanius.twilight.commands.impl");
-
         board = new Board(this, new BoardLayout());
+
+        registration.init("me.lucanius.twilight.listeners")
+                .init("me.lucanius.twilight.commands.impl")
+                .init("me.lucanius.twilight.event.listeners", events);
 
         Tools.log(CC.BAR);
         Tools.log(CC.MAIN + "Twilight&r &av" + getDescription().getVersion() + " &7~ &blucA#0999");
