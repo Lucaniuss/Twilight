@@ -38,7 +38,8 @@ public class StandardProfileService implements ProfileService {
 
     @Override
     public Profile getOrCreate(UUID uniqueId) {
-        return this.cache.isCached(uniqueId) ? this.cache.getIfPresent(uniqueId) : profiles.computeIfAbsent(uniqueId, Profile::new);
+        // this.cache.isCached(uniqueId) ? this.cache.getIfPresent(uniqueId)
+        return profiles.computeIfAbsent(uniqueId, Profile::new);
     }
 
     @Override
@@ -48,7 +49,8 @@ public class StandardProfileService implements ProfileService {
 
     @Override
     public Profile getOffline(UUID uniqueId) {
-        return this.cache.isCached(uniqueId) ? this.cache.getIfPresent(uniqueId) : profiles.computeIfAbsent(uniqueId, uuid -> {
+        // this.cache.isCached(uniqueId) ? this.cache.getIfPresent(uniqueId)
+        return profiles.computeIfAbsent(uniqueId, uuid -> {
             Profile profile = new Profile(uuid);
             profile.load(plugin.getMongo().getProfiles().find(Filters.eq("uniqueId", uuid.toString())).first());
 
