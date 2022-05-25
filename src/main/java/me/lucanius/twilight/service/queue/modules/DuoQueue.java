@@ -31,7 +31,7 @@ public class DuoQueue extends AbstractQueue<Set<Player>> {
 
         // TODO: Send messages
 
-        element.forEach(player -> plugin.getQueues().putData(player.getUniqueId(), data));
+        element.forEach(player -> plugin.getQueues().putData(player, player.getUniqueId(), data));
         add(data);
     }
 
@@ -39,7 +39,7 @@ public class DuoQueue extends AbstractQueue<Set<Player>> {
     public void dequeue(AbstractQueueData<?> data) {
         // TODO: Send messages
 
-        ((DuoQueueData) data).getElement().forEach(player -> plugin.getQueues().removeData(player.getUniqueId()));
+        ((DuoQueueData) data).getElement().forEach(player -> plugin.getQueues().removeData(player, player.getUniqueId()));
         remove(data);
     }
 

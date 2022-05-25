@@ -9,6 +9,7 @@ import me.lucanius.twilight.service.queue.abstr.AbstractQueueData;
 import me.lucanius.twilight.service.queue.modules.DuoQueue;
 import me.lucanius.twilight.service.queue.modules.SoloQueue;
 import me.lucanius.twilight.service.queue.task.QueueTask;
+import org.bukkit.entity.Player;
 
 import java.util.*;
 
@@ -60,15 +61,17 @@ public class QueueService {
         return (int) queueing.values().stream().filter(data -> data.getLoadout().equals(loadout) && data.getQueue().equals(queue)).count();
     }
 
-    public void putData(UUID uniqueId, AbstractQueueData<?> queueData) {
+    public void putData(Player player, UUID uniqueId, AbstractQueueData<?> queueData) {
         queueing.put(uniqueId, queueData);
         plugin.getProfiles().get(uniqueId).setState(ProfileState.QUEUE);
-        // TODO: Reset player inventory and add a queue item
+
+        player.getInventory().clear();
+        plugin.getLobby().getQueueItems().forEach(item -> player.getInventory().setItem(item.getSlot(), item.getItem()));
     }
 
-    public void removeData(UUID uniqueId) {
+    public void removeData(Player player, UUID uniqueId) {
         queueing.remove(uniqueId);
-        // TODO: Send player back to lobby and reset their items (Probably going to create a LobbyService class for this)
+        plugin.getLobby().toLobby(player, false);
     }
 
     @SneakyThrows

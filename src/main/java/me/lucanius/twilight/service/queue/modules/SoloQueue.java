@@ -31,7 +31,7 @@ public class SoloQueue extends AbstractQueue<Player> {
 
         // TODO: Send messages
 
-        plugin.getQueues().putData(element.getUniqueId(), data);
+        plugin.getQueues().putData(element, element.getUniqueId(), data);
         add(data);
     }
 
@@ -39,7 +39,8 @@ public class SoloQueue extends AbstractQueue<Player> {
     public void dequeue(AbstractQueueData<?> data) {
         // TODO: Send messages
 
-        plugin.getQueues().removeData(((SoloQueueData) data).getElement().getUniqueId());
+        SoloQueueData soloData = (SoloQueueData) data;
+        plugin.getQueues().removeData(soloData.getElement(), soloData.getElement().getUniqueId());
         remove(data);
     }
 
