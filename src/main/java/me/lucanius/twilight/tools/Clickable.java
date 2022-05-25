@@ -9,6 +9,9 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * I don't know who the author is.
+ */
 public class Clickable {
 
     private final List<TextComponent> components;
