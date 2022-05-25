@@ -44,6 +44,7 @@ public final class CC {
     public final String MAIN = DARK_GREEN;
     public final String SECOND = GREEN;
     public final String ICON = GRAY + BOLD + " ◈ ";
+    public final String GAME_PREFIX = GRAY + "(" + MAIN + "Game" + GRAY + ") ";
 
     public String translate(String string) {
         return ChatColor.translateAlternateColorCodes('&', string);
