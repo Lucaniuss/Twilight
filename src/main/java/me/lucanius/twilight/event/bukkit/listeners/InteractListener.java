@@ -1,4 +1,4 @@
-package me.lucanius.twilight.listeners;
+package me.lucanius.twilight.event.bukkit.listeners;
 
 import me.lucanius.twilight.Twilight;
 import me.lucanius.twilight.service.lobby.hotbar.context.HotbarContext;

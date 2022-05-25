@@ -84,7 +84,7 @@ public final class Twilight extends JavaPlugin {
         events = new StandardEventProvider();
         board = new Board(this, new BoardLayout());
 
-        registration.init("me.lucanius.twilight.listeners")
+        registration.init("me.lucanius.twilight.event.bukkit.listeners")
                 .init("me.lucanius.twilight.commands.impl")
                 .init("me.lucanius.twilight.event.listeners");
 

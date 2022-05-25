@@ -1,4 +1,4 @@
-package me.lucanius.twilight.listeners;
+package me.lucanius.twilight.event.bukkit.listeners;
 
 import me.lucanius.twilight.Twilight;
 import me.lucanius.twilight.service.profile.Profile;
@@ -39,6 +39,10 @@ public class MainListener {
             }
 
             // game damage event
+        });
+
+        Events.subscribe(EntityDamageByEntityEvent.class, event -> {
+
         });
 
         Events.subscribe(BlockBreakEvent.class, event -> {

@@ -1,4 +1,4 @@
-package me.lucanius.twilight.listeners;
+package me.lucanius.twilight.event.bukkit.listeners;
 
 import com.google.common.base.Preconditions;
 import me.lucanius.twilight.Twilight;
