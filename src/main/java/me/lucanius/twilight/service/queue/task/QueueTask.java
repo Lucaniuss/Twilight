@@ -3,6 +3,8 @@ package me.lucanius.twilight.service.queue.task;
 import me.lucanius.twilight.Twilight;
 import me.lucanius.twilight.service.queue.abstr.AbstractQueueData;
 import me.lucanius.twilight.service.queue.callback.QueueCallback;
+import me.lucanius.twilight.service.queue.menu.abstr.AbstractQueueMenu;
+import me.lucanius.twilight.tools.menu.handlers.MenuSaver;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Arrays;
@@ -20,11 +22,18 @@ public class QueueTask extends BukkitRunnable {
     public void run() {
         plugin.getQueues().getAll().forEach(queue -> {
 
+            MenuSaver.getCached().forEach((key, value) -> {
+                if (value instanceof AbstractQueueMenu) {
+                    value.update(plugin.getServer().getPlayer(key));
+                }
+            });
+            /*
             if (!queue.getQueue().isEmpty()) {
                 plugin.getQueues().getQueued().forEach(queued ->
                         queue.getMenu().update(plugin.getServer().getPlayer(queued))
                 );
             }
+            */
 
             Iterator<AbstractQueueData<?>> iterator = queue.getQueue().iterator();
             while (iterator.hasNext()) {
