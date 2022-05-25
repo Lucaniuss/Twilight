@@ -1,7 +1,7 @@
 package me.lucanius.twilight.service.profile.modules;
 
 import lombok.Data;
-import me.lucanius.twilight.service.game.GameTeam;
+import me.lucanius.twilight.service.game.team.GameTeam;
 
 /**
  * @author Lucanius
