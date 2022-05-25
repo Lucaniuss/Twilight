@@ -86,7 +86,7 @@ public final class Twilight extends JavaPlugin {
 
         registration.init("me.lucanius.twilight.listeners")
                 .init("me.lucanius.twilight.commands.impl")
-                .init("me.lucanius.twilight.event.listeners", events);
+                .init("me.lucanius.twilight.event.listeners");
 
         Tools.log(CC.BAR);
         Tools.log(CC.MAIN + "Twilight&r &av" + getDescription().getVersion() + " &7~ &blucA#0999");
