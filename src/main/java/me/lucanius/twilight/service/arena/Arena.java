@@ -3,6 +3,7 @@ package me.lucanius.twilight.service.arena;
 import lombok.Data;
 import me.lucanius.twilight.service.arena.generator.ArenaGenerator;
 import me.lucanius.twilight.tools.config.ConfigFile;
+import me.lucanius.twilight.tools.location.Cuboid;
 import me.lucanius.twilight.tools.location.SerializableLocation;
 import org.bukkit.Location;
 import org.bukkit.configuration.ConfigurationSection;
@@ -105,6 +106,10 @@ public class Arena {
         for (int i = 0; i < amount; i++) {
             generator.generate();
         }
+    }
+
+    public Cuboid getCuboid() {
+        return new Cuboid(min, max);
     }
 
     public String serialize() {
