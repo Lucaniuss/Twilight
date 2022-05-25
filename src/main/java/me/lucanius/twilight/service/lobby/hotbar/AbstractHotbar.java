@@ -1,6 +1,8 @@
 package me.lucanius.twilight.service.lobby.hotbar;
 
 import lombok.Getter;
+import me.lucanius.twilight.service.lobby.hotbar.context.HotbarContext;
+import me.lucanius.twilight.service.lobby.hotbar.context.HotbarType;
 import me.lucanius.twilight.tools.CC;
 import me.lucanius.twilight.tools.item.ItemBuilder;
 import org.bukkit.Material;

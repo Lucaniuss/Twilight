@@ -1,4 +1,4 @@
-package me.lucanius.twilight.service.lobby.hotbar;
+package me.lucanius.twilight.service.lobby.hotbar.context;
 
 /**
  * @author Lucanius

@@ -1,6 +1,8 @@
 package me.lucanius.twilight.service.lobby.hotbar;
 
 import lombok.Data;
+import me.lucanius.twilight.service.lobby.hotbar.context.HotbarContext;
+import me.lucanius.twilight.service.lobby.hotbar.context.HotbarType;
 import org.bukkit.inventory.ItemStack;
 
 /**

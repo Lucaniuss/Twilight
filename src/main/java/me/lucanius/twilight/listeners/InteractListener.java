@@ -1,7 +1,7 @@
 package me.lucanius.twilight.listeners;
 
 import me.lucanius.twilight.Twilight;
-import me.lucanius.twilight.service.lobby.hotbar.HotbarContext;
+import me.lucanius.twilight.service.lobby.hotbar.context.HotbarContext;
 import me.lucanius.twilight.service.lobby.hotbar.HotbarItem;
 import me.lucanius.twilight.service.profile.Profile;
 import me.lucanius.twilight.tools.events.Events;
