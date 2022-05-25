@@ -20,8 +20,7 @@ public class ProfileService {
 
     private final Twilight plugin;
     private final Map<UUID, Profile> profiles;
-    private final ProfileCache cache;
-
+    @Getter private final ProfileCache cache;
     @Getter private Profile dummy;
 
     public ProfileService(Twilight plugin) {
