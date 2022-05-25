@@ -7,6 +7,7 @@ import me.lucanius.twilight.service.loadout.LoadoutService;
 import me.lucanius.twilight.service.lobby.LobbyService;
 import me.lucanius.twilight.service.profile.Profile;
 import me.lucanius.twilight.service.profile.ProfileService;
+import me.lucanius.twilight.service.profile.standard.StandardProfileService;
 import me.lucanius.twilight.service.queue.QueueService;
 import me.lucanius.twilight.storage.MongoServer;
 import me.lucanius.twilight.storage.builder.MongoBuilder;
@@ -69,7 +70,7 @@ public final class Twilight extends JavaPlugin {
                 .build();
         framework = new CommandFramework(this);
         lobby = new LobbyService(this);
-        profiles = new ProfileService(this);
+        profiles = new StandardProfileService(this);
         loadouts = new LoadoutService(this);
         queues = new QueueService(this);
         arenas = new ArenaService(this);
