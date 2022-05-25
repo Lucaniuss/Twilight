@@ -28,13 +28,16 @@ public class GameTeam {
     private final List<TeamMember> members;
     private final ChatColor color;
     private final String name;
+    private final String prefix;
 
     private Location spawn;
+    private int points;
 
     public GameTeam(List<UUID> members, ChatColor color) {
         this.members = members.stream().map(member -> new TeamMember(member, this)).collect(Collectors.toList());
         this.color = color;
         this.name = Tools.getEnumName(color.name());
+        this.prefix = color + "[" + color.name().charAt(0) + "] ";
     }
 
     public TeamMember getSpecific(UUID uniqueId) {

@@ -25,6 +25,7 @@ public abstract class AbstractHotbar {
     protected final List<HotbarItem> lobbyItems;
     protected final List<HotbarItem> partyItems;
     protected final List<HotbarItem> queueItems;
+    protected final List<HotbarItem> spectatorItems;
 
     public AbstractHotbar() {
         this.items = new ArrayList<>(
@@ -38,6 +39,7 @@ public abstract class AbstractHotbar {
         this.lobbyItems = items.stream().filter(i -> i.getType() == HotbarType.LOBBY).collect(Collectors.toList());
         this.partyItems = items.stream().filter(i -> i.getType() == HotbarType.PARTY).collect(Collectors.toList());
         this.queueItems = items.stream().filter(i -> i.getType() == HotbarType.QUEUE).collect(Collectors.toList());
+        this.spectatorItems = items.stream().filter(i -> i.getType() == HotbarType.SPECTATING).collect(Collectors.toList());
     }
 
     public HotbarItem get(ItemStack item) {

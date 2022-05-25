@@ -70,9 +70,7 @@ public class GameService {
                 .reduce(0, Integer::sum);
     }
 
-    public boolean hasBuild() {
-        return games.values()
-                .stream()
-                .anyMatch(game -> game.getLoadout().isBuild());
+    public boolean needsMovement() {
+        return games.values().stream().anyMatch(game -> game.getLoadout().needsMovement());
     }
 }

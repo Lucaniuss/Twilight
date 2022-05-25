@@ -5,11 +5,12 @@ import me.lucanius.twilight.event.bukkit.Events;
 import me.lucanius.twilight.event.events.GameEndEvent;
 import me.lucanius.twilight.event.events.GameStartEvent;
 import me.lucanius.twilight.event.events.AsyncMovementEvent;
-import me.lucanius.twilight.event.movement.MovementListener;
+import me.lucanius.twilight.event.movement.AsyncMovementListener;
 import me.lucanius.twilight.service.arena.Arena;
 import me.lucanius.twilight.service.game.Game;
 import me.lucanius.twilight.service.game.team.GameTeam;
 import me.lucanius.twilight.service.game.team.member.TeamMember;
+import me.lucanius.twilight.service.loadout.Loadout;
 import me.lucanius.twilight.service.profile.Profile;
 import me.lucanius.twilight.service.profile.ProfileState;
 import me.lucanius.twilight.service.profile.modules.GameProfile;
@@ -31,7 +32,8 @@ public class GameListener {
     public GameListener() {
         Events.subscribe(GameStartEvent.class, event -> {
             Game game = event.getGame();
-            if (game.getLoadout().isBuild()) {
+            Loadout loadout = game.getLoadout();
+            if (loadout.isBuild()) {
                 Arena copy = game.getArena().getRandomCopy();
                 if (copy == null) {
                     event.setCancelled(true);
@@ -39,9 +41,10 @@ public class GameListener {
                 }
 
                 game.setArenaCopy(copy);
-                if (!plugin.getEvents().subbed(AsyncMovementEvent.class)) {
-                    new MovementListener();
-                }
+            }
+
+            if (loadout.needsMovement() && !plugin.getEvents().subbed(AsyncMovementEvent.class)) {
+                new AsyncMovementListener();
             }
 
             Collection<Player> players = new ArrayList<>();
@@ -82,10 +85,9 @@ public class GameListener {
 
         Events.subscribe(GameEndEvent.class, event -> {
             Game game = event.getGame();
-            if (game.getLoadout().isBuild() && plugin.getGames().hasBuild()) {
-                if (plugin.getEvents().subbed(AsyncMovementEvent.class)) {
-                    plugin.getEvents().unsubscribe(AsyncMovementEvent.class);
-                }
+            Loadout loadout = game.getLoadout();
+            if (loadout.needsMovement() && !plugin.getGames().needsMovement() && plugin.getEvents().subbed(AsyncMovementEvent.class)) {
+                plugin.getEvents().unsubscribe(AsyncMovementEvent.class);
             }
         });
     }
