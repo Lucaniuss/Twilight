@@ -1,5 +1,8 @@
 package me.lucanius.twilight.service.party;
 
+import me.lucanius.twilight.service.lobby.hotbar.HotbarItem;
+import org.bukkit.entity.Player;
+
 import java.util.Collection;
 import java.util.UUID;
 
@@ -12,16 +15,20 @@ public interface PartyService {
 
     Party getParty(UUID uuid);
 
-    PartyService createParty(UUID leader);
+    boolean isParty(UUID uuid);
 
-    PartyService joinParty(UUID player, UUID leader);
+    boolean isLeader(UUID uuid);
 
-    PartyService leaveParty(UUID player);
+    PartyService createParty(Player leader);
 
-    PartyService disbandParty(UUID leader);
+    PartyService joinParty(Player player, UUID leader);
 
-    Collection<UUID> getMembers(Party party);
+    PartyService leaveParty(Player player);
+
+    PartyService disbandParty(Party party);
 
     Collection<Party> getParties();
+
+    Collection<HotbarItem> getItems();
 
 }

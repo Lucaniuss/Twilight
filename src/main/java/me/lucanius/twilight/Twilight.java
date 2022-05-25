@@ -9,6 +9,8 @@ import me.lucanius.twilight.service.damage.DamageService;
 import me.lucanius.twilight.service.game.GameService;
 import me.lucanius.twilight.service.loadout.LoadoutService;
 import me.lucanius.twilight.service.lobby.LobbyService;
+import me.lucanius.twilight.service.party.PartyService;
+import me.lucanius.twilight.service.party.impl.StandardPartyService;
 import me.lucanius.twilight.service.profile.Profile;
 import me.lucanius.twilight.service.profile.ProfileService;
 import me.lucanius.twilight.service.profile.standard.StandardProfileService;
@@ -51,6 +53,7 @@ public final class Twilight extends JavaPlugin {
     private ArenaService arenas;
     private GameService games;
     private DamageService damages;
+    private PartyService parties;
 
     private EventProvider events;
     private Board board;
@@ -83,6 +86,7 @@ public final class Twilight extends JavaPlugin {
         arenas = new ArenaService(this);
         games = new GameService(this);
         damages = new DamageService();
+        parties = new StandardPartyService(this);
 
         events = new StandardEventProvider();
         board = new Board(this, new BoardLayout());
