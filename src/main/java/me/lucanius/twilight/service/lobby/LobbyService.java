@@ -30,6 +30,10 @@ public class LobbyService extends AbstractHotbar {
         toLobby(player, plugin.getProfiles().get(player.getUniqueId()), teleport);
     }
 
+    public void toLobby(Profile profile, boolean teleport) {
+        toLobby(plugin.getServer().getPlayer(profile.getUniqueId()), profile, teleport);
+    }
+
     public void toLobby(Player player, Profile profile, boolean teleport) {
         profile.setState(ProfileState.LOBBY);
 
