@@ -5,8 +5,10 @@ import me.lucanius.twilight.event.bukkit.Events;
 import me.lucanius.twilight.event.events.AsyncMovementEvent;
 import me.lucanius.twilight.service.game.Game;
 import me.lucanius.twilight.service.loadout.Loadout;
+import me.lucanius.twilight.service.loadout.type.LoadoutType;
 import me.lucanius.twilight.service.profile.Profile;
 import me.lucanius.twilight.service.profile.ProfileState;
+import org.bukkit.entity.Player;
 
 /**
  * @author Lucanius
@@ -29,7 +31,17 @@ public class AsyncMovementListener {
                 return;
             }
 
-            loadout.getType().getCallable().execute(event.getPlayer(), null, game);
+            Player player = event.getPlayer();
+            LoadoutType type = loadout.getType();
+            switch (type) {
+                case SUMO:
+                    if (event.getTo().getBlock().isLiquid()) {
+                        type.getCallable().execute(player, plugin.getDamages().get(player.getUniqueId()), game);
+                    }
+                    break;
+                case BRIDGES:
+                    break;
+            }
         });
     }
 }

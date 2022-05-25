@@ -10,13 +10,13 @@ import me.lucanius.twilight.Twilight;
  * © Twilight - All Rights Reserved
  */
 @Getter @Setter
-public abstract class AbstractEvent {
+public abstract class AbstractEvent implements TwilightEvent {
 
     protected final static Twilight plugin = Twilight.getInstance();
 
     private boolean cancelled;
 
-    protected void call(TwilightEvent event) {
-        plugin.getEvents().publish(event);
+    public AbstractEvent() {
+        plugin.getEvents().publish(this);
     }
 }

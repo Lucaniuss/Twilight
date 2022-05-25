@@ -1,8 +1,8 @@
 package me.lucanius.twilight.event.events;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import me.lucanius.twilight.event.AbstractEvent;
-import me.lucanius.twilight.event.TwilightEvent;
 import me.lucanius.twilight.service.game.Game;
 
 /**
@@ -11,14 +11,9 @@ import me.lucanius.twilight.service.game.Game;
  * © Twilight - All Rights Reserved
  */
 
-@Getter
-public class GameStartEvent extends AbstractEvent implements TwilightEvent {
+@Getter @RequiredArgsConstructor
+public class GameStartEvent extends AbstractEvent {
 
     private final Game game;
 
-    public GameStartEvent(Game game) {
-        this.game = game;
-
-        this.call(this);
-    }
 }
