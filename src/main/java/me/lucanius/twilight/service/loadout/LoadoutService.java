@@ -53,4 +53,17 @@ public class LoadoutService {
         loadouts.add(loadout);
         return loadout;
     }
+
+    public void destroy(Loadout loadout) {
+        loadouts.remove(loadout);
+    }
+
+    public void register(Loadout loadout) {
+        loadouts.add(loadout);
+    }
+
+    public void reload() {
+        save();
+        load();
+    }
 }
