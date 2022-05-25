@@ -1,6 +1,8 @@
 package me.lucanius.twilight.service.game;
 
 import me.lucanius.twilight.Twilight;
+import me.lucanius.twilight.event.AbstractEvent;
+import me.lucanius.twilight.event.events.GameStartEvent;
 import me.lucanius.twilight.service.loadout.Loadout;
 import me.lucanius.twilight.service.profile.Profile;
 import me.lucanius.twilight.service.queue.abstr.AbstractQueue;
@@ -26,6 +28,11 @@ public class GameService {
     }
 
     public void startGame(Game game) {
+        AbstractEvent event = new GameStartEvent(game);
+        if (event.isCancelled()) {
+            return;
+        }
+
         games.put(game.getUniqueId(), game);
     }
 
