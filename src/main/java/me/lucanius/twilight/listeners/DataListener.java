@@ -37,5 +37,7 @@ public class DataListener {
 
             plugin.getLobby().toLobby(player, profile, true);
         });
+
+        // create PlayerQuitEvent and save user to mongo and remove from game if they are in game
     }
 }
