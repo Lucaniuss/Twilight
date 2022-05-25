@@ -128,4 +128,8 @@ public class Loadout {
     public boolean isBuild() {
         return type == LoadoutType.BRIDGES;
     }
+
+    public boolean needsMovement() {
+        return (type == LoadoutType.BRIDGES || type == LoadoutType.SUMO);
+    }
 }
