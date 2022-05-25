@@ -1,4 +1,4 @@
-package me.lucanius.twilight.commands.impl.admin.arena.modules;
+package me.lucanius.twilight.commands.impl.admin.arena.modules.essential;
 
 import me.lucanius.twilight.commands.abstr.AbstractCommand;
 import me.lucanius.twilight.tools.CC;
@@ -28,7 +28,7 @@ public class CreateCommand extends AbstractCommand {
         }
 
         plugin.getArenas().build(args[0]);
-        player.sendMessage(CC.SECOND + "Successfully deleted arena " + CC.MAIN + args[0] + CC.SECOND + ".");
+        player.sendMessage(CC.SECOND + "Successfully created arena " + CC.MAIN + args[0] + CC.SECOND + ".");
         player.sendMessage(CC.SECOND + CC.ITALIC + "Make sure you setup all locations using their commands!");
     }
 }

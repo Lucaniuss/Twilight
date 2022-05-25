@@ -1,20 +1,19 @@
-package me.lucanius.twilight.commands.impl.admin.arena.modules;
+package me.lucanius.twilight.commands.impl.admin.arena.modules.location;
 
 import me.lucanius.twilight.commands.abstr.AbstractCommand;
 import me.lucanius.twilight.service.arena.Arena;
 import me.lucanius.twilight.tools.CC;
 import me.lucanius.twilight.tools.command.Command;
 import me.lucanius.twilight.tools.command.CommandArgs;
-import me.lucanius.twilight.tools.location.SerializableLocation;
 import org.bukkit.entity.Player;
 
 /**
  * @author Lucanius
  * @since May 24, 2022
  */
-public class MaxCommand extends AbstractCommand {
+public class BuildHeightCommand extends AbstractCommand {
 
-    @Command(name = "arena.max", permission = "twilight.admin")
+    @Command(name = "arena.buildheight", permission = "twilight.admin")
     public void onCommand(CommandArgs cmd) {
         Player player = cmd.getPlayer();
         String[] args = cmd.getArgs();
@@ -30,7 +29,7 @@ public class MaxCommand extends AbstractCommand {
             return;
         }
 
-        arena.setMax(new SerializableLocation(player.getLocation()));
-        player.sendMessage(CC.SECOND + "Successfully set location Max for " + CC.MAIN + arena.getName() + CC.SECOND + ".");
+        arena.setBuildHeight(player.getLocation().getY());
+        player.sendMessage(CC.SECOND + "Successfully set the build-height for " + CC.MAIN + arena.getName() + CC.SECOND + ".");
     }
 }

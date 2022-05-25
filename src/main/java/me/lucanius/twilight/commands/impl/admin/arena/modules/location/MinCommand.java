@@ -1,4 +1,4 @@
-package me.lucanius.twilight.commands.impl.admin.arena.modules;
+package me.lucanius.twilight.commands.impl.admin.arena.modules.location;
 
 import me.lucanius.twilight.commands.abstr.AbstractCommand;
 import me.lucanius.twilight.service.arena.Arena;

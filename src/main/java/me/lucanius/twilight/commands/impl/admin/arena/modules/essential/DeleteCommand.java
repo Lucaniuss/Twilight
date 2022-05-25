@@ -1,20 +1,19 @@
-package me.lucanius.twilight.commands.impl.admin.arena.modules;
+package me.lucanius.twilight.commands.impl.admin.arena.modules.essential;
 
 import me.lucanius.twilight.commands.abstr.AbstractCommand;
 import me.lucanius.twilight.service.arena.Arena;
 import me.lucanius.twilight.tools.CC;
 import me.lucanius.twilight.tools.command.Command;
 import me.lucanius.twilight.tools.command.CommandArgs;
-import me.lucanius.twilight.tools.location.SerializableLocation;
 import org.bukkit.entity.Player;
 
 /**
  * @author Lucanius
  * @since May 24, 2022
  */
-public class ACommand extends AbstractCommand {
+public class DeleteCommand extends AbstractCommand {
 
-    @Command(name = "arena.a", permission = "twilight.admin")
+    @Command(name = "arena.delete", permission = "twilight.admin")
     public void onCommand(CommandArgs cmd) {
         Player player = cmd.getPlayer();
         String[] args = cmd.getArgs();
@@ -30,7 +29,7 @@ public class ACommand extends AbstractCommand {
             return;
         }
 
-        arena.setA(new SerializableLocation(player.getLocation()));
-        player.sendMessage(CC.SECOND + "Successfully set location A for " + CC.MAIN + arena.getName() + CC.SECOND + ".");
+        plugin.getArenas().destroy(arena);
+        player.sendMessage(CC.SECOND + "Successfully deleted arena " + CC.MAIN + arena.getName() + CC.SECOND + ".");
     }
 }

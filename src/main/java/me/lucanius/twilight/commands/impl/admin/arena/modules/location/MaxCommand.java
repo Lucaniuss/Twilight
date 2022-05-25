@@ -1,4 +1,4 @@
-package me.lucanius.twilight.commands.impl.admin.arena.modules;
+package me.lucanius.twilight.commands.impl.admin.arena.modules.location;
 
 import me.lucanius.twilight.commands.abstr.AbstractCommand;
 import me.lucanius.twilight.service.arena.Arena;
@@ -12,9 +12,9 @@ import org.bukkit.entity.Player;
  * @author Lucanius
  * @since May 24, 2022
  */
-public class BCommand extends AbstractCommand {
+public class MaxCommand extends AbstractCommand {
 
-    @Command(name = "arena.b", permission = "twilight.admin")
+    @Command(name = "arena.max", permission = "twilight.admin")
     public void onCommand(CommandArgs cmd) {
         Player player = cmd.getPlayer();
         String[] args = cmd.getArgs();
@@ -30,7 +30,7 @@ public class BCommand extends AbstractCommand {
             return;
         }
 
-        arena.setB(new SerializableLocation(player.getLocation()));
-        player.sendMessage(CC.SECOND + "Successfully set location B for " + CC.MAIN + arena.getName() + CC.SECOND + ".");
+        arena.setMax(new SerializableLocation(player.getLocation()));
+        player.sendMessage(CC.SECOND + "Successfully set location Max for " + CC.MAIN + arena.getName() + CC.SECOND + ".");
     }
 }

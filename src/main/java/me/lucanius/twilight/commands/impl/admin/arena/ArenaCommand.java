@@ -32,7 +32,7 @@ public class ArenaCommand extends AbstractCommand {
         player.sendMessage(CC.BAR);
         player.sendMessage(CC.MAIN + CC.BOLD + "Arena Commands " + CC.GRAY + "(" + completer.size() + ")");
         for (String str : completer) {
-            player.sendMessage(CC.ICON + CC.MAIN + "/" + cmd.getLabel() + " " + str);
+            player.sendMessage(CC.ICON + CC.SECOND + "/" + cmd.getLabel() + " " + str);
         }
         player.sendMessage(CC.BAR);
     }
