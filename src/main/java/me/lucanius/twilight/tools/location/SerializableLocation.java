@@ -6,6 +6,8 @@ import me.lucanius.twilight.Twilight;
 import org.bukkit.Location;
 import org.bukkit.World;
 
+import java.util.Optional;
+
 /**
  * @author Lucanius
  * @since May 20, 2022
@@ -67,7 +69,7 @@ public class SerializableLocation {
     }
 
     public World getBukkitWorld() {
-        return bukkitWorld = bukkitWorld != null ? bukkitWorld : world != null ? plugin.getServer().getWorld(world) : plugin.getServer().getWorlds().get(0);
+        return bukkitWorld = bukkitWorld != null ? bukkitWorld : world != null ? Optional.ofNullable(plugin.getServer().getWorld(world)).orElse(plugin.getServer().getWorlds().get(0)) : plugin.getServer().getWorlds().get(0);
     }
 
     public Location getBukkitLocation() {
