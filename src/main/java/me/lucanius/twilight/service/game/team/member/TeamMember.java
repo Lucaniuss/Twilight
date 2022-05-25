@@ -1,0 +1,41 @@
+package me.lucanius.twilight.service.game.team.member;
+
+import lombok.Getter;
+import lombok.Setter;
+import me.lucanius.twilight.Twilight;
+import me.lucanius.twilight.service.profile.Profile;
+import org.bukkit.entity.Player;
+
+import java.util.UUID;
+
+/**
+ * @author Lucanius
+ * @since May 25, 2022
+ */
+@Getter @Setter
+public class TeamMember {
+
+    private final static Twilight plugin = Twilight.getInstance();
+
+    private final UUID uniqueId;
+
+    private boolean alive;
+    private Player player;
+    private Profile profile;
+
+    public TeamMember(UUID uniqueId) {
+        this.uniqueId = uniqueId;
+        this.alive = true;
+        this.player = plugin.getServer().getPlayer(uniqueId);
+        this.profile = plugin.getProfiles().get(uniqueId);
+    }
+
+    public Player getPlayer() {
+        return player = player != null ? player : plugin.getServer().getPlayer(uniqueId);
+    }
+
+    public Profile getProfile() {
+        return profile = profile != null ? profile : plugin.getProfiles().get(uniqueId);
+    }
+
+}
