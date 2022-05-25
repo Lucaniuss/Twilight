@@ -6,6 +6,7 @@ import me.lucanius.twilight.Twilight;
 import me.lucanius.twilight.service.game.team.member.TeamMember;
 import me.lucanius.twilight.tools.Tools;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import java.util.Collection;
@@ -27,8 +28,10 @@ public class GameTeam {
     private final ChatColor color;
     private final String name;
 
+    private Location spawn;
+
     public GameTeam(List<UUID> members, ChatColor color) {
-        this.members = members.stream().map(TeamMember::new).collect(Collectors.toList());
+        this.members = members.stream().map(member -> new TeamMember(member, this)).collect(Collectors.toList());
         this.color = color;
         this.name = Tools.getEnumName(color.name());
     }

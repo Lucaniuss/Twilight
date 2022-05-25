@@ -3,6 +3,7 @@ package me.lucanius.twilight.service.game.team.member;
 import lombok.Getter;
 import lombok.Setter;
 import me.lucanius.twilight.Twilight;
+import me.lucanius.twilight.service.game.team.GameTeam;
 import me.lucanius.twilight.service.profile.Profile;
 import org.bukkit.entity.Player;
 
@@ -18,13 +19,15 @@ public class TeamMember {
     private final static Twilight plugin = Twilight.getInstance();
 
     private final UUID uniqueId;
+    private final GameTeam team;
 
     private boolean alive;
     private Player player;
     private Profile profile;
 
-    public TeamMember(UUID uniqueId) {
+    public TeamMember(UUID uniqueId, GameTeam team) {
         this.uniqueId = uniqueId;
+        this.team = team;
         this.alive = true;
         this.player = plugin.getServer().getPlayer(uniqueId);
         this.profile = plugin.getProfiles().get(uniqueId);
