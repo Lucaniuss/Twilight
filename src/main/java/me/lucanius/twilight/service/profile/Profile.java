@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import me.lucanius.twilight.Twilight;
 import me.lucanius.twilight.service.loadout.personal.PersonalLoadout;
+import me.lucanius.twilight.service.profile.modules.GameProfile;
 import me.lucanius.twilight.tools.Scheduler;
 import me.lucanius.twilight.tools.Tools;
 import org.bson.Document;
@@ -27,7 +28,10 @@ public class Profile {
     private final List<PersonalLoadout[]> loadouts;
 
     private ProfileState state;
+    private GameProfile gameProfile;
+
     private int pingRange;
+
     private boolean loaded;
 
     public Profile(UUID uniqueId) {
@@ -36,7 +40,10 @@ public class Profile {
         this.loadouts = new ArrayList<>();
 
         this.state = ProfileState.LOBBY;
+        this.gameProfile = new GameProfile();
+
         this.pingRange = -1;
+
         this.loaded = false;
 
         plugin.getLoadouts().getAll().forEach(loadout -> loadouts.add(new PersonalLoadout[3]));

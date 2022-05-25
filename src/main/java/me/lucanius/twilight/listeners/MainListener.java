@@ -8,10 +8,7 @@ import me.lucanius.twilight.tools.events.Events;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.*;
-import org.bukkit.event.entity.CreatureSpawnEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.FoodLevelChangeEvent;
-import org.bukkit.event.entity.ItemSpawnEvent;
+import org.bukkit.event.entity.*;
 import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
@@ -86,6 +83,20 @@ public class MainListener {
             }
 
             // event setcancelled when loadout of game is noHunger
+        });
+
+        Events.subscribe(PotionSplashEvent.class, event -> {
+            if (!(event.getEntity().getShooter() instanceof Player)) {
+                return;
+            }
+
+            Player player = (Player) event.getEntity().getShooter();
+            Profile profile = plugin.getProfiles().get(player.getUniqueId());
+            if (profile.getState() != ProfileState.PLAYING) {
+                return;
+            }
+
+            profile.getGameProfile().throwPotion(event.getIntensity(player) <= 0.5d);
         });
 
         Events.subscribe(ItemSpawnEvent.class, event -> Scheduler.runLaterAsync(() -> event.getEntity().remove(), 20L * 10L));
