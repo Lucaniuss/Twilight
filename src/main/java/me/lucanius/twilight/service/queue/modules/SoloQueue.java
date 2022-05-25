@@ -61,15 +61,16 @@ public class SoloQueue extends AbstractQueue<Player> {
                     new GameTeam(Collections.singletonList(((SoloQueueData) first).getElement().getUniqueId()), ChatColor.BLUE),
                     new GameTeam(Collections.singletonList(((SoloQueueData) second).getElement().getUniqueId()), ChatColor.RED)
             );
+            Loadout loadout = first.getLoadout();
             Game game = new Game(
                     GameContext.NORMAL,
-                    first.getLoadout(),
-                    plugin.getArenas().getRandom(),
+                    loadout,
+                    plugin.getArenas().getRandom(loadout),
                     this,
                     teams
             );
-            plugin.getGames().startGame(game);
-            return QueueCallback.ALLOWED;
+
+            return plugin.getGames().startGame(game) ? QueueCallback.ALLOWED : QueueCallback.DENIED;
         } catch (final Exception e) {
             e.printStackTrace();
             return QueueCallback.DENIED;

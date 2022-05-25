@@ -27,13 +27,14 @@ public class GameService {
         this.games = new HashMap<>();
     }
 
-    public void startGame(Game game) {
+    public boolean startGame(Game game) {
         AbstractEvent event = new GameStartEvent(game);
         if (event.isCancelled()) {
-            return;
+            return false;
         }
 
         games.put(game.getUniqueId(), game);
+        return true;
     }
 
     public Game get(UUID uniqueId) {
@@ -46,6 +47,10 @@ public class GameService {
 
     public Game get(Player player) {
         return games.get(plugin.getProfiles().get(player.getUniqueId()).getGameProfile().getGameId());
+    }
+
+    public Collection<Game> getAll() {
+        return games.values();
     }
 
     public int getSize() {
@@ -63,5 +68,11 @@ public class GameService {
                 .map(Game::getEveryone)
                 .map(Collection::size)
                 .reduce(0, Integer::sum);
+    }
+
+    public boolean hasBuild() {
+        return games.values()
+                .stream()
+                .anyMatch(game -> game.getLoadout().isBuild());
     }
 }
