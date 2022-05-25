@@ -1,6 +1,7 @@
 package me.lucanius.twilight.service.arena;
 
 import lombok.Data;
+import me.lucanius.twilight.Twilight;
 import me.lucanius.twilight.service.arena.generator.ArenaGenerator;
 import me.lucanius.twilight.tools.config.ConfigFile;
 import me.lucanius.twilight.tools.location.Cuboid;
@@ -18,9 +19,12 @@ import java.util.List;
 @Data
 public class Arena {
 
+    private final static Twilight plugin = Twilight.getInstance();
+
     private final String name;
 
     private List<Arena> copies;
+    private List<String> loadouts;
     private SerializableLocation min, max, a, b, middle;
     private double buildHeight;
 
@@ -28,10 +32,11 @@ public class Arena {
         this.name = name;
     }
 
-    public Arena(String name, List<Arena> copies, SerializableLocation min, SerializableLocation max, SerializableLocation a, SerializableLocation b, double buildHeight) {
+    public Arena(String name, List<Arena> copies, List<String> loadouts, SerializableLocation min, SerializableLocation max, SerializableLocation a, SerializableLocation b, double buildHeight) {
         this.name = name;
 
         this.copies = copies;
+        this.loadouts = loadouts;
         this.min = min;
         this.max = max;
         this.a = a;
@@ -44,6 +49,7 @@ public class Arena {
         this.name = name;
 
         this.copies = new ArrayList<>();
+        this.loadouts = new ArrayList<>();
         this.min = min;
         this.max = max;
         this.a = a;
@@ -68,6 +74,11 @@ public class Arena {
             }
         }
 
+        if (loadouts == null) {
+            loadouts = new ArrayList<>();
+        }
+        loadouts.addAll(conf.getStringList(key + "LOADOUTS"));
+
         this.min = new SerializableLocation(conf.getString(key + "MIN"));
         this.max = new SerializableLocation(conf.getString(key + "MAX"));
         this.a = new SerializableLocation(conf.getString(key + "A"));
@@ -85,6 +96,11 @@ public class Arena {
                 conf.set(key + "COPIES." + copy.getName(), serialize());
             }
         }
+
+        if (loadouts != null && !loadouts.isEmpty()) {
+            conf.set(key + "LOADOUTS", loadouts);
+        }
+
         conf.set(key + "MIN", min.serialize());
         conf.set(key + "MAX", max.serialize());
         conf.set(key + "A", a.serialize());
@@ -110,6 +126,14 @@ public class Arena {
 
     public Cuboid getCuboid() {
         return new Cuboid(min, max);
+    }
+
+    public Arena getRandomCopy() {
+        if (copies.isEmpty()) {
+            return null;
+        }
+
+        return copies.remove(plugin.getRandom().nextInt(copies.size()));
     }
 
     public String serialize() {

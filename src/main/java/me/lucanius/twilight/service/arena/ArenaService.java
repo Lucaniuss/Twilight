@@ -1,6 +1,7 @@
 package me.lucanius.twilight.service.arena;
 
 import me.lucanius.twilight.Twilight;
+import me.lucanius.twilight.service.loadout.Loadout;
 import me.lucanius.twilight.tools.config.ConfigFile;
 
 import java.util.Collection;
@@ -67,7 +68,7 @@ public class ArenaService {
         load();
     }
 
-    public Arena getRandom() {
-        return arenas.stream().findAny().orElse(null);
+    public Arena getRandom(Loadout loadout) {
+        return arenas.stream().filter(arena -> arena.getLoadouts().contains(loadout.getName())).findAny().orElse(null);
     }
 }
