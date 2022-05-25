@@ -3,6 +3,7 @@ package me.lucanius.twilight.tools;
 import lombok.experimental.UtilityClass;
 import net.minecraft.server.v1_8_R3.EntityPlayer;
 import net.minecraft.server.v1_8_R3.Packet;
+import org.apache.commons.lang3.text.WordUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Sound;
@@ -10,6 +11,8 @@ import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
+
+import java.util.Optional;
 
 /**
  * @author Lucanius
@@ -89,5 +92,16 @@ public final class Tools {
             player.setFlySpeed(0.2f);
             player.setGameMode(GameMode.SURVIVAL);
         });
+    }
+
+    public String getEnumName(String string) {
+        String[] split = string.split("_");
+        StringBuilder builder = new StringBuilder();
+        for (String s : split) {
+            builder.append(WordUtils.capitalize(s.toLowerCase())).append(" ");
+        }
+
+        String str = builder.toString();
+        return Optional.of(str).filter(s -> s.length() != 0).map(s -> s.substring(0, s.length() - 1)).orElse(str);
     }
 }
