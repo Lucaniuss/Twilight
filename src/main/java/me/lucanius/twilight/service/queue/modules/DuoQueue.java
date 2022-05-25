@@ -36,8 +36,10 @@ public class DuoQueue extends AbstractQueue<Set<Player>> {
     }
 
     @Override
-    public void dequeue(AbstractQueueData<?> data) {
-        // TODO: Send messages
+    public void dequeue(AbstractQueueData<?> data, QueueCallback callback) {
+        if (callback != QueueCallback.NONE && !callback.getMessage().equals("")) {
+            ((DuoQueueData) data).getElement().forEach(player -> player.sendMessage(callback.getMessage()));
+        }
 
         ((DuoQueueData) data).getElement().forEach(player -> plugin.getQueues().removeData(player, player.getUniqueId()));
         remove(data);

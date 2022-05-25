@@ -3,6 +3,8 @@ package me.lucanius.twilight.service.profile.modules;
 import lombok.Data;
 import me.lucanius.twilight.service.game.team.GameTeam;
 
+import java.util.UUID;
+
 /**
  * @author Lucanius
  * @since May 25, 2022
@@ -19,6 +21,7 @@ public class GameProfile {
     private int hits = 0;
     private int kills = 0;
     private boolean respawning = false;
+    private UUID gameId;
     private GameTeam team;
 
     public void reset() {
@@ -29,6 +32,7 @@ public class GameProfile {
         hits = 0;
         kills = 0;
         respawning = false;
+        gameId = null;
         team = null;
     }
 

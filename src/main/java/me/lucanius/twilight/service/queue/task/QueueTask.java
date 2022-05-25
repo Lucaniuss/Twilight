@@ -62,7 +62,7 @@ public class QueueTask extends BukkitRunnable {
 
                 QueueCallback callback = first.hasRange() && second.hasRange() ? inRange(first, second) ? queue.start(first, second) : QueueCallback.DENIED : queue.start(first, second);
                 if (callback != QueueCallback.ALLOWED) {
-                    Arrays.asList(first, second).forEach(AbstractQueueData::dequeue);
+                    Arrays.asList(first, second).forEach(data -> data.dequeue(callback));
                     return;
                 }
             }

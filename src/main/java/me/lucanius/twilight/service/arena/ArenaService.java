@@ -66,4 +66,8 @@ public class ArenaService {
         save();
         load();
     }
+
+    public Arena getRandom() {
+        return arenas.stream().findAny().orElse(null);
+    }
 }

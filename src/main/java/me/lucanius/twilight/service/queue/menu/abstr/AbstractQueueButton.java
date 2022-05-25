@@ -23,7 +23,7 @@ public abstract class AbstractQueueButton extends Button {
     public ItemStack getItem(Player player) {
         ItemBuilder builder = new ItemBuilder(loadout.getIcon().clone());
 
-        int playing = 0; // TODO: Implement this - Create Game System
+        int playing = plugin.getGames().getSize(loadout, queue);
 
         builder.setName(CC.MAIN + CC.BOLD + loadout.getName());
         builder.addLore(CC.MEDIUM_BAR);

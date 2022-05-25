@@ -2,6 +2,7 @@ package me.lucanius.twilight.service.queue.data;
 
 import me.lucanius.twilight.service.loadout.Loadout;
 import me.lucanius.twilight.service.queue.abstr.AbstractQueueData;
+import me.lucanius.twilight.service.queue.callback.QueueCallback;
 import org.bukkit.entity.Player;
 
 import java.util.Set;
@@ -27,6 +28,11 @@ public class DuoQueueData extends AbstractQueueData<Set<Player>> {
 
     @Override
     public void dequeue() {
-        queue.dequeue(this);
+        queue.dequeue(this, QueueCallback.NONE);
+    }
+
+    @Override
+    public void dequeue(QueueCallback callback) {
+        queue.dequeue(this, callback);
     }
 }

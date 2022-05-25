@@ -1,7 +1,12 @@
 package me.lucanius.twilight.service.game;
 
 import me.lucanius.twilight.Twilight;
+import me.lucanius.twilight.service.loadout.Loadout;
+import me.lucanius.twilight.service.profile.Profile;
+import me.lucanius.twilight.service.queue.abstr.AbstractQueue;
+import org.bukkit.entity.Player;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -18,5 +23,38 @@ public class GameService {
     public GameService(Twilight plugin) {
         this.plugin = plugin;
         this.games = new HashMap<>();
+    }
+
+    public void startGame(Game game) {
+        games.put(game.getUniqueId(), game);
+    }
+
+    public Game get(UUID uniqueId) {
+        return games.get(uniqueId);
+    }
+
+    public Game get(Profile profile) {
+        return games.get(profile.getGameProfile().getGameId());
+    }
+
+    public Game get(Player player) {
+        return games.get(plugin.getProfiles().get(player.getUniqueId()).getGameProfile().getGameId());
+    }
+
+    public int getSize() {
+        return games.values()
+                .stream()
+                .map(Game::getEveryone)
+                .map(Collection::size)
+                .reduce(0, Integer::sum);
+    }
+
+    public int getSize(Loadout loadout, AbstractQueue<?> queue) {
+        return games.values()
+                .stream()
+                .filter(game -> game.getLoadout().equals(loadout) && game.getQueue().equals(queue))
+                .map(Game::getEveryone)
+                .map(Collection::size)
+                .reduce(0, Integer::sum);
     }
 }

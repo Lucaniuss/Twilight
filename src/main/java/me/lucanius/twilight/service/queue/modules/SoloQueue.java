@@ -1,5 +1,8 @@
 package me.lucanius.twilight.service.queue.modules;
 
+import me.lucanius.twilight.service.game.Game;
+import me.lucanius.twilight.service.game.context.GameContext;
+import me.lucanius.twilight.service.game.team.GameTeam;
 import me.lucanius.twilight.service.loadout.Loadout;
 import me.lucanius.twilight.service.queue.abstr.AbstractQueue;
 import me.lucanius.twilight.service.queue.abstr.AbstractQueueData;
@@ -7,7 +10,12 @@ import me.lucanius.twilight.service.queue.callback.QueueCallback;
 import me.lucanius.twilight.service.queue.data.SoloQueueData;
 import me.lucanius.twilight.service.queue.menu.menus.SoloQueueMenu;
 import me.lucanius.twilight.tools.Tools;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @author Lucanius
@@ -36,17 +44,35 @@ public class SoloQueue extends AbstractQueue<Player> {
     }
 
     @Override
-    public void dequeue(AbstractQueueData<?> data) {
-        // TODO: Send messages
-
+    public void dequeue(AbstractQueueData<?> data, QueueCallback callback) {
         SoloQueueData soloData = (SoloQueueData) data;
+        if (callback != QueueCallback.NONE && !callback.getMessage().equals("")) {
+            soloData.getElement().sendMessage(callback.getMessage());
+        }
+
         plugin.getQueues().removeData(soloData.getElement(), soloData.getElement().getUniqueId());
         remove(data);
     }
 
     @Override
     public QueueCallback start(AbstractQueueData<?> first, AbstractQueueData<?> second) {
-        // TODO: Implement
-        return QueueCallback.ALLOWED;
+        try {
+            List<GameTeam> teams = Arrays.asList(
+                    new GameTeam(Collections.singletonList(((SoloQueueData) first).getElement().getUniqueId()), ChatColor.BLUE),
+                    new GameTeam(Collections.singletonList(((SoloQueueData) second).getElement().getUniqueId()), ChatColor.RED)
+            );
+            Game game = new Game(
+                    GameContext.NORMAL,
+                    first.getLoadout(),
+                    plugin.getArenas().getRandom(),
+                    this,
+                    teams
+            );
+            plugin.getGames().startGame(game);
+            return QueueCallback.ALLOWED;
+        } catch (final Exception e) {
+            e.printStackTrace();
+            return QueueCallback.DENIED;
+        }
     }
 }

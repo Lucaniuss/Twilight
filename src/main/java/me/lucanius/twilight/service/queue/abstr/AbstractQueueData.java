@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import me.lucanius.twilight.Twilight;
 import me.lucanius.twilight.service.loadout.Loadout;
+import me.lucanius.twilight.service.queue.callback.QueueCallback;
 import me.lucanius.twilight.tools.CC;
 import me.lucanius.twilight.tools.date.DateTools;
 
@@ -49,6 +50,8 @@ public abstract class AbstractQueueData<E> {
     public abstract void sendMessage();
 
     public abstract void dequeue();
+
+    public abstract void dequeue(QueueCallback callback);
 
     public boolean hasRange() {
         return pingRange != -1;

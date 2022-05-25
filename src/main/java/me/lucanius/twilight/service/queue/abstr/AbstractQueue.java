@@ -33,7 +33,7 @@ public abstract class AbstractQueue<E> {
 
     public abstract void enqueue(E element, Loadout loadout);
 
-    public abstract void dequeue(AbstractQueueData<?> data);
+    public abstract void dequeue(AbstractQueueData<?> data, QueueCallback callback);
 
     public abstract QueueCallback start(AbstractQueueData<?> first, AbstractQueueData<?> second);
 
