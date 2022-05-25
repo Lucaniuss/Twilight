@@ -1,14 +1,17 @@
-package me.lucanius.twilight.service.profile;
+package me.lucanius.twilight.service.profile.standard;
 
 import com.mongodb.client.model.Filters;
-import lombok.Getter;
 import me.lucanius.twilight.Twilight;
+import me.lucanius.twilight.service.profile.ProfileService;
+import me.lucanius.twilight.service.profile.Profile;
+import me.lucanius.twilight.service.profile.ProfileCache;
 import me.lucanius.twilight.tools.Scheduler;
 import me.lucanius.twilight.tools.config.ConfigFile;
 
 import java.util.Collection;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
@@ -16,14 +19,14 @@ import java.util.concurrent.TimeUnit;
  * @author Lucanius
  * @since May 20, 2022
  */
-public class ProfileService {
+public class StandardProfileService implements ProfileService {
 
     private final Twilight plugin;
     private final Map<UUID, Profile> profiles;
-    @Getter private final ProfileCache cache;
-    @Getter private Profile dummy;
+    private final ProfileCache cache;
+    private Profile dummy;
 
-    public ProfileService(Twilight plugin) {
+    public StandardProfileService(Twilight plugin) {
         this.plugin = plugin;
         this.profiles = new ConcurrentHashMap<>();
 
@@ -33,14 +36,17 @@ public class ProfileService {
         Scheduler.run(() -> this.dummy = new Profile(UUID.fromString("00000000-0000-0000-0000-000000000000")));
     }
 
+    @Override
     public Profile getOrCreate(UUID uniqueId) {
         return this.cache.isCached(uniqueId) ? this.cache.getIfPresent(uniqueId) : profiles.computeIfAbsent(uniqueId, Profile::new);
     }
 
+    @Override
     public Profile get(UUID uniqueId) {
         return profiles.get(uniqueId);
     }
 
+    @Override
     public Profile getOffline(UUID uniqueId) {
         return this.cache.isCached(uniqueId) ? this.cache.getIfPresent(uniqueId) : profiles.computeIfAbsent(uniqueId, uuid -> {
             Profile profile = new Profile(uuid);
@@ -50,10 +56,27 @@ public class ProfileService {
         });
     }
 
+    @Override
+    public CompletableFuture<Profile> getAsync(UUID uniqueId) {
+        return CompletableFuture.supplyAsync(() -> this.getOffline(uniqueId));
+    }
+
+    @Override
+    public Profile getDummy() {
+        return this.dummy;
+    }
+
+    @Override
+    public ProfileCache getCache() {
+        return this.cache;
+    }
+
+    @Override
     public Collection<Profile> getAll() {
         return profiles.values();
     }
 
+    @Override
     public void remove(UUID uniqueId) {
         Scheduler.runAsync(() -> {
             Profile profile = profiles.remove(uniqueId);
