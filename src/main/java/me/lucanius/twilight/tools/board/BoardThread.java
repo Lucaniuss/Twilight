@@ -1,6 +1,5 @@
 package me.lucanius.twilight.tools.board;
 
-import lombok.SneakyThrows;
 import me.lucanius.twilight.Twilight;
 import me.lucanius.twilight.tools.CC;
 import org.bukkit.scoreboard.Objective;
@@ -27,11 +26,15 @@ public class BoardThread extends Thread {
         this.start();
     }
 
-    @Override @SneakyThrows
+    @Override
     public void run() {
         while (true) {
-            tick();
-            sleep(sleepTime);
+            try {
+                tick();
+                sleep(sleepTime);
+            } catch (final Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
