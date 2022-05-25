@@ -4,11 +4,13 @@ import com.mongodb.client.model.Filters;
 import lombok.Getter;
 import me.lucanius.twilight.Twilight;
 import me.lucanius.twilight.tools.Scheduler;
+import me.lucanius.twilight.tools.config.ConfigFile;
 
 import java.util.Collection;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Lucanius
@@ -18,6 +20,7 @@ public class ProfileService {
 
     private final Twilight plugin;
     private final Map<UUID, Profile> profiles;
+    private final ProfileCache cache;
 
     @Getter private Profile dummy;
 
@@ -25,11 +28,14 @@ public class ProfileService {
         this.plugin = plugin;
         this.profiles = new ConcurrentHashMap<>();
 
+        final ConfigFile conf = plugin.getConfig();
+        (this.cache = new ProfileCache()).build(conf.getLong("CACHE.TIME"), TimeUnit.valueOf(conf.getString("CACHE.UNIT")));
+
         Scheduler.run(() -> this.dummy = new Profile(UUID.fromString("00000000-0000-0000-0000-000000000000")));
     }
 
     public Profile getOrCreate(UUID uniqueId) {
-        return profiles.computeIfAbsent(uniqueId, Profile::new);
+        return this.cache.isCached(uniqueId) ? this.cache.getIfPresent(uniqueId) : profiles.computeIfAbsent(uniqueId, Profile::new);
     }
 
     public Profile get(UUID uniqueId) {
@@ -37,7 +43,7 @@ public class ProfileService {
     }
 
     public Profile getOffline(UUID uniqueId) {
-        return profiles.computeIfAbsent(uniqueId, uuid -> {
+        return this.cache.isCached(uniqueId) ? this.cache.getIfPresent(uniqueId) : profiles.computeIfAbsent(uniqueId, uuid -> {
             Profile profile = new Profile(uuid);
             profile.load(plugin.getMongo().getProfiles().find(Filters.eq("uniqueId", uuid.toString())).first());
 
