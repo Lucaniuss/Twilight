@@ -2,7 +2,6 @@ package me.lucanius.twilight.service.queue.data;
 
 import me.lucanius.twilight.service.loadout.Loadout;
 import me.lucanius.twilight.service.queue.abstr.AbstractQueueData;
-import me.lucanius.twilight.tools.CC;
 import org.bukkit.entity.Player;
 
 import java.util.Set;
@@ -21,9 +20,7 @@ public class DuoQueueData extends AbstractQueueData<Set<Player>> {
     public void sendMessage() {
         for (Player player : element) {
             for (String s : messages) {
-                player.sendMessage(CC.translate(s
-                        .replace("<loadout>", loadout.getName())
-                ));
+                player.sendMessage(s.replace("<loadout>", loadout.getName()));
             }
         }
     }

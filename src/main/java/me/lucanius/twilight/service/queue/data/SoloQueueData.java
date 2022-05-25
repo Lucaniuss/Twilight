@@ -2,7 +2,6 @@ package me.lucanius.twilight.service.queue.data;
 
 import me.lucanius.twilight.service.loadout.Loadout;
 import me.lucanius.twilight.service.queue.abstr.AbstractQueueData;
-import me.lucanius.twilight.tools.CC;
 import org.bukkit.entity.Player;
 
 /**
@@ -18,9 +17,7 @@ public class SoloQueueData extends AbstractQueueData<Player> {
     @Override
     public void sendMessage() {
         for (String s : messages) {
-            element.sendMessage(CC.translate(s
-                    .replace("<loadout>", loadout.getName())
-            ));
+            element.sendMessage(s.replace("<loadout>", loadout.getName()));
         }
     }
 
