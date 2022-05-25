@@ -1,10 +1,12 @@
 package me.lucanius.twilight.service.profile.modules;
 
 import lombok.Data;
+import me.lucanius.twilight.service.game.GameTeam;
 
 /**
  * @author Lucanius
  * @since May 25, 2022
+ *
  * Used to cache all current game stats for each profile
  */
 @Data
@@ -16,18 +18,18 @@ public class GameProfile {
     private int combo = 0;
     private int hits = 0;
     private int kills = 0;
-    private int lives = 0;
     private boolean respawning = false;
+    private GameTeam team;
 
     public void reset() {
-        this.missedPots = 0;
-        this.thrownPots = 0;
-        this.longestCombo = 0;
-        this.combo = 0;
-        this.hits = 0;
-        this.kills = 0;
-        this.lives = 0;
-        this.respawning = false;
+        missedPots = 0;
+        thrownPots = 0;
+        longestCombo = 0;
+        combo = 0;
+        hits = 0;
+        kills = 0;
+        respawning = false;
+        team = null;
     }
 
     public void throwPotion(boolean missed) {
