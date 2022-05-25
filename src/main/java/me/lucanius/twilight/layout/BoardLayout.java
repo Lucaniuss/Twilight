@@ -27,7 +27,7 @@ public class BoardLayout extends LinesProvider implements BoardAdapter {
             case LOBBY:
                 return getLobby();
             case PLAYING:
-                break;
+                return getPlaying(profile, player);
             case QUEUE:
                 return getQueue(player);
         }
