@@ -25,6 +25,7 @@ public class ReloadCommand extends AbstractCommand {
                 plugin.getArenas().register(arena);
             }
             cmd.getPlayer().sendMessage(CC.RED + "An error occurred while reloading arenas. Restoring...");
+            e.printStackTrace();
         }
     }
 }

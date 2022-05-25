@@ -25,6 +25,7 @@ public class ReloadCommand extends AbstractCommand {
                 plugin.getLoadouts().register(loadout);
             }
             cmd.getPlayer().sendMessage(CC.RED + "An error occurred while reloading loadouts. Restoring...");
+            e.printStackTrace();
         }
     }
 }
