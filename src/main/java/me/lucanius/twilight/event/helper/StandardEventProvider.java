@@ -7,6 +7,8 @@ import me.lucanius.twilight.event.EventProvider;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * @author Clouke
@@ -16,9 +18,11 @@ import java.util.List;
 public class StandardEventProvider implements EventProvider {
 
     private final List<EventListener> subscribers;
+    private final ExecutorService thread;
 
     public StandardEventProvider() {
         this.subscribers = new ArrayList<>();
+        this.thread = Executors.newSingleThreadExecutor();
     }
 
     @Override
@@ -35,11 +39,11 @@ public class StandardEventProvider implements EventProvider {
 
     @Override
     public void publish(TwilightEvent event) {
-        this.subscribers.forEach(subscriber -> subscriber.onEvent(event));
+        this.thread.execute(() -> this.subscribers.forEach(subscriber -> subscriber.onEvent(event)));
     }
 
     @Override
     public <T extends TwilightEvent> void publish(Class<T> event) {
-        this.subscribers.forEach(subscriber -> subscriber.onEvent(event));
+        this.thread.execute(() -> this.subscribers.forEach(subscriber -> subscriber.onEvent(event)));
     }
 }
