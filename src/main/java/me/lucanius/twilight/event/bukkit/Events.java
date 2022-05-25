@@ -3,6 +3,7 @@ package me.lucanius.twilight.event.bukkit;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 import me.lucanius.twilight.Twilight;
+import me.lucanius.twilight.event.AbstractEvent;
 import me.lucanius.twilight.event.TwilightEvent;
 import me.lucanius.twilight.event.TwilightExecutor;
 import org.bukkit.event.Event;
@@ -40,8 +41,9 @@ public final class Events {
         subscribe(clazz, handler, EventPriority.NORMAL, false);
     }
 
+    @SuppressWarnings("unchecked")
     public <E extends TwilightEvent> void subscribe(Class<E> event, TwilightExecutor<E> handler) {
-        plugin.getEvents().subscribe(event, handler);
+        plugin.getEvents().subscribe((Class<? extends AbstractEvent>) event, handler);
     }
 
     @SneakyThrows
