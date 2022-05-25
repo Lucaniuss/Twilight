@@ -7,6 +7,7 @@ import me.lucanius.twilight.service.profile.ProfileService;
 import me.lucanius.twilight.tools.CC;
 import me.lucanius.twilight.tools.Scheduler;
 import me.lucanius.twilight.tools.events.Events;
+import me.lucanius.twilight.tools.functions.Condition;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -22,9 +23,11 @@ public class DataListener {
 
     private final Twilight plugin = Twilight.getInstance();
     private final ProfileService service; // lazy init
+    private final boolean caching;
 
     public DataListener() {
         this.service = plugin.getProfiles();
+        this.caching = plugin.getConfig().getBoolean("CACHE.ENABLED");
 
         Events.subscribe(AsyncPlayerPreLoginEvent.class, event -> this.service.getOrCreate(event.getUniqueId()).load());
 
@@ -49,7 +52,7 @@ public class DataListener {
             final Profile profile = this.service.get(uuid);
             Preconditions.checkNotNull(profile, "Profile cannot be null!");
 
-            this.service.getCache().put(uuid, profile);
+            Condition.of(caching, () -> this.service.getCache().put(uuid, profile));
             this.service.remove(uuid);
         });
 
