@@ -3,6 +3,8 @@ package me.lucanius.twilight.tools.registration;
 import com.google.common.collect.ImmutableSet;
 import lombok.SneakyThrows;
 import me.lucanius.twilight.Twilight;
+import me.lucanius.twilight.event.EventListener;
+import me.lucanius.twilight.event.EventProvider;
 
 import java.net.URL;
 import java.security.CodeSource;
@@ -22,6 +24,16 @@ public class ClassRegistration {
         for (Class<?> clazz : getClassesInPackage(packageName)) {
             try {
                 clazz.newInstance();
+            } catch (Exception ignored) {}
+        }
+
+        return this;
+    }
+
+    public ClassRegistration init(String packageName, EventProvider provider) {
+        for (Class<?> clazz : getClassesInPackage(packageName)) {
+            try {
+                provider.subscribe((EventListener) clazz.newInstance());
             } catch (Exception ignored) {}
         }
 
