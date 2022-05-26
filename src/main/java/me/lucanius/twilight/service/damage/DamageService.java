@@ -26,6 +26,10 @@ public class DamageService {
         cached.remove(uniqueId);
     }
 
+    public boolean has(UUID uniqueId) {
+        return cached.containsKey(uniqueId);
+    }
+
     public Player get(UUID uniqueId) {
         CachedDamage cachedDamage = cached.get(uniqueId);
 
