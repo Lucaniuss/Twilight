@@ -2,11 +2,10 @@ package me.lucanius.twilight.service.profile.standard;
 
 import com.mongodb.client.model.Filters;
 import me.lucanius.twilight.Twilight;
-import me.lucanius.twilight.service.profile.ProfileService;
 import me.lucanius.twilight.service.profile.Profile;
 import me.lucanius.twilight.service.profile.ProfileCache;
+import me.lucanius.twilight.service.profile.ProfileService;
 import me.lucanius.twilight.tools.Scheduler;
-import me.lucanius.twilight.tools.config.ConfigFile;
 
 import java.util.Collection;
 import java.util.Map;
@@ -30,16 +29,20 @@ public class StandardProfileService implements ProfileService {
         this.plugin = plugin;
         this.profiles = new ConcurrentHashMap<>();
 
-        final ConfigFile conf = plugin.getConfig();
-        (this.cache = new ProfileCache()).build(conf.getLong("CACHE.TIME"), TimeUnit.valueOf(conf.getString("CACHE.UNIT")));
+        (this.cache = new ProfileCache()).build(plugin.getConfig().getLong("CACHE.TIME"), TimeUnit.valueOf(plugin.getConfig().getString("CACHE.UNIT")));
 
         Scheduler.run(() -> this.dummy = new Profile(UUID.fromString("00000000-0000-0000-0000-000000000000")));
     }
 
     @Override
     public Profile getOrCreate(UUID uniqueId) {
-        // this.cache.isCached(uniqueId) ? this.cache.getIfPresent(uniqueId)
         return profiles.computeIfAbsent(uniqueId, Profile::new);
+        /*
+        return Optional.ofNullable(cache.isCached(uniqueId)
+                ? cache.getIfPresent(uniqueId)
+                : profiles.get(uniqueId)
+        ).orElseGet(() -> profiles.computeIfAbsent(uniqueId, Profile::new));
+        */
     }
 
     @Override
@@ -49,13 +52,23 @@ public class StandardProfileService implements ProfileService {
 
     @Override
     public Profile getOffline(UUID uniqueId) {
-        // this.cache.isCached(uniqueId) ? this.cache.getIfPresent(uniqueId)
         return profiles.computeIfAbsent(uniqueId, uuid -> {
-            Profile profile = new Profile(uuid);
+            Profile profile = new Profile(uuid); // find document here so it runs on main thread
             profile.load(plugin.getMongo().getProfiles().find(Filters.eq("uniqueId", uuid.toString())).first());
 
             return profile.isLoaded() ? profile : null;
         });
+        /*
+        return Optional.ofNullable(cache.isCached(uniqueId)
+                ? cache.getIfPresent(uniqueId)
+                : profiles.get(uniqueId)
+        ).orElseGet(() -> profiles.computeIfAbsent(uniqueId, uuid -> {
+            Profile profile = new Profile(uuid);
+            profile.load(plugin.getMongo().getProfiles().find(Filters.eq("uniqueId", uuid.toString())).first());
+
+            return profile.isLoaded() ? profile : null;
+        }));
+        */
     }
 
     @Override
@@ -65,12 +78,12 @@ public class StandardProfileService implements ProfileService {
 
     @Override
     public Profile getDummy() {
-        return this.dummy;
+        return dummy;
     }
 
     @Override
     public ProfileCache getCache() {
-        return this.cache;
+        return cache;
     }
 
     @Override
