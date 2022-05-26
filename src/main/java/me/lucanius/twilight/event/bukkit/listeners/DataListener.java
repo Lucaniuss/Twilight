@@ -1,18 +1,19 @@
 package me.lucanius.twilight.event.bukkit.listeners;
 
-import com.google.common.base.Preconditions;
 import me.lucanius.twilight.Twilight;
+import me.lucanius.twilight.event.bukkit.Events;
+import me.lucanius.twilight.service.game.Game;
 import me.lucanius.twilight.service.profile.Profile;
 import me.lucanius.twilight.service.profile.ProfileService;
 import me.lucanius.twilight.tools.CC;
 import me.lucanius.twilight.tools.Scheduler;
-import me.lucanius.twilight.event.bukkit.Events;
 import me.lucanius.twilight.tools.functions.Condition;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -45,14 +46,30 @@ public class DataListener {
         });
 
         Events.subscribe(PlayerQuitEvent.class, event -> {
-            final UUID uuid = event.getPlayer().getUniqueId();
-            final Profile profile = service.get(uuid);
-            Preconditions.checkNotNull(profile, "Profile cannot be null!");
+            Player player = event.getPlayer();
+            UUID uniqueId = player.getUniqueId();
+            Profile profile = service.get(uniqueId);
+            if (profile == null) {
+                return;
+            }
 
-            Condition.of(caching, () -> service.getCache().put(uuid, profile));
-            service.remove(uuid);
+            Optional<Game> game = Optional.ofNullable(plugin.getGames().get(profile));
+            switch (profile.getState()) {
+                case PLAYING:
+                    game.ifPresent(value -> value.getLoadout().getType().getCallable().execute(player, plugin.getDamages().get(uniqueId), value));
+                    break;
+                case SPECTATING:
+                    game.ifPresent(value -> value.removeSpectator(uniqueId));
+                    break;
+                case QUEUE:
+                    plugin.getQueues().getData(uniqueId).dequeue();
+                    break;
+            }
+
+            Condition.of(caching, () ->
+                    service.getCache().put(uniqueId, profile)
+            );
+            service.remove(uniqueId);
         });
-
-        //TODO: create PlayerQuitEvent and save user to mongo and remove from game if they are in game
     }
 }
