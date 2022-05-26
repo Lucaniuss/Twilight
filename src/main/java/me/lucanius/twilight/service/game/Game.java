@@ -4,8 +4,10 @@ import lombok.Getter;
 import lombok.Setter;
 import me.lucanius.twilight.Twilight;
 import me.lucanius.twilight.service.arena.Arena;
+import me.lucanius.twilight.service.arena.snapshot.ArenaSnapshot;
 import me.lucanius.twilight.service.game.context.GameContext;
 import me.lucanius.twilight.service.game.context.GameState;
+import me.lucanius.twilight.service.game.task.GameTask;
 import me.lucanius.twilight.service.game.team.GameTeam;
 import me.lucanius.twilight.service.game.team.member.TeamMember;
 import me.lucanius.twilight.service.loadout.Loadout;
@@ -18,8 +20,6 @@ import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.craftbukkit.v1_8_R3.CraftServer;
-import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -48,7 +48,9 @@ public class Game {
 
     private GameState state;
     private long timeStamp;
-    private Arena arenaCopy;
+    private ArenaSnapshot arenaSnapshot;
+    private GameTask task;
+    private int countdown;
 
     public Game(GameContext context, Loadout loadout, Arena arena, AbstractQueue<?> queue, List<GameTeam> teams) {
         this.blocks = new HashSet<>();
@@ -62,18 +64,19 @@ public class Game {
 
         this.state = GameState.STARTING;
         this.timeStamp = System.currentTimeMillis();
-        this.arenaCopy = null;
+        this.arenaSnapshot = null;
+        this.task = null;
+        this.countdown = 6;
     }
 
     public void addSpectator(Player player, boolean fromGame) {
         UUID uniqueId = player.getUniqueId();
         spectators.add(uniqueId);
 
+        Tools.clearPlayer(player);
         if (!fromGame) {
-            Tools.clearPlayer(player);
-
             if (!player.hasPermission("twilight.staff")) {
-                sendMessage(CC.GAME_PREFIX + CC.SECOND + player.getName() + " is now spectating the game.");
+                sendMessage(CC.SECOND + player.getName() + " is now spectating the game.");
             }
 
             player.teleport(arena.getMiddle().getBukkitLocation());
@@ -90,37 +93,22 @@ public class Game {
             return;
         }
 
-        MinecraftServer nmsServer = ((CraftServer) plugin.getServer()).getServer();
-        WorldServer nmsWorld = ((CraftWorld) player.getWorld()).getHandle();
-
-        EntityPlayer deadNmsPlayer = Tools.getEntityPlayer(player);
-        EntityPlayer fakePlayer = new EntityPlayer(nmsServer, nmsWorld, deadNmsPlayer.getProfile(), new PlayerInteractManager(nmsWorld));
-
+        EntityPlayer nmsPlayer = Tools.getEntityPlayer(player);
         Location location = player.getLocation();
         double x = location.getX();
         double y = location.getY();
         double z = location.getZ();
-        fakePlayer.setLocation(x, y, z, location.getYaw(), location.getPitch());
 
-        PacketPlayOutSpawnEntityWeather lightning = new PacketPlayOutSpawnEntityWeather(new EntityLightning(deadNmsPlayer.world, x, y, z));
+        PacketPlayOutSpawnEntityWeather lightning = new PacketPlayOutSpawnEntityWeather(new EntityLightning(nmsPlayer.world, x, y, z));
         PacketPlayOutNamedSoundEffect lightningSound = new PacketPlayOutNamedSoundEffect("ambient.weather.thunder", x, y, z, 10.0f, 1.0f);
-        PacketPlayOutPlayerInfo remove = new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER, deadNmsPlayer);
-        PacketPlayOutPlayerInfo add = new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, fakePlayer);
-        PacketPlayOutNamedEntitySpawn spawn = new PacketPlayOutNamedEntitySpawn(fakePlayer);
-        PacketPlayOutEntityStatus status = new PacketPlayOutEntityStatus(fakePlayer, (byte) 9);
 
         getEveryone().stream().filter(other -> player != other).forEach(other -> {
             PlayerConnection otherConnection = Tools.getEntityPlayer(other).playerConnection;
-
             otherConnection.sendPacket(lightning);
             otherConnection.sendPacket(lightningSound);
-            otherConnection.sendPacket(remove);
-            otherConnection.sendPacket(add);
-            otherConnection.sendPacket(spawn);
-            otherConnection.sendPacket(status);
         });
 
-        PlayerConnection connection = deadNmsPlayer.playerConnection;
+        PlayerConnection connection = nmsPlayer.playerConnection;
         connection.sendPacket(lightning);
         connection.sendPacket(lightningSound);
 
@@ -138,14 +126,39 @@ public class Game {
         }, 20L);
     }
 
+    public void removeSpectator(UUID uniqueId) {
+        spectators.remove(uniqueId);
+
+        Player player = plugin.getServer().getPlayer(uniqueId);
+        if (player == null) {
+            return;
+        }
+
+        if (state != GameState.TERMINATED && !player.hasPermission("twilight.staff")) {
+            sendMessage(CC.SECOND + player.getName() + " is no longer spectating the game.");
+        }
+
+        plugin.getLobby().toLobby(player, true);
+    }
+
     public void forEachSpectator(Consumer<? super UUID> action) {
         if (!spectators.isEmpty()) {
             spectators.forEach(action);
         }
     }
 
+    public GameTask setTask(GameTask task) {
+        return this.task = task;
+    }
+
+    public ArenaSnapshot setArenaSnapshot(ArenaSnapshot arenaSnapshot) {
+        return this.arenaSnapshot = arenaSnapshot;
+    }
+
     public Collection<Player> getEveryone() {
-        return teams.stream().flatMap(team -> team.getMembers().stream()).map(TeamMember::getPlayer).collect(Collectors.toList());
+        Collection<Player> players = teams.stream().flatMap(team -> team.getMembers().stream()).map(TeamMember::getPlayer).collect(Collectors.toList());
+        spectators.stream().map(plugin.getServer()::getPlayer).filter(Objects::nonNull).forEach(players::add);
+        return players;
     }
 
     public Collection<Player> getAlive() {
@@ -169,16 +182,27 @@ public class Game {
     }
 
     public void sendMessage(String message) {
-        getEveryone().forEach(player -> player.sendMessage(CC.translate(message)));
+        getEveryone().forEach(player -> player.sendMessage(CC.translate(CC.GAME_PREFIX + message)));
     }
 
     public void sendSound(Sound sound) {
         getEveryone().forEach(player -> player.playSound(player.getLocation(), sound, 1, 1));
     }
 
+    public void sendMessageWithSound(String message, Sound sound) {
+        getEveryone().forEach(player -> {
+            player.sendMessage(CC.translate(CC.GAME_PREFIX + message));
+            player.playSound(player.getLocation(), sound, 1, 1);
+        });
+    }
+
     public void clearBlocks() {
         blocks.forEach(location -> location.getBlock().setType(Material.AIR));
         blocks.clear();
+    }
+
+    public int decrement() {
+        return --countdown;
     }
 
     public String getTime() {

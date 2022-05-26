@@ -67,4 +67,8 @@ public class GameTeam {
     public void detectSpawn(Arena arena) {
         spawn = color == ChatColor.BLUE ? arena.getA().getBukkitLocation() : color == ChatColor.RED ? arena.getB().getBukkitLocation() : null;
     }
+
+    public int getAliveSize() {
+        return (int) members.stream().filter(TeamMember::isAlive).count();
+    }
 }
