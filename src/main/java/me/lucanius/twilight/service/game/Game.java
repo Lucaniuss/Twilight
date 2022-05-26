@@ -11,6 +11,7 @@ import me.lucanius.twilight.service.game.task.GameTask;
 import me.lucanius.twilight.service.game.team.GameTeam;
 import me.lucanius.twilight.service.game.team.member.TeamMember;
 import me.lucanius.twilight.service.loadout.Loadout;
+import me.lucanius.twilight.service.loadout.type.LoadoutType;
 import me.lucanius.twilight.service.queue.abstr.AbstractQueue;
 import me.lucanius.twilight.tools.CC;
 import me.lucanius.twilight.tools.Scheduler;
@@ -225,6 +226,15 @@ public class Game {
             });
             brokenBlocks.clear();
         }
+    }
+
+    public boolean isBreakable(Block block) {
+        if (!arena.isInside(block.getLocation())) return false;
+        if (placedBlocks.contains(block.getLocation())) return true;
+        if (loadout.getType() != LoadoutType.BRIDGES || block.getType() != Material.STAINED_CLAY) return false;
+
+        byte data = block.getData();
+        return data == 0 || data == 11 || data == 14;
     }
 
     public int decrement() {

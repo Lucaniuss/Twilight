@@ -37,14 +37,13 @@ public class WorldListener {
             }
 
             Block block = event.getBlock();
-            Location location = block.getLocation();
-            Arena arena = game.getArena();
-            if (!arena.isInside(location)) {
+            if (!game.isBreakable(block)) {
                 event.setCancelled(true);
                 return;
             }
 
-            if (location.getY() > arena.getBuildHeight()) {
+            Location location = block.getLocation();
+            if (location.getY() > game.getArena().getBuildHeight()) {
                 event.setCancelled(true);
                 return;
             }
