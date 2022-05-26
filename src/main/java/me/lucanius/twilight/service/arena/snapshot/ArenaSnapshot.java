@@ -1,5 +1,6 @@
 package me.lucanius.twilight.service.arena.snapshot;
 
+import lombok.Getter;
 import me.lucanius.twilight.service.arena.Arena;
 import me.lucanius.twilight.tools.ChunkVector;
 import org.bukkit.ChunkSnapshot;
@@ -16,15 +17,21 @@ import java.util.Map;
  */
 public class ArenaSnapshot {
 
-    private final Map<ChunkVector, ChunkSnapshot> snapshots = new HashMap<>();
+    @Getter private final Arena arena;
+    private final Map<ChunkVector, ChunkSnapshot> snapshots;
 
-    public void save(Arena arena) {
+    public ArenaSnapshot(Arena arena) {
+        this.arena = arena;
+        this.snapshots = new HashMap<>();
+    }
+
+    public void save() {
         arena.getCuboid().getChunks().forEach(chunk ->
                 snapshots.put(ChunkVector.of(chunk), chunk.getChunkSnapshot())
         );
     }
 
-    public void restore(Arena arena) {
+    public void restore() {
         arena.getCuboid().getChunks().forEach(chunk -> {
             ChunkVector chunkVector = ChunkVector.of(chunk);
             ChunkSnapshot snapshot = snapshots.get(chunkVector);
