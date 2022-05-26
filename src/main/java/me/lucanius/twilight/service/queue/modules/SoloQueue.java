@@ -64,18 +64,19 @@ public class SoloQueue extends AbstractQueue<Player> {
             );
 
             Loadout loadout = first.getLoadout();
+            if (loadout == null) {
+                loadout = second.getLoadout();
+            }
+            if (loadout == null) {
+                return QueueCallback.NO_LOADOUT;
+            }
+
             Arena arena = plugin.getArenas().getRandom(loadout);
             if (arena == null) {
                 return QueueCallback.NO_ARENA;
             }
 
-            Game game = new Game(
-                    GameContext.NORMAL,
-                    loadout,
-                    arena,
-                    this,
-                    teams
-            );
+            Game game = new Game(GameContext.NORMAL, loadout, arena, this, teams);
 
             return plugin.getGames().startGame(game) ? QueueCallback.ALLOWED : QueueCallback.DENIED;
         } catch (final Exception e) {
