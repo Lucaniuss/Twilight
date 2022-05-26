@@ -22,19 +22,16 @@ import java.util.UUID;
 public class DataListener {
 
     private final Twilight plugin = Twilight.getInstance();
-    private final ProfileService service; // lazy init
-    private final boolean caching;
+    private final ProfileService service = plugin.getProfiles(); // lazy init
+    private final boolean caching = plugin.getConfig().getBoolean("CACHE.ENABLED");
 
     public DataListener() {
-        this.service = plugin.getProfiles();
-        this.caching = plugin.getConfig().getBoolean("CACHE.ENABLED");
-
-        Events.subscribe(AsyncPlayerPreLoginEvent.class, event -> this.service.getOrCreate(event.getUniqueId()).load());
+        Events.subscribe(AsyncPlayerPreLoginEvent.class, event -> service.getOrCreate(event.getUniqueId()).load());
 
         Events.subscribe(PlayerJoinEvent.class, event -> {
             final Player player = event.getPlayer();
             final UUID uniqueId = player.getUniqueId();
-            final Profile profile = this.service.get(uniqueId);
+            final Profile profile = service.get(uniqueId);
             if (profile == null) {
                 player.sendMessage(CC.RED + "Contact an administrator immediately or try to re-log!");
                 return;
@@ -49,11 +46,11 @@ public class DataListener {
 
         Events.subscribe(PlayerQuitEvent.class, event -> {
             final UUID uuid = event.getPlayer().getUniqueId();
-            final Profile profile = this.service.get(uuid);
+            final Profile profile = service.get(uuid);
             Preconditions.checkNotNull(profile, "Profile cannot be null!");
 
-            Condition.of(caching, () -> this.service.getCache().put(uuid, profile));
-            this.service.remove(uuid);
+            Condition.of(caching, () -> service.getCache().put(uuid, profile));
+            service.remove(uuid);
         });
 
         //TODO: create PlayerQuitEvent and save user to mongo and remove from game if they are in game
