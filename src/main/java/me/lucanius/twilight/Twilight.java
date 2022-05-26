@@ -5,6 +5,7 @@ import me.lucanius.twilight.event.EventProvider;
 import me.lucanius.twilight.event.helper.StandardEventProvider;
 import me.lucanius.twilight.layout.BoardLayout;
 import me.lucanius.twilight.service.arena.ArenaService;
+import me.lucanius.twilight.service.cooldown.CooldownService;
 import me.lucanius.twilight.service.damage.DamageService;
 import me.lucanius.twilight.service.game.Game;
 import me.lucanius.twilight.service.game.GameService;
@@ -55,6 +56,7 @@ public final class Twilight extends JavaPlugin {
     private GameService games;
     private DamageService damages;
     private PartyService parties;
+    private CooldownService cooldowns;
 
     private EventProvider events;
     private Board board;
@@ -88,6 +90,7 @@ public final class Twilight extends JavaPlugin {
         games = new GameService(this);
         damages = new DamageService();
         parties = new StandardPartyService(this);
+        cooldowns = new CooldownService(this);
 
         events = new StandardEventProvider();
         board = new Board(this, new BoardLayout());

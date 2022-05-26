@@ -2,6 +2,7 @@ package me.lucanius.twilight.event.bukkit.listeners;
 
 import me.lucanius.twilight.Twilight;
 import me.lucanius.twilight.event.bukkit.Events;
+import me.lucanius.twilight.service.cooldown.Cooldown;
 import me.lucanius.twilight.service.game.Game;
 import me.lucanius.twilight.service.game.context.GameState;
 import me.lucanius.twilight.service.lobby.hotbar.HotbarItem;
@@ -125,6 +126,21 @@ public class InteractListener {
                                 player.sendMessage(CC.RED + "You can't do this while the game isn't ongoing!");
                                 return;
                             }
+
+                            Cooldown cooldown = plugin.getCooldowns().get(uniqueId, "ENDERPEARL");
+                            if (cooldown == null) {
+                                cooldown = new Cooldown(15 * 1000L, () -> player.sendMessage(CC.GREEN + "You can now use pearls again!"));
+                                plugin.getCooldowns().add(uniqueId, "ENDERPEARL", cooldown);
+                            }
+
+                            if (cooldown.active()) {
+                                event.setCancelled(true);
+                                player.updateInventory();
+                                player.sendMessage(CC.RED + "You can't use pearls for another " + cooldown.remaining() + " seconds!");
+                                return;
+                            }
+
+                            cooldown.reset();
                             break;
                     }
 
