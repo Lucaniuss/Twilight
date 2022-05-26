@@ -24,6 +24,7 @@ public abstract class AbstractHotbar {
 
     protected final List<HotbarItem> lobbyItems;
     protected final List<HotbarItem> partyItems;
+    protected final List<HotbarItem> gameItems;
     protected final List<HotbarItem> queueItems;
     protected final List<HotbarItem> spectatorItems;
 
@@ -32,12 +33,16 @@ public abstract class AbstractHotbar {
                 Arrays.asList(
                         new HotbarItem(new ItemBuilder(Material.IRON_SWORD).setName(CC.MAIN + "Unranked &7(Right-Click)").build(), 0, HotbarContext.UNRANKED, HotbarType.LOBBY),
                         new HotbarItem(new ItemBuilder(Material.DIAMOND_SWORD).setName(CC.MAIN + "Ranked &7(Right-Click)").build(), 1, HotbarContext.RANKED, HotbarType.LOBBY),
+
+                        new HotbarItem(new ItemBuilder(Material.ENCHANTED_BOOK).setName(CC.MAIN + "Default Loadout &7(Right-Click)").build(), 0, HotbarContext.DEFAULT_BOOK, HotbarType.GAME),
+
                         new HotbarItem(new ItemBuilder(Material.INK_SACK).setData(1).setName(CC.MAIN + "Leave Queue &7(Right-Click)").build(), 0, HotbarContext.LEAVE_QUEUE, HotbarType.QUEUE)
                 )
         );
 
         this.lobbyItems = items.stream().filter(i -> i.getType() == HotbarType.LOBBY).collect(Collectors.toList());
         this.partyItems = items.stream().filter(i -> i.getType() == HotbarType.PARTY).collect(Collectors.toList());
+        this.gameItems = items.stream().filter(i -> i.getType() == HotbarType.GAME).collect(Collectors.toList());
         this.queueItems = items.stream().filter(i -> i.getType() == HotbarType.QUEUE).collect(Collectors.toList());
         this.spectatorItems = items.stream().filter(i -> i.getType() == HotbarType.SPECTATING).collect(Collectors.toList());
     }
