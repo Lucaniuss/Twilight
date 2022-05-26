@@ -43,6 +43,7 @@ public final class CC {
     public final String SMALL_BAR = GRAY + STRIKE_THROUGH + "------------------";
     public final String MAIN = DARK_GREEN;
     public final String SECOND = GREEN;
+    public final String THIRD = YELLOW;
     public final String ICON = GRAY + BOLD + " ◈ ";
     public final String GAME_PREFIX = GRAY + "(" + MAIN + "Game" + GRAY + ") ";
 
