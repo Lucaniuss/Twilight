@@ -9,7 +9,6 @@ import org.bukkit.GameMode;
 import org.bukkit.Sound;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 
 import java.util.Optional;
@@ -81,13 +80,12 @@ public final class Tools {
 
         player.getActivePotionEffects().stream().map(PotionEffect::getType).forEach(player::removePotionEffect);
 
-        PlayerInventory inventory = player.getInventory();
-        inventory.setHeldItemSlot(0);
-        inventory.clear();
-        inventory.setArmorContents(null);
+        player.getInventory().setHeldItemSlot(0);
+        player.getInventory().clear();
+        player.getInventory().setArmorContents(null);
         player.updateInventory();
 
-        Scheduler.run(() -> { // This can't be async, so we make sure this will not throw an exception
+        Scheduler.run(() -> { // This needs to run on the main thread
             player.setWalkSpeed(0.2f);
             player.setFlySpeed(0.2f);
             player.setGameMode(GameMode.SURVIVAL);
