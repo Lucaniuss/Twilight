@@ -6,6 +6,7 @@ import me.lucanius.twilight.service.game.Game;
 import me.lucanius.twilight.service.game.context.GameState;
 import me.lucanius.twilight.service.lobby.hotbar.HotbarItem;
 import me.lucanius.twilight.service.lobby.hotbar.context.HotbarContext;
+import me.lucanius.twilight.service.party.Party;
 import me.lucanius.twilight.service.profile.Profile;
 import me.lucanius.twilight.tools.CC;
 import org.bukkit.Material;
@@ -14,6 +15,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -47,6 +49,8 @@ public class InteractListener {
             boolean nullItem = item == null;
 
             event.setCancelled(!nullItem);
+            Optional<Game> optionalGame = Optional.ofNullable(plugin.getGames().get(profile));
+            Optional<Party> party = Optional.ofNullable(plugin.getParties().getParty(uniqueId));
             switch (profile.getState()) {
                 case LOBBY:
                     if (nullItem) {
@@ -59,10 +63,42 @@ public class InteractListener {
                             break;
                         case RANKED:
                             break;
+                        case LOADOUT_EDITOR:
+                            break;
+                        case CREATE_PARTY:
+                            if (party.isPresent()) {
+                                player.sendMessage(CC.RED + "You are already in a party!");
+                                return;
+                            }
+
+                            plugin.getParties().createParty(player);
+                            break;
+                        case LEADERBOARDS:
+                            break;
+                        case PERSONAL_SETTINGS:
+                            break;
+                        case DUOS:
+                            plugin.getQueues().getDuoQueue().getMenu().open(player);
+                            break;
+                        case PARTY_GAMES:
+                            break;
+                        case OTHER_PARTIES:
+                            break;
+                        case PARTY_INFO:
+                            break;
+                        case LEAVE_PARTY:
+                            if (plugin.getParties().leaveParty(player) == null) {
+                                player.sendMessage(CC.RED + "You are not in a party!");
+                            }
+                            break;
                     }
                     break;
                 case PLAYING:
-                    Game game = plugin.getGames().get(profile);
+                    if (!optionalGame.isPresent()) {
+                        return;
+                    }
+
+                    Game game = optionalGame.get();
                     switch (stack.getType()) {
                         case MUSHROOM_SOUP:
                             double health = player.getHealth();
@@ -104,6 +140,19 @@ public class InteractListener {
 
                     if (item.getContext() == HotbarContext.LEAVE_QUEUE) {
                         plugin.getQueues().getData(uniqueId).dequeue();
+                    }
+                    break;
+                case SPECTATING:
+                    if (nullItem) {
+                        return;
+                    }
+
+                    switch (item.getContext()) {
+                        case VIEW_PLAYERS:
+                            break;
+                        case STOP_SPECTATING:
+                            optionalGame.ifPresent(value -> value.removeSpectator(uniqueId));
+                            break;
                     }
                     break;
             }

@@ -1,17 +1,16 @@
 package me.lucanius.twilight.service.party.impl;
 
 import me.lucanius.twilight.Twilight;
+import me.lucanius.twilight.service.game.Game;
 import me.lucanius.twilight.service.lobby.hotbar.HotbarItem;
 import me.lucanius.twilight.service.party.Party;
 import me.lucanius.twilight.service.party.PartyService;
+import me.lucanius.twilight.service.profile.Profile;
 import me.lucanius.twilight.service.profile.ProfileState;
 import me.lucanius.twilight.tools.CC;
 import org.bukkit.entity.Player;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * @author Clouke
@@ -61,7 +60,7 @@ public class StandardPartyService implements PartyService {
     public PartyService joinParty(Player player, UUID leader) {
         Party party = getParty(leader);
         if (party == null) {
-            return this;
+            return null;
         }
 
         party.add(player.getUniqueId());
@@ -79,7 +78,7 @@ public class StandardPartyService implements PartyService {
         UUID uniqueId = player.getUniqueId();
         Party party = getParty(uniqueId);
         if (party == null) {
-            return this;
+            return null;
         }
 
         if (isLeader(uniqueId)) {
@@ -89,9 +88,18 @@ public class StandardPartyService implements PartyService {
             party.remove(uniqueId);
         }
 
-        // TODO: Check if player is in-game / spectating - Remove from there if so
+        Profile profile = plugin.getProfiles().get(uniqueId);
+        Optional<Game> game = Optional.ofNullable(plugin.getGames().get(profile));
+        switch (profile.getState()) {
+            case PLAYING:
+                game.ifPresent(value -> value.getLoadout().getType().getCallable().execute(plugin, player, plugin.getDamages().get(uniqueId), value));
+                break;
+            case SPECTATING:
+                game.ifPresent(value -> value.removeSpectator(uniqueId));
+                break;
+        }
 
-        plugin.getLobby().toLobby(player, false);
+        plugin.getLobby().toLobby(player, profile, false);
         return this;
     }
 
