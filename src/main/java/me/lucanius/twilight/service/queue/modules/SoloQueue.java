@@ -1,5 +1,6 @@
 package me.lucanius.twilight.service.queue.modules;
 
+import me.lucanius.twilight.service.arena.Arena;
 import me.lucanius.twilight.service.game.Game;
 import me.lucanius.twilight.service.game.context.GameContext;
 import me.lucanius.twilight.service.game.team.GameTeam;
@@ -61,11 +62,17 @@ public class SoloQueue extends AbstractQueue<Player> {
                     new GameTeam(Collections.singletonList(((SoloQueueData) first).getElement().getUniqueId()), ChatColor.BLUE),
                     new GameTeam(Collections.singletonList(((SoloQueueData) second).getElement().getUniqueId()), ChatColor.RED)
             );
+
             Loadout loadout = first.getLoadout();
+            Arena arena = plugin.getArenas().getRandom(loadout);
+            if (arena == null) {
+                return QueueCallback.NO_ARENA;
+            }
+
             Game game = new Game(
                     GameContext.NORMAL,
                     loadout,
-                    plugin.getArenas().getRandom(loadout),
+                    arena,
                     this,
                     teams
             );
