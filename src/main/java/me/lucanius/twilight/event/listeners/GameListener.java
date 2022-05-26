@@ -2,12 +2,11 @@ package me.lucanius.twilight.event.listeners;
 
 import me.lucanius.twilight.Twilight;
 import me.lucanius.twilight.event.bukkit.Events;
+import me.lucanius.twilight.event.events.AsyncMovementEvent;
 import me.lucanius.twilight.event.events.GameEndEvent;
 import me.lucanius.twilight.event.events.GameStartEvent;
-import me.lucanius.twilight.event.events.AsyncMovementEvent;
 import me.lucanius.twilight.event.movement.AsyncMovementListener;
 import me.lucanius.twilight.service.arena.Arena;
-import me.lucanius.twilight.service.arena.snapshot.ArenaSnapshot;
 import me.lucanius.twilight.service.game.Game;
 import me.lucanius.twilight.service.game.context.GameState;
 import me.lucanius.twilight.service.game.task.GameTask;
@@ -35,8 +34,8 @@ public class GameListener {
     public GameListener() {
         Events.subscribe(GameStartEvent.class, event -> {
             Game game = event.getGame();
-
             Loadout loadout = game.getLoadout();
+
             if (loadout.isBuild()) {
                 Arena copy = game.getArena().getRandomCopy();
                 if (copy == null) {
@@ -44,7 +43,7 @@ public class GameListener {
                     return;
                 }
 
-                game.setArenaSnapshot(new ArenaSnapshot(copy)).save();
+                game.setArenaCopy(copy);
             }
 
             // initialize new AsyncMovementListener if it is not already initialized
@@ -69,7 +68,7 @@ public class GameListener {
                 Tools.clearPlayer(player);
 
                 if (team.getSpawn() == null) {
-                    team.detectSpawn(game.getArena());
+                    team.detectSpawn(game.getArenaCopy() != null ? game.getArenaCopy() : game.getArena());
                 }
                 player.teleport(team.getSpawn());
 

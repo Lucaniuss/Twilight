@@ -6,6 +6,7 @@ import me.lucanius.twilight.event.helper.StandardEventProvider;
 import me.lucanius.twilight.layout.BoardLayout;
 import me.lucanius.twilight.service.arena.ArenaService;
 import me.lucanius.twilight.service.damage.DamageService;
+import me.lucanius.twilight.service.game.Game;
 import me.lucanius.twilight.service.game.GameService;
 import me.lucanius.twilight.service.loadout.LoadoutService;
 import me.lucanius.twilight.service.lobby.LobbyService;
@@ -105,7 +106,9 @@ public final class Twilight extends JavaPlugin {
     public void onDisable() {
         disabling = true;
 
+        games.getAll().forEach(Game::clearArena);
         profiles.getAll().forEach(Profile::save);
+
         loadouts.save();
         arenas.save();
 

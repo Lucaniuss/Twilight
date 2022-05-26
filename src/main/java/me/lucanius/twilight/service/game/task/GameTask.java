@@ -3,7 +3,6 @@ package me.lucanius.twilight.service.game.task;
 import lombok.RequiredArgsConstructor;
 import me.lucanius.twilight.Twilight;
 import me.lucanius.twilight.event.events.AsyncMovementEvent;
-import me.lucanius.twilight.service.arena.snapshot.ArenaSnapshot;
 import me.lucanius.twilight.service.game.Game;
 import me.lucanius.twilight.service.game.context.GameState;
 import me.lucanius.twilight.tools.CC;
@@ -40,13 +39,7 @@ public class GameTask extends BukkitRunnable {
                 break;
             case TERMINATED:
                 if (game.decrement() == 0) {
-                    if (game.getLoadout().isBuild()) {
-                        ArenaSnapshot snapshot = game.getArenaSnapshot();
-                        if (snapshot != null) {
-                            snapshot.restore();
-                            game.getArena().getCopies().add(snapshot.getArena());
-                        }
-                    }
+                    game.clearArena();
 
                     game.getAlive().forEach(member -> plugin.getLobby().toLobby(member, true));
                     game.forEachSpectator(game::removeSpectator);

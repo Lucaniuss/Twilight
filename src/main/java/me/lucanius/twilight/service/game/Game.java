@@ -1,10 +1,10 @@
 package me.lucanius.twilight.service.game;
 
+import io.netty.util.internal.ConcurrentSet;
 import lombok.Getter;
 import lombok.Setter;
 import me.lucanius.twilight.Twilight;
 import me.lucanius.twilight.service.arena.Arena;
-import me.lucanius.twilight.service.arena.snapshot.ArenaSnapshot;
 import me.lucanius.twilight.service.game.context.GameContext;
 import me.lucanius.twilight.service.game.context.GameState;
 import me.lucanius.twilight.service.game.task.GameTask;
@@ -20,6 +20,9 @@ import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -37,7 +40,9 @@ public class Game {
 
     private final static Twilight plugin = Twilight.getInstance();
 
-    private final Set<Location> blocks;
+    private final Set<Location> placedBlocks;
+    private final Map<Location, BlockState> brokenBlocks;
+    private final Set<Entity> droppedItems;
     private final Set<UUID> spectators;
     private final UUID uniqueId;
     private final GameContext context;
@@ -48,13 +53,15 @@ public class Game {
 
     private GameState state;
     private long timeStamp;
-    private ArenaSnapshot arenaSnapshot;
+    private Arena arenaCopy;
     private GameTask task;
     private int countdown;
 
     public Game(GameContext context, Loadout loadout, Arena arena, AbstractQueue<?> queue, List<GameTeam> teams) {
-        this.blocks = new HashSet<>();
-        this.spectators = new HashSet<>();
+        this.placedBlocks = new HashSet<>();
+        this.brokenBlocks = new HashMap<>();
+        this.droppedItems = new HashSet<>();
+        this.spectators = new ConcurrentSet<>(); // to prevent ConcurrentModificationException
         this.uniqueId = UUID.randomUUID();
         this.context = context;
         this.loadout = loadout;
@@ -64,7 +71,7 @@ public class Game {
 
         this.state = GameState.STARTING;
         this.timeStamp = System.currentTimeMillis();
-        this.arenaSnapshot = null;
+        this.arenaCopy = null;
         this.task = null;
         this.countdown = 6;
     }
@@ -82,6 +89,8 @@ public class Game {
             player.teleport(arena.getMiddle().getBukkitLocation());
             player.setAllowFlight(true);
             player.setFlying(true);
+
+            plugin.getProfiles().get(uniqueId).getGameProfile().setGameId(this.uniqueId);
 
             plugin.getLobby().getSpectatorItems().forEach(item -> player.getInventory().setItem(item.getSlot(), item.getItem()));
             plugin.getOnline().forEach(online -> {
@@ -151,10 +160,6 @@ public class Game {
         return this.task = task;
     }
 
-    public ArenaSnapshot setArenaSnapshot(ArenaSnapshot arenaSnapshot) {
-        return this.arenaSnapshot = arenaSnapshot;
-    }
-
     public Collection<Player> getEveryone() {
         Collection<Player> players = teams.stream().flatMap(team -> team.getMembers().stream()).map(TeamMember::getPlayer).collect(Collectors.toList());
         spectators.stream().map(plugin.getServer()::getPlayer).filter(Objects::nonNull).forEach(players::add);
@@ -196,9 +201,26 @@ public class Game {
         });
     }
 
-    public void clearBlocks() {
-        blocks.forEach(location -> location.getBlock().setType(Material.AIR));
-        blocks.clear();
+    @SuppressWarnings("deprecation")
+    public void clearArena() {
+        if (!droppedItems.isEmpty()) {
+            droppedItems.forEach(Entity::remove);
+            droppedItems.clear();
+        }
+
+        if (!placedBlocks.isEmpty()) {
+            placedBlocks.forEach(location -> location.getBlock().setType(Material.AIR));
+            placedBlocks.clear();
+        }
+
+        if (!brokenBlocks.isEmpty()) {
+            brokenBlocks.forEach((location, state) -> {
+                Block block = location.getBlock();
+                block.setType(state.getType());
+                block.setData(state.getRawData());
+            });
+            brokenBlocks.clear();
+        }
     }
 
     public int decrement() {
