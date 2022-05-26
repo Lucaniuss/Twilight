@@ -28,6 +28,7 @@ public class TeamMember {
     public TeamMember(UUID uniqueId, GameTeam team) {
         this.uniqueId = uniqueId;
         this.team = team;
+
         this.alive = true;
         this.player = plugin.getServer().getPlayer(uniqueId);
         this.profile = plugin.getProfiles().get(uniqueId);
@@ -40,5 +41,4 @@ public class TeamMember {
     public Profile getProfile() {
         return profile = profile != null ? profile : plugin.getProfiles().get(uniqueId);
     }
-
 }
