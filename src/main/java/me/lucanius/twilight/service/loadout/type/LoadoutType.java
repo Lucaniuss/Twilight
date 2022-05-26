@@ -32,9 +32,9 @@ public enum LoadoutType {
         GameTeam victimTeam = game.getTeam(victimId);
         GameTeam killerTeam = game.getOpposingTeam(victimTeam);
         if (hasKiller) {
-            game.sendMessage(CC.GAME_PREFIX + victimTeam.getColor() + victim.getName() + CC.SECOND + " was killed by " + killerTeam.getColor() + killer.getName() + CC.SECOND + ".");
+            game.sendMessage(victimTeam.getColor() + victim.getName() + CC.SECOND + " was killed by " + killerTeam.getColor() + killer.getName() + CC.SECOND + ".");
         } else {
-            game.sendMessage(CC.GAME_PREFIX + victimTeam.getColor() + victim.getName() + CC.SECOND + " died.");
+            game.sendMessage(victimTeam.getColor() + victim.getName() + CC.SECOND + " died.");
         }
 
         if (victim.isOnline()) {
@@ -42,14 +42,19 @@ public enum LoadoutType {
         }
 
         victimTeam.killSpecific(victimId);
-        boolean canProceed = victimTeam.getMembers().size() > 0;
-        if (!canProceed) {
+        if (!(victimTeam.getAliveSize() > 0)) {
             new GameEndEvent(game, killerTeam, killerTeam);
         }
     })),
-    SUMO(((victim, killer, game) -> {})),
-    BOXING(((victim, killer, game) -> {})),
-    BRIDGES(((victim, killer, game) -> {}));
+    SUMO(((victim, killer, game) -> {
+        NONE.getCallable().execute(victim, killer, game);
+    })),
+    BOXING(((victim, killer, game) -> {
+        NONE.getCallable().execute(victim, killer, game);
+    })),
+    BRIDGES(((victim, killer, game) -> {
+
+    }));
 
     private final LoadoutTypeCallable callable;
 
