@@ -5,6 +5,7 @@ import me.lucanius.twilight.service.game.team.GameTeam;
 import me.lucanius.twilight.service.profile.Profile;
 import me.lucanius.twilight.service.queue.abstr.AbstractQueueData;
 import me.lucanius.twilight.tools.CC;
+import me.lucanius.twilight.tools.Tools;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -79,6 +80,9 @@ public abstract class LinesProvider extends AbstractProvider {
                         lines.addAll(getBridges(game));
                         break;
                 }
+                lines.add(" ");
+                lines.add(CC.WHITE + "Your Ping: " + CC.SECOND + Tools.getPing(player));
+                lines.add(CC.WHITE + "Their Ping: " + CC.SECOND + (isPresent ? Tools.getPing(enemy.get()) : 0));
                 break;
             case TERMINATED:
                 lines.add(CC.WHITE + "Game ended.");

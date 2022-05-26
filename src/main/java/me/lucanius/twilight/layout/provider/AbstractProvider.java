@@ -21,9 +21,9 @@ public abstract class AbstractProvider {
         int fHits = fProfile.getHits(), eHits = eProfile.getHits(), fCombo = fProfile.getCombo(), eCombo = eProfile.getCombo();
 
         lines.add(" ");
-        lines.add(CC.MAIN + "Hits: " + CC.SECOND + (fHits - eHits < eHits - fHits ? "&c(" + (fHits - eHits) + ")" : "&a(+" + (fHits - eHits) + ")"));
-        lines.add(" " + CC.WHITE + "You: " + CC.MAIN + fHits + " " + CC.SECOND + (fCombo > 1 ? "(" + fCombo + " Combo)" : ""));
-        lines.add(" " + CC.WHITE + "Them: " + CC.MAIN + eHits + " " + CC.SECOND + (eCombo > 1 ? "(" + eCombo + " Combo)" : ""));
+        lines.add(CC.MAIN + "Hits: " + (fHits - eHits < eHits - fHits ? "&c(" + (fHits - eHits) + ")" : "&a(+" + (fHits - eHits) + ")"));
+        lines.add(" " + CC.WHITE + "You: " + CC.SECOND + fHits + " " + CC.THIRD + (fCombo > 1 ? "(" + fCombo + " Combo)" : ""));
+        lines.add(" " + CC.WHITE + "Them: " + CC.SECOND + eHits + " " + CC.THIRD + (eCombo > 1 ? "(" + eCombo + " Combo)" : ""));
 
         return lines;
     }
