@@ -52,7 +52,7 @@ public class InviteCommand extends AbstractCommand {
         profile.setPartyInvite(parties.getParty(uuid));
 
         Clickable clickable = new Clickable();
-        clickable.add("&aYou've been invited to join &e" + player.getName() + "'s &aparty", "&a&lClick to Join", "/party accept");
+        clickable.add(CC.translate("&aYou've been invited to join &e" + player.getName() + "'s &aparty"), CC.translate("&a&lClick to Join"), "/party accept");
         clickable.send(target);
     }
 }
