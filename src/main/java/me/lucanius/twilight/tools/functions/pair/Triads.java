@@ -17,6 +17,10 @@ public class Triads<A, B, C> implements Triad<A, B, C> {
         this.c = c;
     }
 
+    public static <A, B, C> Triads<A, B, C> of(A a, B b, C c) {
+        return new Triads<>(a, b, c);
+    }
+
     @Override
     public A getA() {
         return this.a;
