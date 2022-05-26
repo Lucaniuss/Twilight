@@ -22,29 +22,6 @@ public class MainListener {
     private final Twilight plugin = Twilight.getInstance();
 
     public MainListener() {
-        Events.subscribe(EntityDamageEvent.class, event -> {
-            if (!(event.getEntity() instanceof Player)) {
-                return;
-            }
-
-            Player player = (Player) event.getEntity();
-            Profile profile = plugin.getProfiles().get(player.getUniqueId());
-            if (profile.getState() != ProfileState.PLAYING) {
-                if (event.getCause() == EntityDamageEvent.DamageCause.VOID) {
-                    plugin.getLobby().toLobby(player, profile, true);
-                }
-
-                event.setCancelled(true);
-                return;
-            }
-
-            // game damage event
-        });
-
-        Events.subscribe(EntityDamageByEntityEvent.class, event -> {
-
-        });
-
         Events.subscribe(BlockBreakEvent.class, event -> {
             Player player = event.getPlayer();
             Profile profile = plugin.getProfiles().get(player.getUniqueId());
