@@ -248,4 +248,8 @@ public class Game {
     public String getTime() {
         return DateTools.formatIntToMMSS((int) ((System.currentTimeMillis() - timeStamp) / 1000L));
     }
+
+    public boolean isRanked() {
+        return queue.equals(plugin.getQueues().getRanked());
+    }
 }
