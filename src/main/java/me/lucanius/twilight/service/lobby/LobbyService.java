@@ -39,6 +39,7 @@ public class LobbyService extends AbstractHider {
         lobbyItems.forEach(item -> player.getInventory().setItem(item.getSlot(), item.getItem()));
 
         updateView();
+        profile.getGameProfile().reset();
 
         if (teleport) {
             player.teleport(lobbyLocation.getBukkitLocation());
