@@ -6,8 +6,8 @@ import me.lucanius.twilight.event.EventListener;
 import me.lucanius.twilight.event.EventProvider;
 import me.lucanius.twilight.event.TwilightEvent;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -18,7 +18,7 @@ import java.util.concurrent.Executors;
  */
 public class StandardEventProvider implements EventProvider {
 
-    private final Map<EventListener, Class<? extends AbstractEvent>> subscribers = new HashMap<>();
+    private final Map<EventListener, Class<? extends AbstractEvent>> subscribers = new ConcurrentHashMap<>();
     private final ExecutorService thread = Executors.newSingleThreadExecutor();
 
     @Override
