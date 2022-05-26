@@ -2,6 +2,7 @@ package me.lucanius.twilight.service.profile.modules;
 
 import lombok.Data;
 import me.lucanius.twilight.service.game.team.GameTeam;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.UUID;
 
@@ -21,8 +22,9 @@ public class GameProfile {
     private int hits = 0;
     private int kills = 0;
     private boolean respawning = false;
-    private UUID gameId;
-    private GameTeam team;
+    private UUID gameId = null;
+    private GameTeam team = null;
+    private ItemStack[] personalContents = null;
 
     public void reset() {
         missedPots = 0;
@@ -34,6 +36,7 @@ public class GameProfile {
         respawning = false;
         gameId = null;
         team = null;
+        personalContents = null;
     }
 
     public void throwPotion(boolean missed) {

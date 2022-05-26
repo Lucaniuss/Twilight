@@ -5,8 +5,13 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import me.lucanius.twilight.service.loadout.type.LoadoutType;
+import me.lucanius.twilight.service.profile.Profile;
+import me.lucanius.twilight.service.profile.modules.GameProfile;
 import me.lucanius.twilight.tools.Serializer;
+import me.lucanius.twilight.tools.Tools;
 import me.lucanius.twilight.tools.config.ConfigFile;
+import org.bukkit.ChatColor;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -113,10 +118,45 @@ public class Loadout {
     }
 
     public void apply(Player player) {
-        final PlayerInventory inv = player.getInventory();
+        PlayerInventory inv = player.getInventory();
 
         inv.setContents(contents);
         inv.setArmorContents(armor);
+
+        if (effects != null && !effects.isEmpty()) {
+            effects.forEach(player::addPotionEffect);
+        }
+
+        player.updateInventory();
+    }
+
+    public void apply(Player player, Profile profile) {
+        if (!isBuild()) {
+            apply(player);
+            return;
+        }
+
+        GameProfile gameProfile = profile.getGameProfile();
+
+        ItemStack[] playerContents = contents;
+        ItemStack[] playerArmor = armor;
+        if (gameProfile.getPersonalContents() != null) {
+            playerContents = gameProfile.getPersonalContents();
+        }
+
+        Color color = gameProfile.getTeam().getColor() == ChatColor.BLUE ? Color.BLUE : gameProfile.getTeam().getColor() == ChatColor.RED ? Color.RED : Color.WHITE;
+        int data = color == Color.BLUE ? 11 : color == Color.RED ? 14 : 0;
+
+        int i = 0;
+        ItemStack[] finalContents = Tools.getColoredItems(playerContents, data, i);
+        ItemStack[] finalArmor = Tools.getColoredArmor(playerArmor, color, i);
+
+        PlayerInventory inv = player.getInventory();
+
+        inv.setContents(finalContents);
+        inv.setArmorContents(finalArmor);
+
+        gameProfile.setPersonalContents(finalContents);
 
         if (effects != null && !effects.isEmpty()) {
             effects.forEach(player::addPotionEffect);

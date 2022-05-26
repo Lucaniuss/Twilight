@@ -25,15 +25,15 @@ public class AsyncMovementListener {
         Tools.log("Initializing AsyncMovementListener...");
         Events.subscribe(AsyncMovementEvent.class, event -> {
             Profile profile = event.getProfile();
-            if (profile == null) {
-                return;
-            }
-
-            if (profile.getState() != ProfileState.PLAYING) {
+            if (profile == null || profile.getState() != ProfileState.PLAYING) {
                 return;
             }
 
             Game game = plugin.getGames().get(profile);
+            if (game == null) {
+                return;
+            }
+
             Loadout loadout = game.getLoadout();
             if (!loadout.needsMovement()) {
                 return;
@@ -51,7 +51,7 @@ public class AsyncMovementListener {
 
             boolean bridges = type == LoadoutType.BRIDGES;
             if ((sumo && to.getBlock().isLiquid()) || (bridges && (profile.getGameProfile().getTeam().getSpawn().getY() - 30) > to.getY())) {
-                type.getCallable().execute(player, plugin.getDamages().get(player.getUniqueId()), game);
+                type.getCallable().execute(plugin, player, plugin.getDamages().get(player.getUniqueId()), game);
             }
         });
     }

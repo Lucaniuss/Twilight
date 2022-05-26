@@ -12,7 +12,9 @@ import me.lucanius.twilight.tools.Scheduler;
 import me.lucanius.twilight.tools.Tools;
 import org.bson.Document;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * @author Lucanius
@@ -26,7 +28,7 @@ public class Profile {
 
     private final UUID uniqueId;
     private final String idToString;
-    private final List<PersonalLoadout[]> loadouts;
+    private final Map<String, PersonalLoadout[]> loadouts;
 
     private ProfileState state;
     private GameProfile gameProfile;
@@ -40,7 +42,7 @@ public class Profile {
     public Profile(UUID uniqueId) {
         this.uniqueId = uniqueId;
         this.idToString = uniqueId.toString();
-        this.loadouts = new ArrayList<>();
+        this.loadouts = new HashMap<>();
 
         this.state = ProfileState.LOBBY;
         this.gameProfile = new GameProfile();
@@ -49,7 +51,7 @@ public class Profile {
 
         this.loaded = false;
 
-        plugin.getLoadouts().getAll().forEach(loadout -> loadouts.add(new PersonalLoadout[3]));
+        plugin.getLoadouts().getAll().forEach(loadout -> loadouts.put(loadout.getName(), new PersonalLoadout[3]));
     }
 
     public void load() {
@@ -82,5 +84,60 @@ public class Profile {
         Document document = new Document("uniqueId", idToString);
 
         plugin.getMongo().getProfiles().replaceOne(Filters.eq("uniqueId", idToString), document, options);
+    }
+
+    public PersonalLoadout[] getPersonalLoadouts(String loadout) {
+        return loadouts.get(loadout);
+    }
+
+    public PersonalLoadout getPersonalLoadout(String loadout, int number) {
+        return loadouts.get(loadout)[number];
+    }
+
+    public void replacePersonalLoadout(String loadout, int number, PersonalLoadout personalLoadout) {
+        PersonalLoadout[] personalLoadouts = loadouts.get(loadout);
+        personalLoadouts[number] = personalLoadout;
+
+        loadouts.put(loadout, personalLoadouts);
+    }
+
+    public void deletePersonalLoadout(String loadout, PersonalLoadout personalLoadout) {
+        if (personalLoadout == null) {
+            return;
+        }
+        PersonalLoadout[] kits = loadouts.get(loadout);
+        for (int i = 0; i < 4; i++) {
+            if (kits[i] != null && kits[i] == personalLoadout) {
+                kits[i] = null;
+                break;
+            }
+        }
+
+        loadouts.put(loadout, kits);
+    }
+
+    public boolean hasPersonalLoadouts(String loadout) {
+        boolean hasLoadout = false;
+        PersonalLoadout[] kits = loadouts.get(loadout);
+        for (int i = 0; i < 4; i++) {
+            if (kits[i] != null) {
+                hasLoadout = true;
+                break;
+            }
+        }
+
+        return hasLoadout;
+    }
+
+    public int getPersonalLoadoutSize(String loadout) {
+        int amount = 0;
+        PersonalLoadout[] kits = loadouts.get(loadout);
+        for (int i = 0; i < 4; i++) {
+            if (kits[i] != null) {
+                amount += 1;
+            }
+        }
+
+        return amount;
     }
 }

@@ -194,6 +194,10 @@ public class Game {
         getEveryone().forEach(player -> player.playSound(player.getLocation(), sound, 1, 1));
     }
 
+    public void sendSoundToTeam(GameTeam team, Sound sound) {
+        team.toPlayers().forEach(player -> player.playSound(player.getLocation(), sound, 1, 1));
+    }
+
     public void sendMessageWithSound(String message, Sound sound) {
         getEveryone().forEach(player -> {
             player.sendMessage(CC.translate(CC.GAME_PREFIX + message));

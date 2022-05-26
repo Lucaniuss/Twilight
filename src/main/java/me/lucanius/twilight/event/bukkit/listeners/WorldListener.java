@@ -31,12 +31,7 @@ public class WorldListener {
             }
 
             Game game = plugin.getGames().get(profile);
-            if (game == null) {
-                event.setCancelled(true);
-                return;
-            }
-
-            if (!game.getLoadout().isBuild()) {
+            if (game == null || !game.getLoadout().isBuild()) {
                 event.setCancelled(true);
                 return;
             }
@@ -66,12 +61,7 @@ public class WorldListener {
             }
 
             Game game = plugin.getGames().get(profile);
-            if (game == null) {
-                event.setCancelled(true);
-                return;
-            }
-
-            if (!game.getLoadout().isBuild()) {
+            if (game == null || !game.getLoadout().isBuild()) {
                 event.setCancelled(true);
                 return;
             }

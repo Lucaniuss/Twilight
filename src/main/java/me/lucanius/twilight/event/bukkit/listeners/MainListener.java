@@ -7,6 +7,7 @@ import me.lucanius.twilight.service.profile.Profile;
 import me.lucanius.twilight.service.profile.ProfileState;
 import me.lucanius.twilight.tools.Scheduler;
 import org.bukkit.Material;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBurnEvent;
 import org.bukkit.event.block.BlockIgniteEvent;
@@ -18,6 +19,7 @@ import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
 
 /**
@@ -38,14 +40,9 @@ public class MainListener {
             }
 
             Game game = plugin.getGames().get(profile);
-            if (game == null) {
-                event.setCancelled(true);
-                return;
-            }
-
             Material drop = event.getItemDrop().getItemStack().getType();
             boolean droppable = drop.name().contains("_SWORD") || drop.name().contains("_AXE") || drop.name().contains("_SPADE") || drop.name().contains("_PICKAXE") || drop == Material.BOW || drop == Material.ENCHANTED_BOOK || drop == Material.MUSHROOM_SOUP;
-            if (game.getLoadout().isNoDrop() || droppable) {
+            if (game == null || game.getLoadout().isNoDrop() || droppable) {
                 event.setCancelled(true);
                 return;
             }
@@ -56,6 +53,24 @@ public class MainListener {
             }
 
             game.getDroppedItems().add(event.getItemDrop());
+        });
+
+        Events.subscribe(PlayerPickupItemEvent.class, event -> {
+            Player player = event.getPlayer();
+            Profile profile = plugin.getProfiles().get(player.getUniqueId());
+            if (profile.getState() != ProfileState.PLAYING) {
+                event.setCancelled(true);
+                return;
+            }
+
+            Game game = plugin.getGames().get(profile);
+            Item item = event.getItem();
+            if (game == null || !game.getDroppedItems().contains(item)) {
+                event.setCancelled(true);
+                return;
+            }
+
+            game.getDroppedItems().remove(item);
         });
 
         Events.subscribe(FoodLevelChangeEvent.class, event -> {

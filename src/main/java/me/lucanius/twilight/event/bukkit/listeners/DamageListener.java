@@ -51,7 +51,7 @@ public class DamageListener {
 
                     switch (event.getCause()) {
                         case VOID:
-                            game.getLoadout().getType().getCallable().execute(player, plugin.getDamages().get(uniqueId), game);
+                            game.getLoadout().getType().getCallable().execute(plugin, player, plugin.getDamages().get(uniqueId), game);
                             break;
                         case FALL:
                             event.setCancelled(game.getLoadout().isNoFall());
@@ -145,7 +145,7 @@ public class DamageListener {
                 event.setDamage(0.0d);
                 event.setCancelled(true);
 
-                type.getCallable().execute(victim, damager, game);
+                type.getCallable().execute(plugin, victim, damager, game);
                 return;
             }
 
@@ -173,7 +173,7 @@ public class DamageListener {
             LoadoutType type = game.getLoadout().getType();
             LoadoutTypeCallable callable = type.getCallable();
             if (type != LoadoutType.BRIDGES) {
-                callable.execute(victim, killer, game);
+                callable.execute(plugin, victim, killer, game);
                 return;
             }
 
@@ -181,7 +181,7 @@ public class DamageListener {
             Scheduler.runLater(() -> { // prevent an error that occurs when the player dies in an unnatural way
                 victim.spigot().respawn();
                 victim.teleport(location);
-                callable.execute(victim, killer, game);
+                callable.execute(plugin, victim, killer, game);
             }, 1L);
         });
     }

@@ -1,14 +1,14 @@
 package me.lucanius.twilight.tools;
 
 import lombok.experimental.UtilityClass;
+import me.lucanius.twilight.tools.item.ItemBuilder;
 import net.minecraft.server.v1_8_R3.EntityPlayer;
 import net.minecraft.server.v1_8_R3.Packet;
 import org.apache.commons.lang3.text.WordUtils;
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 
 import java.util.Optional;
@@ -101,5 +101,43 @@ public final class Tools {
 
         String str = builder.toString();
         return Optional.of(str).filter(s -> s.length() != 0).map(s -> s.substring(0, s.length() - 1)).orElse(str);
+    }
+
+    public ItemStack[] getColoredItems(ItemStack[] items, int color, int i) {
+        ItemStack[] finalItems = new ItemStack[36];
+
+        for (ItemStack item : items) {
+            if (item != null && item.getType() != Material.AIR) {
+                if (item.getType() == Material.STAINED_CLAY) {
+                    finalItems[i] = new ItemBuilder(item).setData(color).build();
+                } else if (item.getType() == Material.WOOL) {
+                    finalItems[i] = new ItemBuilder(item).setData(color).build();
+                } else {
+                    finalItems[i] = item;
+                }
+            }
+
+            i++;
+        }
+
+        return finalItems;
+    }
+
+    public ItemStack[] getColoredArmor(ItemStack[] armor, Color color, int i) {
+        ItemStack[] finalArmor = new ItemStack[4];
+
+        for (ItemStack item : armor) {
+            if (item != null && item.getType() != Material.AIR) {
+                if (item.getType().name().startsWith("LEATHER_")) {
+                    finalArmor[i] = new ItemBuilder(item).setColor(color).build();
+                } else {
+                    finalArmor[i] = item;
+                }
+            }
+
+            i++;
+        }
+
+        return finalArmor;
     }
 }

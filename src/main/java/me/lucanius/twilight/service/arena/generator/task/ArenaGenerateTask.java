@@ -14,8 +14,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author Lucanius
- * @since May 26, 2022
+ * @author Zonix
+ * @edited Lucanius
  */
 public abstract class ArenaGenerateTask extends BukkitRunnable {
 

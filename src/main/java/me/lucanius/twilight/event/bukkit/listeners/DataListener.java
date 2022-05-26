@@ -56,7 +56,7 @@ public class DataListener {
             Optional<Game> game = Optional.ofNullable(plugin.getGames().get(profile));
             switch (profile.getState()) {
                 case PLAYING:
-                    game.ifPresent(value -> value.getLoadout().getType().getCallable().execute(player, plugin.getDamages().get(uniqueId), value));
+                    game.ifPresent(value -> value.getLoadout().getType().getCallable().execute(plugin, player, plugin.getDamages().get(uniqueId), value));
                     break;
                 case SPECTATING:
                     game.ifPresent(value -> value.removeSpectator(uniqueId));

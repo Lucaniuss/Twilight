@@ -72,6 +72,8 @@ public class GameListener {
                 }
                 player.teleport(team.getSpawn());
 
+                plugin.getGames().giveLoadouts(player, profile, loadout);
+
                 players.add(player);
             });
 
@@ -83,10 +85,7 @@ public class GameListener {
                 }));
 
                 // show players that are in the game to each other
-                players.forEach(player -> {
-                    players.forEach(player::showPlayer);
-                    loadout.apply(player);
-                });
+                players.forEach(player -> players.forEach(player::showPlayer));
             });
 
             game.setTask(new GameTask(plugin, game)).runTaskTimer(plugin, 20L, 20L);

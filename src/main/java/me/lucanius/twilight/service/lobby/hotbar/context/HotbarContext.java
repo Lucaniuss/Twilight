@@ -9,6 +9,8 @@ public enum HotbarContext {
     UNRANKED,
     RANKED,
 
-    LEAVE_QUEUE
+    LEAVE_QUEUE,
+
+    DEFAULT_BOOK
 
 }

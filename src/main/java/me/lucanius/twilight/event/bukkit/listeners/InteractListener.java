@@ -1,10 +1,14 @@
 package me.lucanius.twilight.event.bukkit.listeners;
 
 import me.lucanius.twilight.Twilight;
-import me.lucanius.twilight.service.lobby.hotbar.context.HotbarContext;
-import me.lucanius.twilight.service.lobby.hotbar.HotbarItem;
-import me.lucanius.twilight.service.profile.Profile;
 import me.lucanius.twilight.event.bukkit.Events;
+import me.lucanius.twilight.service.game.Game;
+import me.lucanius.twilight.service.game.context.GameState;
+import me.lucanius.twilight.service.lobby.hotbar.HotbarItem;
+import me.lucanius.twilight.service.lobby.hotbar.context.HotbarContext;
+import me.lucanius.twilight.service.profile.Profile;
+import me.lucanius.twilight.tools.CC;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -41,6 +45,7 @@ public class InteractListener {
 
             HotbarItem item = plugin.getLobby().get(stack);
             boolean nullItem = item == null;
+
             event.setCancelled(!nullItem);
             switch (profile.getState()) {
                 case LOBBY:
@@ -57,6 +62,40 @@ public class InteractListener {
                     }
                     break;
                 case PLAYING:
+                    Game game = plugin.getGames().get(profile);
+                    switch (stack.getType()) {
+                        case MUSHROOM_SOUP:
+                            double health = player.getHealth();
+                            if (!player.isDead() && health < 19.0d) {
+                                player.setHealth(Math.min(health + 7.0d, 20.0d));
+                                stack.setType(Material.BOWL);
+                                player.updateInventory();
+                                return;
+                            }
+                            break;
+                        case POTION:
+                            if (stack.getDurability() == 16421 && game.getState() == GameState.STARTING) {
+                                event.setCancelled(true);
+                                player.updateInventory();
+                                player.sendMessage(CC.RED + "You can't do this while the game isn't ongoing!");
+                                return;
+                            }
+                            break;
+                        case ENDER_PEARL:
+                            if (game.getState() == GameState.STARTING) {
+                                event.setCancelled(true);
+                                player.updateInventory();
+                                player.sendMessage(CC.RED + "You can't do this while the game isn't ongoing!");
+                                return;
+                            }
+                            break;
+                    }
+
+                    if (!nullItem && item.getContext() == HotbarContext.DEFAULT_BOOK) {
+                        game.getLoadout().apply(player, profile);
+                        player.sendMessage(CC.SECOND + "Successfully equipped the default loadout!");
+                        return;
+                    }
                     break;
                 case QUEUE:
                     if (nullItem) {
