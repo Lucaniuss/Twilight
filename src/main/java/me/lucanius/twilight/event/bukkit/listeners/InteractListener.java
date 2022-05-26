@@ -41,6 +41,7 @@ public class InteractListener {
 
             HotbarItem item = plugin.getLobby().get(stack);
             boolean nullItem = item == null;
+            event.setCancelled(!nullItem);
             switch (profile.getState()) {
                 case LOBBY:
                     if (nullItem) {
