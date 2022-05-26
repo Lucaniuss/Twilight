@@ -50,7 +50,7 @@ public class AsyncMovementListener {
             }
 
             boolean bridges = type == LoadoutType.BRIDGES;
-            if ((sumo && to.getBlock().isLiquid()) || (bridges && (profile.getGameProfile().getTeam().getSpawn().getY() - 30) < to.getY())) {
+            if ((sumo && to.getBlock().isLiquid()) || (bridges && (profile.getGameProfile().getTeam().getSpawn().getY() - 30) > to.getY())) {
                 type.getCallable().execute(player, plugin.getDamages().get(player.getUniqueId()), game);
             }
         });
