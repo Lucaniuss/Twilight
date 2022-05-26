@@ -51,7 +51,7 @@ public class Profile {
 
         this.loaded = false;
 
-        plugin.getLoadouts().getAll().forEach(loadout -> loadouts.put(loadout.getName(), new PersonalLoadout[3]));
+        plugin.getLoadouts().getAll().forEach(loadout -> loadouts.put(loadout.getName(), new PersonalLoadout[4]));
     }
 
     public void load() {
