@@ -81,8 +81,8 @@ public abstract class LinesProvider extends AbstractProvider {
                         break;
                 }
                 lines.add(" ");
-                lines.add(CC.WHITE + "Your Ping: " + CC.SECOND + Tools.getPing(player));
-                lines.add(CC.WHITE + "Their Ping: " + CC.SECOND + (isPresent ? Tools.getPing(enemy.get()) : 0));
+                lines.add(CC.WHITE + "Your Ping: " + CC.SECOND + Tools.getPing(player) + "ms");
+                lines.add(CC.WHITE + "Their Ping: " + CC.SECOND + (isPresent ? Tools.getPing(enemy.get()) : 0) + "ms");
                 break;
             case TERMINATED:
                 lines.add(CC.WHITE + "Game ended.");
