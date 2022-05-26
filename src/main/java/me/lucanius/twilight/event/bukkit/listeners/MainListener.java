@@ -1,14 +1,21 @@
 package me.lucanius.twilight.event.bukkit.listeners;
 
 import me.lucanius.twilight.Twilight;
+import me.lucanius.twilight.event.bukkit.Events;
+import me.lucanius.twilight.service.game.Game;
 import me.lucanius.twilight.service.profile.Profile;
 import me.lucanius.twilight.service.profile.ProfileState;
 import me.lucanius.twilight.tools.Scheduler;
-import me.lucanius.twilight.event.bukkit.Events;
-import org.bukkit.GameMode;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.block.*;
-import org.bukkit.event.entity.*;
+import org.bukkit.event.block.BlockBurnEvent;
+import org.bukkit.event.block.BlockIgniteEvent;
+import org.bukkit.event.block.BlockSpreadEvent;
+import org.bukkit.event.block.LeavesDecayEvent;
+import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
+import org.bukkit.event.entity.ItemSpawnEvent;
+import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
@@ -22,28 +29,6 @@ public class MainListener {
     private final Twilight plugin = Twilight.getInstance();
 
     public MainListener() {
-        Events.subscribe(BlockBreakEvent.class, event -> {
-            Player player = event.getPlayer();
-            Profile profile = plugin.getProfiles().get(player.getUniqueId());
-            if (profile.getState() != ProfileState.PLAYING) {
-                event.setCancelled(player.getGameMode() != GameMode.CREATIVE);
-                return;
-            }
-
-            // game block break event
-        });
-
-        Events.subscribe(BlockPlaceEvent.class, event -> {
-            Player player = event.getPlayer();
-            Profile profile = plugin.getProfiles().get(player.getUniqueId());
-            if (profile.getState() != ProfileState.PLAYING) {
-                event.setCancelled(player.getGameMode() != GameMode.CREATIVE);
-                return;
-            }
-
-            // game block break event
-        });
-
         Events.subscribe(PlayerDropItemEvent.class, event -> {
             Player player = event.getPlayer();
             Profile profile = plugin.getProfiles().get(player.getUniqueId());
@@ -52,7 +37,25 @@ public class MainListener {
                 return;
             }
 
-            // event setcancelled when loadout of game is noDrop
+            Game game = plugin.getGames().get(profile);
+            if (game == null) {
+                event.setCancelled(true);
+                return;
+            }
+
+            Material drop = event.getItemDrop().getItemStack().getType();
+            boolean droppable = drop.name().contains("_SWORD") || drop.name().contains("_AXE") || drop.name().contains("_SPADE") || drop.name().contains("_PICKAXE") || drop == Material.BOW || drop == Material.ENCHANTED_BOOK || drop == Material.MUSHROOM_SOUP;
+            if (game.getLoadout().isNoDrop() || droppable) {
+                event.setCancelled(true);
+                return;
+            }
+
+            if (drop.equals(Material.GLASS_BOTTLE) || drop.equals(Material.BOWL)) {
+                event.getItemDrop().remove();
+                return;
+            }
+
+            game.getDroppedItems().add(event.getItemDrop());
         });
 
         Events.subscribe(FoodLevelChangeEvent.class, event -> {
@@ -63,7 +66,8 @@ public class MainListener {
                 return;
             }
 
-            // event setcancelled when loadout of game is noHunger
+            Game game = plugin.getGames().get(profile);
+            event.setCancelled(game != null && game.getLoadout().isNoHunger());
         });
 
         Events.subscribe(PotionSplashEvent.class, event -> {
