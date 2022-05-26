@@ -118,10 +118,7 @@ public class Arena {
     }
 
     public void generate(int amount) {
-        ArenaGenerator generator = new ArenaGenerator(this);
-        for (int i = 0; i < amount; i++) {
-            generator.generate();
-        }
+        new ArenaGenerator(plugin, this, amount);
     }
 
     public Cuboid getCuboid() {
@@ -134,6 +131,10 @@ public class Arena {
         }
 
         return copies.remove(plugin.getRandom().nextInt(copies.size()));
+    }
+
+    public void resetCopy(Arena arena) {
+        arena.getCopies().add(this);
     }
 
     public String serialize() {
