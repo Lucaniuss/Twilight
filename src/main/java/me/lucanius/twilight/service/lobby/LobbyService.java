@@ -1,7 +1,7 @@
 package me.lucanius.twilight.service.lobby;
 
 import me.lucanius.twilight.Twilight;
-import me.lucanius.twilight.service.lobby.hotbar.AbstractHotbar;
+import me.lucanius.twilight.service.lobby.hider.AbstractHider;
 import me.lucanius.twilight.service.profile.Profile;
 import me.lucanius.twilight.service.profile.ProfileState;
 import me.lucanius.twilight.tools.Tools;
@@ -12,14 +12,12 @@ import org.bukkit.entity.Player;
  * @author Lucanius
  * @since May 23, 2022
  */
-public class LobbyService extends AbstractHotbar {
-
-    private final Twilight plugin;
+public class LobbyService extends AbstractHider {
 
     private SerializableLocation lobbyLocation;
 
     public LobbyService(Twilight plugin) {
-        this.plugin = plugin;
+        super(plugin);
 
         lobbyLocation = plugin.getConfig().contains("LOBBY.LOCATION")
                 ? new SerializableLocation(plugin.getConfig().getString("LOBBY.LOCATION"))
@@ -39,6 +37,8 @@ public class LobbyService extends AbstractHotbar {
 
         Tools.clearPlayer(player);
         lobbyItems.forEach(item -> player.getInventory().setItem(item.getSlot(), item.getItem()));
+
+        updateView();
 
         if (teleport) {
             player.teleport(lobbyLocation.getBukkitLocation());
