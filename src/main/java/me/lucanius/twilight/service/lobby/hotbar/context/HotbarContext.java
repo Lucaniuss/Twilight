@@ -8,9 +8,22 @@ public enum HotbarContext {
 
     UNRANKED,
     RANKED,
+    LOADOUT_EDITOR,
+    CREATE_PARTY,
+    LEADERBOARDS,
+    PERSONAL_SETTINGS,
+
+    DUOS,
+    PARTY_GAMES,
+    OTHER_PARTIES,
+    PARTY_INFO,
+    LEAVE_PARTY,
+
+    DEFAULT_BOOK,
 
     LEAVE_QUEUE,
 
-    DEFAULT_BOOK
+    VIEW_PLAYERS,
+    STOP_SPECTATING
 
 }
