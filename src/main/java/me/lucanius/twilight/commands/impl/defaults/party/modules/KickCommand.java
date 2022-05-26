@@ -23,7 +23,7 @@ public class KickCommand extends AbstractCommand {
         String[] args = cmd.getArgs();
 
         if (args.length != 1) {
-            player.sendMessage(CC.translate("&cUsage: /party kick <player>"));
+            player.sendMessage(getUsage(cmd.getLabel(), "<player>"));
             return;
         }
 

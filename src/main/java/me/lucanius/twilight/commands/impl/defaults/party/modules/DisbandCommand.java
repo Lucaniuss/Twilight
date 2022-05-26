@@ -18,10 +18,10 @@ public class DisbandCommand extends AbstractCommand {
 
     @Command(name = "party.disband", aliases = {"p.disband"})
     public void onCommand(CommandArgs cmd) {
-        final PartyService party = plugin.getParties();
-        final Player player = cmd.getPlayer();
-        final UUID uuid = player.getUniqueId();
+        Player player = cmd.getPlayer();
+        UUID uuid = player.getUniqueId();
 
+        PartyService party = plugin.getParties();
         if (!party.isParty(uuid)) {
             player.sendMessage(CC.translate("&cYou are not in a party..."));
             return;

@@ -16,9 +16,9 @@ public class CreateCommand extends AbstractCommand {
 
     @Command(name = "party.create", aliases = {"p.create"})
     public void onCommand(CommandArgs cmd) {
-        final PartyService party = plugin.getParties();
         Player player = cmd.getPlayer();
 
+        PartyService party = plugin.getParties();
         if (party.isParty(player.getUniqueId())) {
             player.sendMessage(CC.translate("&cYou are already in a party!"));
             return;

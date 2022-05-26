@@ -16,13 +16,12 @@ import java.util.UUID;
  */
 public class LeaveCommand extends AbstractCommand {
 
-    private static final PartyService parties = plugin.getParties();
-
     @Command(name = "party.leave", aliases = {"p.leave"})
     public void onCommand(CommandArgs cmd) {
         Player player = cmd.getPlayer();
         UUID uuid = player.getUniqueId();
 
+        PartyService parties = plugin.getParties();
         if (!parties.isParty(uuid)) {
             player.sendMessage(CC.translate("&cYou are not in a party..."));
             return;

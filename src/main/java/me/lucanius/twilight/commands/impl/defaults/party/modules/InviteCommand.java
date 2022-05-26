@@ -18,19 +18,18 @@ import java.util.UUID;
  */
 public class InviteCommand extends AbstractCommand {
 
-    private static final PartyService parties = plugin.getParties();
-
     @Command(name = "party.invite", aliases = {"p.invite"})
     public void onCommand(CommandArgs cmd) {
         Player player = cmd.getPlayer();
         UUID uuid = player.getUniqueId();
         String[] args = cmd.getArgs();
 
-        if (args.length < 1) {
-            player.sendMessage(CC.translate("&cUsage: /party invite <player>"));
+        if (args.length != 1) {
+            player.sendMessage(getUsage(cmd.getLabel(), "<player>"));
             return;
         }
 
+        PartyService parties = plugin.getParties();
         if (!parties.isParty(uuid)) {
             player.sendMessage(CC.translate("&cYou are not in a party..."));
             return;
@@ -51,8 +50,10 @@ public class InviteCommand extends AbstractCommand {
         profile.setPartyLeader(uuid);
         profile.setPartyInvite(parties.getParty(uuid));
 
-        Clickable clickable = new Clickable();
-        clickable.add(CC.translate("&aYou've been invited to join &e" + player.getName() + "'s &aparty"), CC.translate("&a&lClick to Join"), "/party accept");
-        clickable.send(target);
+        new Clickable(
+                CC.translate("&aYou've been invited to join &e" + player.getName() + "'s &aparty"),
+                CC.translate("&a&lClick to Join"),
+                "/party accept"
+        ).send(target);
     }
 }
