@@ -9,6 +9,7 @@ import me.lucanius.twilight.service.loadout.Loadout;
 import me.lucanius.twilight.service.loadout.type.LoadoutType;
 import me.lucanius.twilight.service.profile.Profile;
 import me.lucanius.twilight.service.profile.ProfileState;
+import me.lucanius.twilight.tools.Tools;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -21,8 +22,13 @@ public class AsyncMovementListener {
     private final Twilight plugin = Twilight.getInstance();
 
     public AsyncMovementListener() {
+        Tools.log("Initializing AsyncMovementListener...");
         Events.subscribe(AsyncMovementEvent.class, event -> {
             Profile profile = event.getProfile();
+            if (profile == null) {
+                return;
+            }
+
             if (profile.getState() != ProfileState.PLAYING) {
                 return;
             }
