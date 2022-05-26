@@ -59,9 +59,10 @@ public class InteractListener {
 
                     switch (item.getContext()) {
                         case UNRANKED:
-                            plugin.getQueues().getSoloQueue().getMenu().open(player);
+                            plugin.getQueues().getUnranked().getMenu().open(player);
                             break;
                         case RANKED:
+                            plugin.getQueues().getRanked().getMenu().open(player);
                             break;
                         case LOADOUT_EDITOR:
                             break;
@@ -78,7 +79,7 @@ public class InteractListener {
                         case PERSONAL_SETTINGS:
                             break;
                         case DUOS:
-                            plugin.getQueues().getDuoQueue().getMenu().open(player);
+                            plugin.getQueues().getDuos().getMenu().open(player);
                             break;
                         case PARTY_GAMES:
                             break;

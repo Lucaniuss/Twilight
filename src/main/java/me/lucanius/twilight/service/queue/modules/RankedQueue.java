@@ -8,8 +8,8 @@ import me.lucanius.twilight.service.loadout.Loadout;
 import me.lucanius.twilight.service.queue.abstr.AbstractQueue;
 import me.lucanius.twilight.service.queue.abstr.AbstractQueueData;
 import me.lucanius.twilight.service.queue.callback.QueueCallback;
-import me.lucanius.twilight.service.queue.data.SoloQueueData;
-import me.lucanius.twilight.service.queue.menu.menus.SoloQueueMenu;
+import me.lucanius.twilight.service.queue.data.RankedQueueData;
+import me.lucanius.twilight.service.queue.menu.menus.RankedQueueMenu;
 import me.lucanius.twilight.tools.Tools;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -20,22 +20,22 @@ import java.util.List;
 
 /**
  * @author Lucanius
- * @since May 22, 2022
+ * @since May 26, 2022
  */
-public class SoloQueue extends AbstractQueue<Player> {
+public class RankedQueue extends AbstractQueue<Player> {
 
-    public SoloQueue() {
-        super("Solo");
-        menu = new SoloQueueMenu(this);
+    public RankedQueue() {
+        super("Ranked");
+        menu = new RankedQueueMenu(this);
     }
 
     @Override
     public void enqueue(Player element, Loadout loadout) {
-        SoloQueueData data = new SoloQueueData(
+        RankedQueueData data = new RankedQueueData(
                 element,
                 loadout,
-                Tools.getPing(element),
-                plugin.getProfiles().get(element.getUniqueId()).getPingRange()
+                Tools.getPing(element), // check for elo
+                plugin.getProfiles().get(element.getUniqueId()).getPingRange() // check for elo
         );
 
         // TODO: Send messages
@@ -46,7 +46,7 @@ public class SoloQueue extends AbstractQueue<Player> {
 
     @Override
     public void dequeue(AbstractQueueData<?> data, QueueCallback callback) {
-        SoloQueueData soloData = (SoloQueueData) data;
+        RankedQueueData soloData = (RankedQueueData) data;
         if (callback != QueueCallback.NONE && !callback.getMessage().equals("")) {
             soloData.getElement().sendMessage(callback.getMessage());
         }
@@ -59,8 +59,8 @@ public class SoloQueue extends AbstractQueue<Player> {
     public QueueCallback start(AbstractQueueData<?> first, AbstractQueueData<?> second) {
         try {
             List<GameTeam> teams = Arrays.asList(
-                    new GameTeam(Collections.singletonList(((SoloQueueData) first).getElement().getUniqueId()), ChatColor.BLUE),
-                    new GameTeam(Collections.singletonList(((SoloQueueData) second).getElement().getUniqueId()), ChatColor.RED)
+                    new GameTeam(Collections.singletonList(((RankedQueueData) first).getElement().getUniqueId()), ChatColor.BLUE),
+                    new GameTeam(Collections.singletonList(((RankedQueueData) second).getElement().getUniqueId()), ChatColor.RED)
             );
 
             Loadout loadout = first.getLoadout();

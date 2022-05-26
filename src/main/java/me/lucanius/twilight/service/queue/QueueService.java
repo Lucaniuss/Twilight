@@ -1,5 +1,6 @@
 package me.lucanius.twilight.service.queue;
 
+import lombok.Getter;
 import lombok.SneakyThrows;
 import me.lucanius.twilight.Twilight;
 import me.lucanius.twilight.service.loadout.Loadout;
@@ -7,7 +8,8 @@ import me.lucanius.twilight.service.profile.ProfileState;
 import me.lucanius.twilight.service.queue.abstr.AbstractQueue;
 import me.lucanius.twilight.service.queue.abstr.AbstractQueueData;
 import me.lucanius.twilight.service.queue.modules.DuoQueue;
-import me.lucanius.twilight.service.queue.modules.SoloQueue;
+import me.lucanius.twilight.service.queue.modules.RankedQueue;
+import me.lucanius.twilight.service.queue.modules.UnrankedQueue;
 import me.lucanius.twilight.service.queue.task.QueueTask;
 import org.bukkit.entity.Player;
 
@@ -21,7 +23,7 @@ public class QueueService {
 
     private final Twilight plugin;
     private final Set<AbstractQueue<?>> queues;
-    private final QueueTask task;
+    @Getter private final QueueTask task;
     private final Map<UUID, AbstractQueueData<?>> queueing;
 
     public QueueService(Twilight plugin) {
@@ -33,11 +35,15 @@ public class QueueService {
         registerModules();
     }
 
-    public SoloQueue getSoloQueue() {
-        return (SoloQueue) queues.stream().filter(queue -> queue instanceof SoloQueue).findFirst().orElse(null);
+    public UnrankedQueue getUnranked() {
+        return (UnrankedQueue) queues.stream().filter(queue -> queue instanceof UnrankedQueue).findFirst().orElse(null);
     }
 
-    public DuoQueue getDuoQueue() {
+    public RankedQueue getRanked() {
+        return (RankedQueue) queues.stream().filter(queue -> queue instanceof RankedQueue).findFirst().orElse(null);
+    }
+
+    public DuoQueue getDuos() {
         return (DuoQueue) queues.stream().filter(queue -> queue instanceof DuoQueue).findFirst().orElse(null);
     }
 

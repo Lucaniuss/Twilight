@@ -106,7 +106,7 @@ public class StandardPartyService implements PartyService {
     @Override
     public PartyService disbandParty(Party party) {
         parties.remove(party.getLeader(), party);
-        party.broadcast(CC.SECOND + " The party has been disbanded.");
+        party.broadcast(CC.SECOND + "The party has been disbanded.");
 
         party.getMembers().stream()
                 .map(member -> plugin.getProfiles().get(member))

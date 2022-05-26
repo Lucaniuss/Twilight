@@ -7,12 +7,12 @@ import org.bukkit.entity.Player;
 
 /**
  * @author Lucanius
- * @since May 22, 2022
+ * @since May 26, 2022
  */
-public class SoloQueueData extends AbstractQueueData<Player> {
+public class RankedQueueData extends AbstractQueueData<Player> {
 
-    public SoloQueueData(Player element, Loadout loadout, int playerPing, int pingRange) {
-        super(element, loadout, plugin.getQueues().getSoloQueue(), playerPing, pingRange);
+    public RankedQueueData(Player element, Loadout loadout, int playerPing, int pingRange) {
+        super(element, loadout, plugin.getQueues().getRanked(), playerPing, pingRange);
     }
 
     @Override

@@ -6,7 +6,6 @@ import me.lucanius.twilight.service.queue.abstr.AbstractQueueData;
 import me.lucanius.twilight.service.queue.callback.QueueCallback;
 import me.lucanius.twilight.service.queue.data.DuoQueueData;
 import me.lucanius.twilight.service.queue.menu.menus.DuoQueueMenu;
-import me.lucanius.twilight.service.queue.menu.menus.SoloQueueMenu;
 import org.bukkit.entity.Player;
 
 import java.util.Set;
@@ -18,7 +17,7 @@ import java.util.Set;
 public class DuoQueue extends AbstractQueue<Set<Player>> {
 
     public DuoQueue() {
-        super("Duo");
+        super("Duos");
         menu = new DuoQueueMenu(this);
     }
 
