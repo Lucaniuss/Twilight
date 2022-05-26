@@ -10,6 +10,7 @@ import me.lucanius.twilight.service.queue.abstr.AbstractQueueData;
 import me.lucanius.twilight.service.queue.callback.QueueCallback;
 import me.lucanius.twilight.service.queue.data.UnrankedQueueData;
 import me.lucanius.twilight.service.queue.menu.menus.UnrankedQueueMenu;
+import me.lucanius.twilight.tools.CC;
 import me.lucanius.twilight.tools.Tools;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -38,7 +39,7 @@ public class UnrankedQueue extends AbstractQueue<Player> {
                 plugin.getProfiles().get(element.getUniqueId()).getPingRange()
         );
 
-        // TODO: Send messages
+        element.sendMessage(CC.SECOND + "You have been added to the " + CC.MAIN + getName() + CC.SECOND + " queue.");
 
         plugin.getQueues().putData(element, element.getUniqueId(), data);
         add(data);
@@ -46,12 +47,13 @@ public class UnrankedQueue extends AbstractQueue<Player> {
 
     @Override
     public void dequeue(AbstractQueueData<?> data, QueueCallback callback) {
-        UnrankedQueueData soloData = (UnrankedQueueData) data;
-        if (callback != QueueCallback.NONE && !callback.getMessage().equals("")) {
-            soloData.getElement().sendMessage(callback.getMessage());
-        }
+        UnrankedQueueData unrankedData = (UnrankedQueueData) data;
+        String message = callback != QueueCallback.NONE && !callback.getMessage().equals("")
+                ? callback.getMessage()
+                : CC.SECOND + "You have been removed from the " + CC.MAIN + getName() + CC.SECOND + " queue.";
 
-        plugin.getQueues().removeData(soloData.getElement(), soloData.getElement().getUniqueId());
+        unrankedData.getElement().sendMessage(CC.translate(message));
+        plugin.getQueues().removeData(unrankedData.getElement(), unrankedData.getElement().getUniqueId());
         remove(data);
     }
 

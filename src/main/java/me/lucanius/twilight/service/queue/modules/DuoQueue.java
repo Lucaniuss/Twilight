@@ -6,6 +6,7 @@ import me.lucanius.twilight.service.queue.abstr.AbstractQueueData;
 import me.lucanius.twilight.service.queue.callback.QueueCallback;
 import me.lucanius.twilight.service.queue.data.DuoQueueData;
 import me.lucanius.twilight.service.queue.menu.menus.DuoQueueMenu;
+import me.lucanius.twilight.tools.CC;
 import org.bukkit.entity.Player;
 
 import java.util.Set;
@@ -28,19 +29,23 @@ public class DuoQueue extends AbstractQueue<Set<Player>> {
                 loadout
         );
 
-        // TODO: Send messages
-
-        element.forEach(player -> plugin.getQueues().putData(player, player.getUniqueId(), data));
+        element.forEach(player -> {
+            player.sendMessage(CC.SECOND + "You have been added to the " + CC.MAIN + getName() + CC.SECOND + " queue.");
+            plugin.getQueues().putData(player, player.getUniqueId(), data);
+        });
         add(data);
     }
 
     @Override
     public void dequeue(AbstractQueueData<?> data, QueueCallback callback) {
-        if (callback != QueueCallback.NONE && !callback.getMessage().equals("")) {
-            ((DuoQueueData) data).getElement().forEach(player -> player.sendMessage(callback.getMessage()));
-        }
+        String message = callback != QueueCallback.NONE && !callback.getMessage().equals("")
+                ? callback.getMessage()
+                : CC.SECOND + "You have been removed from the " + CC.MAIN + getName() + CC.SECOND + " queue.";
 
-        ((DuoQueueData) data).getElement().forEach(player -> plugin.getQueues().removeData(player, player.getUniqueId()));
+        ((DuoQueueData) data).getElement().forEach(player -> {
+            player.sendMessage(CC.translate(message));
+            plugin.getQueues().removeData(player, player.getUniqueId());
+        });
         remove(data);
     }
 
