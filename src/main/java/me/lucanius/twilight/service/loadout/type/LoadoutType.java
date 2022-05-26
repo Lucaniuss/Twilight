@@ -2,7 +2,6 @@ package me.lucanius.twilight.service.loadout.type;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import me.lucanius.twilight.Twilight;
 import me.lucanius.twilight.event.events.GameEndEvent;
 import me.lucanius.twilight.service.game.context.GameState;
 import me.lucanius.twilight.service.game.team.GameTeam;

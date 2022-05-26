@@ -117,10 +117,26 @@ public class Loadout {
         conf.set(key + "KBPROFILE", kbProfile);
     }
 
+    public boolean isBuild() {
+        return type == LoadoutType.BRIDGES;
+    }
+
+    public boolean needsMovement() {
+        return (type == LoadoutType.BRIDGES || type == LoadoutType.SUMO);
+    }
+
     public void apply(Player player) {
+        apply(player, contents, armor);
+    }
+
+    public void apply(Player player, ItemStack[] current) {
+        apply(player, current, armor);
+    }
+
+    public void apply(Player player, ItemStack[] current, ItemStack[] armor) {
         PlayerInventory inv = player.getInventory();
 
-        inv.setContents(contents);
+        inv.setContents(current);
         inv.setArmorContents(armor);
 
         if (effects != null && !effects.isEmpty()) {
@@ -131,18 +147,16 @@ public class Loadout {
     }
 
     public void apply(Player player, Profile profile) {
-        if (!isBuild()) {
+        if (type != LoadoutType.BRIDGES) {
             apply(player);
             return;
         }
 
         GameProfile gameProfile = profile.getGameProfile();
+        ItemStack[] current = gameProfile.getPersonalContents();
 
-        ItemStack[] playerContents = contents;
+        ItemStack[] playerContents = current != null ? current : contents;
         ItemStack[] playerArmor = armor;
-        if (gameProfile.getPersonalContents() != null) {
-            playerContents = gameProfile.getPersonalContents();
-        }
 
         Color color = gameProfile.getTeam().getColor() == ChatColor.BLUE ? Color.BLUE : gameProfile.getTeam().getColor() == ChatColor.RED ? Color.RED : Color.WHITE;
         int data = color == Color.BLUE ? 11 : color == Color.RED ? 14 : 0;
@@ -151,25 +165,8 @@ public class Loadout {
         ItemStack[] finalContents = Tools.getColoredItems(playerContents, data, i);
         ItemStack[] finalArmor = Tools.getColoredArmor(playerArmor, color, i);
 
-        PlayerInventory inv = player.getInventory();
-
-        inv.setContents(finalContents);
-        inv.setArmorContents(finalArmor);
-
         gameProfile.setPersonalContents(finalContents);
 
-        if (effects != null && !effects.isEmpty()) {
-            effects.forEach(player::addPotionEffect);
-        }
-
-        player.updateInventory();
-    }
-
-    public boolean isBuild() {
-        return type == LoadoutType.BRIDGES;
-    }
-
-    public boolean needsMovement() {
-        return (type == LoadoutType.BRIDGES || type == LoadoutType.SUMO);
+        apply(player, finalArmor, finalArmor);
     }
 }
