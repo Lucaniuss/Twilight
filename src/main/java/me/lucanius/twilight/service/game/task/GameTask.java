@@ -32,7 +32,7 @@ public class GameTask extends BukkitRunnable {
                 if (game.decrement() == 0) {
                     game.setTimeStamp(System.currentTimeMillis());
                     game.setState(GameState.ONGOING);
-                    game.sendMessageWithSound("&aThe game has been started!", Sound.FIREWORK_TWINKLE);
+                    game.sendMessageWithSound(CC.SECOND + "The game has been started!", Sound.FIREWORK_TWINKLE);
                 } else {
                     game.sendMessageWithSound(CC.SECOND + "Starting in " + CC.MAIN + game.getCountdown() + CC.SECOND + "s...", Sound.NOTE_STICKS);
                 }

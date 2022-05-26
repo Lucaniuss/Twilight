@@ -5,6 +5,7 @@ import lombok.Setter;
 import me.lucanius.twilight.Twilight;
 import me.lucanius.twilight.service.arena.Arena;
 import me.lucanius.twilight.service.game.team.member.TeamMember;
+import me.lucanius.twilight.tools.Scheduler;
 import me.lucanius.twilight.tools.Tools;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -32,6 +33,7 @@ public class GameTeam {
 
     private Location spawn;
     private int points;
+    private boolean allowedToScore;
 
     public GameTeam(List<UUID> members, ChatColor color) {
         this.members = members.stream().map(member -> new TeamMember(member, this)).collect(Collectors.toList());
@@ -70,5 +72,12 @@ public class GameTeam {
 
     public int getAliveSize() {
         return (int) members.stream().filter(TeamMember::isAlive).count();
+    }
+
+    public void score() {
+        points++;
+        allowedToScore = false;
+
+        Scheduler.runLaterAsync(() -> allowedToScore = true, 100L);
     }
 }
