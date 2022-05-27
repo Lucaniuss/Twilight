@@ -65,7 +65,7 @@ public class ScoreListener {
             game.sendMessage(playerTeam.getColor() + player.getName() + CC.SECOND + " scored a point!");
 
             if (5 > playerTeam.getPoints()) {
-                new BridgesTask(plugin, game);
+                new BridgesTask(plugin, game).runTaskTimer(plugin, 0L, 20L);
                 return;
             }
 
