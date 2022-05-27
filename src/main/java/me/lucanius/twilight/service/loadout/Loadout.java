@@ -4,9 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import me.lucanius.twilight.service.loadout.personal.PersonalLoadout;
 import me.lucanius.twilight.service.loadout.type.LoadoutType;
 import me.lucanius.twilight.service.profile.Profile;
 import me.lucanius.twilight.service.profile.modules.GameProfile;
+import me.lucanius.twilight.tools.CC;
 import me.lucanius.twilight.tools.Serializer;
 import me.lucanius.twilight.tools.Tools;
 import me.lucanius.twilight.tools.config.ConfigFile;
@@ -168,5 +170,24 @@ public class Loadout {
         gameProfile.setPersonalContents(finalContents);
 
         apply(player, finalArmor, finalArmor);
+    }
+
+    public void apply(Player player, Profile profile, PersonalLoadout loadout) {
+        ItemStack[] playerContents = loadout.getContents() != null ? loadout.getContents() : contents;
+        ItemStack[] playerArmor = armor;
+
+        GameProfile gameProfile = profile.getGameProfile();
+        Color color = gameProfile.getTeam().getColor() == ChatColor.BLUE ? Color.BLUE : gameProfile.getTeam().getColor() == ChatColor.RED ? Color.RED : Color.WHITE;
+        int data = color == Color.BLUE ? 11 : color == Color.RED ? 14 : 0;
+
+        int i = 0;
+        ItemStack[] finalContents = type == LoadoutType.BRIDGES ? Tools.getColoredItems(playerContents, data, i) : playerContents;
+        ItemStack[] finalArmor = type == LoadoutType.BRIDGES ? Tools.getColoredArmor(playerArmor, color, i) : playerArmor;
+
+        gameProfile.setPersonalContents(finalContents);
+
+        apply(player, finalArmor, finalArmor);
+
+        player.sendMessage(CC.SECOND + "Successfully applied your " + CC.MAIN + loadout.getDisplayName() + CC.SECOND + " loadout!");
     }
 }

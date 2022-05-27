@@ -5,6 +5,8 @@ import me.lucanius.twilight.event.bukkit.Events;
 import me.lucanius.twilight.service.cooldown.Cooldown;
 import me.lucanius.twilight.service.game.Game;
 import me.lucanius.twilight.service.game.context.GameState;
+import me.lucanius.twilight.service.loadout.Loadout;
+import me.lucanius.twilight.service.loadout.personal.PersonalLoadout;
 import me.lucanius.twilight.service.lobby.hotbar.HotbarItem;
 import me.lucanius.twilight.service.lobby.hotbar.context.HotbarContext;
 import me.lucanius.twilight.service.party.Party;
@@ -16,6 +18,8 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Arrays;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -80,6 +84,11 @@ public class InteractListener {
                         case PERSONAL_SETTINGS:
                             break;
                         case DUOS:
+                            if (!party.isPresent() || !party.get().getLeader().equals(uniqueId)) {
+                                player.sendMessage(CC.RED + "You are not the leader of your party!");
+                                return;
+                            }
+
                             plugin.getQueues().getDuos().getMenu().open(player);
                             break;
                         case PARTY_GAMES:
@@ -142,12 +151,35 @@ public class InteractListener {
 
                             cooldown.reset();
                             break;
+                        case BOW:
+                            Optional.ofNullable(plugin.getCooldowns().get(uniqueId, "BRIDGES")).ifPresent(cd -> {
+                                if (cd.active()) {
+                                    event.setCancelled(true);
+                                    player.updateInventory();
+                                    player.sendMessage(CC.RED + "You shoot arrows for another " + cd.remaining() + " seconds!");
+                                }
+                            });
+                            break;
                     }
 
                     if (!nullItem && item.getContext() == HotbarContext.DEFAULT_BOOK) {
                         game.getLoadout().apply(player, profile);
                         player.sendMessage(CC.SECOND + "Successfully equipped the default loadout!");
                         return;
+                    }
+
+                    if (!stack.getType().equals(Material.ENCHANTED_BOOK) || !stack.hasItemMeta() || !stack.getItemMeta().hasDisplayName()) {
+                        return;
+                    }
+
+                    Loadout loadout = game.getLoadout();
+                    PersonalLoadout personal = Arrays.stream(profile.getPersonalLoadouts(loadout.getName()))
+                            .filter(Objects::nonNull).filter(l -> CC.translate(l.getDisplayName()).equalsIgnoreCase(stack.getItemMeta().getDisplayName()))
+                            .findFirst().orElse(null);
+                    if (personal != null) {
+                        loadout.apply(player, profile, personal);
+                    } else {
+                        loadout.apply(player, profile);
                     }
                     break;
                 case QUEUE:
