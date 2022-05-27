@@ -34,7 +34,9 @@ public class StandardEventProvider implements EventProvider {
 
     @Override
     public void unsubscribe(Class<? extends AbstractEvent> event) {
-        subscribers.keySet().removeIf(listener -> subscribers.get(listener).equals(event));
+        if (subscribers.containsValue(event)) {
+            subscribers.keySet().stream().filter(listener -> subscribers.get(listener).equals(event)).forEach(subscribers::remove);
+        }
     }
 
     @Override

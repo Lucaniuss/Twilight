@@ -39,9 +39,14 @@ public class AsyncMovementListener {
                 return;
             }
 
+            Location to = event.getTo();
+            if (!to.getChunk().isLoaded()) {
+                return;
+            }
+
             GameState state = game.getState();
             LoadoutType type = loadout.getType();
-            Location to = event.getTo();
+
             Location from = event.getFrom();
             Player player = event.getPlayer();
             boolean sumo = type == LoadoutType.SUMO;
