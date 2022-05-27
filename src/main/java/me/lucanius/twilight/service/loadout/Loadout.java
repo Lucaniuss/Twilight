@@ -136,10 +136,8 @@ public class Loadout {
     }
 
     public void apply(Player player, ItemStack[] current, ItemStack[] armor) {
-        PlayerInventory inv = player.getInventory();
-
-        inv.setContents(current);
-        inv.setArmorContents(armor);
+        player.getInventory().setContents(current);
+        player.getInventory().setArmorContents(armor);
 
         if (effects != null && !effects.isEmpty()) {
             effects.forEach(player::addPotionEffect);
@@ -169,7 +167,7 @@ public class Loadout {
 
         gameProfile.setPersonalContents(finalContents);
 
-        apply(player, finalArmor, finalArmor);
+        apply(player, finalContents, finalArmor);
     }
 
     public void apply(Player player, Profile profile, PersonalLoadout loadout) {
