@@ -11,7 +11,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 public class PlayerMoveListener {
 
     /**
-     * Running our custom MovementEvent through the Bukkit PlayerMoveEvent
+     * Running our custom AsyncMovementEvent through the Bukkit PlayerMoveEvent
      */
     public PlayerMoveListener() {
         Events.subscribe(PlayerMoveEvent.class, AsyncMovementEvent::new);
