@@ -15,7 +15,7 @@ import org.bukkit.entity.Player;
  */
 public class SpawnCommand extends AbstractCommand {
 
-    @Command(name = "spawn", permission = "twilight.command.spwan")
+    @Command(name = "spawn", permission = "twilight.command.spawn")
     public void onCommand(CommandArgs cmd) {
         Player player = cmd.getPlayer();
         Profile profile = plugin.getProfiles().get(player.getUniqueId());
