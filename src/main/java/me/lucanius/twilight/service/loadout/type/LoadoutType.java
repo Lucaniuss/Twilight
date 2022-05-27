@@ -3,6 +3,7 @@ package me.lucanius.twilight.service.loadout.type;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import me.lucanius.twilight.event.events.GameEndEvent;
+import me.lucanius.twilight.service.cooldown.Cooldown;
 import me.lucanius.twilight.service.game.context.GameState;
 import me.lucanius.twilight.service.game.team.GameTeam;
 import me.lucanius.twilight.service.loadout.type.callable.LoadoutTypeCallable;
@@ -80,7 +81,10 @@ public enum LoadoutType {
         victim.setExp(0.0f);
         victim.getActivePotionEffects().stream().map(PotionEffect::getType).forEach(victim::removePotionEffect);
 
-        // reset Arrow Cooldown
+        Cooldown cooldown = plugin.getCooldowns().get(victimId, "BRIDGES");
+        if (cooldown != null && cooldown.active()) {
+            cooldown.cancel();
+        }
     }));
 
     private final LoadoutTypeCallable callable;

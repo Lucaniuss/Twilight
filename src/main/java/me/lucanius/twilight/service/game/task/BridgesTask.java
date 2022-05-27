@@ -1,5 +1,7 @@
 package me.lucanius.twilight.service.game.task;
 
+import me.lucanius.twilight.Twilight;
+import me.lucanius.twilight.service.cooldown.Cooldown;
 import me.lucanius.twilight.service.game.Game;
 import me.lucanius.twilight.tools.CC;
 import org.bukkit.Sound;
@@ -13,12 +15,14 @@ import org.bukkit.scheduler.BukkitRunnable;
  */
 public class BridgesTask extends BukkitRunnable {
 
+    private final Twilight plugin;
     private final Game game;
     private final int initial;
 
     private int current;
 
-    public BridgesTask(Game game) {
+    public BridgesTask(Twilight plugin, Game game) {
+        this.plugin = plugin;
         this.game = game;
         this.initial = 6;
 
@@ -45,7 +49,10 @@ public class BridgesTask extends BukkitRunnable {
                 player.setExp(0.0f);
                 player.getActivePotionEffects().stream().map(PotionEffect::getType).forEach(player::removePotionEffect);
 
-                // reset Arrow Cooldown
+                Cooldown cooldown = plugin.getCooldowns().get(member.getUniqueId(), "BRIDGES");
+                if (cooldown != null && cooldown.active()) {
+                    cooldown.cancel();
+                }
             });
         }
 

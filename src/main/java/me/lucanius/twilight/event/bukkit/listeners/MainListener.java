@@ -2,25 +2,28 @@ package me.lucanius.twilight.event.bukkit.listeners;
 
 import me.lucanius.twilight.Twilight;
 import me.lucanius.twilight.event.bukkit.Events;
+import me.lucanius.twilight.service.cooldown.Cooldown;
 import me.lucanius.twilight.service.game.Game;
+import me.lucanius.twilight.service.loadout.type.LoadoutType;
 import me.lucanius.twilight.service.profile.Profile;
 import me.lucanius.twilight.service.profile.ProfileState;
+import me.lucanius.twilight.tools.CC;
 import me.lucanius.twilight.tools.Scheduler;
 import org.bukkit.Material;
-import org.bukkit.entity.Item;
-import org.bukkit.entity.Player;
+import org.bukkit.Sound;
+import org.bukkit.entity.*;
 import org.bukkit.event.block.BlockBurnEvent;
 import org.bukkit.event.block.BlockIgniteEvent;
 import org.bukkit.event.block.BlockSpreadEvent;
 import org.bukkit.event.block.LeavesDecayEvent;
-import org.bukkit.event.entity.CreatureSpawnEvent;
-import org.bukkit.event.entity.FoodLevelChangeEvent;
-import org.bukkit.event.entity.ItemSpawnEvent;
-import org.bukkit.event.entity.PotionSplashEvent;
+import org.bukkit.event.entity.*;
 import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
+import org.bukkit.inventory.ItemStack;
+
+import java.util.UUID;
 
 /**
  * @author Lucanius
@@ -97,6 +100,74 @@ public class MainListener {
             }
 
             profile.getGameProfile().throwPotion(event.getIntensity(player) <= 0.5d);
+        });
+
+        Events.subscribe(ProjectileLaunchEvent.class, event -> {
+            Projectile projectile = event.getEntity();
+            if (!(projectile.getShooter() instanceof Player)) {
+                return;
+            }
+
+            Player player = (Player) projectile.getShooter();
+            UUID uniqueId = player.getUniqueId();
+            Profile profile = plugin.getProfiles().get(uniqueId);
+            if (profile.getState() != ProfileState.PLAYING) {
+                return;
+            }
+
+            Game game = plugin.getGames().get(profile);
+            if (game == null) {
+                return;
+            }
+
+            game.getDroppedItems().add(projectile);
+            if (game.getLoadout().getType() != LoadoutType.BRIDGES || !(projectile instanceof Arrow)) {
+                return;
+            }
+
+            Cooldown cooldown = plugin.getCooldowns().get(uniqueId, "BRIDGES");
+            if (cooldown == null) {
+                cooldown = new Cooldown(4 * 1000L, () -> {
+                    if (!player.getInventory().contains(Material.ARROW)) {
+                        player.getInventory().addItem(new ItemStack(Material.ARROW));
+                        player.sendMessage(CC.GREEN + "You can now use your bow again!");
+                        player.playSound(player.getLocation(), Sound.CHICKEN_EGG_POP, 10f, 1f);
+                    }
+                });
+                plugin.getCooldowns().add(uniqueId, "BRIDGES", cooldown);
+            }
+
+            if (cooldown.active()) {
+                event.setCancelled(true);
+                player.updateInventory();
+                return;
+            }
+
+            cooldown.reset();
+        });
+
+        Events.subscribe(ProjectileHitEvent.class, event -> {
+            Projectile projectile = event.getEntity();
+            if (!(projectile.getShooter() instanceof Player)) {
+                return;
+            }
+
+            Player player = (Player) projectile.getShooter();
+            UUID uniqueId = player.getUniqueId();
+            Profile profile = plugin.getProfiles().get(uniqueId);
+            if (profile.getState() != ProfileState.PLAYING) {
+                return;
+            }
+
+            Game game = plugin.getGames().get(profile);
+            if (game == null) {
+                return;
+            }
+
+            game.getDroppedItems().remove(projectile);
+            if (event.getEntityType() == EntityType.ARROW) {
+                projectile.remove();
+            }
         });
 
         Events.subscribe(ItemSpawnEvent.class, event -> Scheduler.runLaterAsync(() -> event.getEntity().remove(), 20L * 10L));

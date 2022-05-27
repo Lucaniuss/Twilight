@@ -7,7 +7,6 @@ import me.lucanius.twilight.service.profile.Profile;
 import me.lucanius.twilight.service.profile.ProfileService;
 import me.lucanius.twilight.tools.CC;
 import me.lucanius.twilight.tools.Scheduler;
-import me.lucanius.twilight.tools.functions.Condition;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -66,9 +65,9 @@ public class DataListener {
                     break;
             }
 
-            Condition.of(caching, () ->
-                    service.getCache().put(uniqueId, profile)
-            );
+            if (caching) {
+                service.getCache().put(uniqueId, profile);
+            }
             service.remove(uniqueId);
         });
     }

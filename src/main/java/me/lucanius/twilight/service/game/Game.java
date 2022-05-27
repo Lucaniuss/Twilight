@@ -29,7 +29,6 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.*;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
@@ -149,12 +148,6 @@ public class Game {
         }
 
         plugin.getLobby().toLobby(player, true);
-    }
-
-    public void forEachSpectator(Consumer<? super UUID> action) {
-        if (!spectators.isEmpty()) {
-            spectators.forEach(action);
-        }
     }
 
     public GameTask setTask(GameTask task) {

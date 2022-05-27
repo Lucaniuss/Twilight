@@ -32,7 +32,7 @@ public class CooldownService {
     }
 
     public void add(UUID uniqueId, String name, Cooldown cooldown) {
-        this.cooldowns.add(Triads.of(uniqueId, name, cooldown));
+        cooldowns.add(Triads.of(uniqueId, name, cooldown));
     }
 
     public void clear(UUID uuid, String name) {

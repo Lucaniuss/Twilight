@@ -42,7 +42,7 @@ public class GameTask extends BukkitRunnable {
                     game.clearArena();
 
                     game.getAlive().forEach(member -> plugin.getLobby().toLobby(member, true));
-                    game.forEachSpectator(game::removeSpectator);
+                    game.getSpectators().forEach(game::removeSpectator);
 
                     plugin.getGames().removeGame(game);
 

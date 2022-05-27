@@ -8,7 +8,6 @@ import me.lucanius.twilight.service.loadout.type.LoadoutType;
 import me.lucanius.twilight.service.lobby.hotbar.context.HotbarContext;
 import me.lucanius.twilight.service.profile.Profile;
 import me.lucanius.twilight.service.queue.abstr.AbstractQueue;
-import me.lucanius.twilight.tools.CC;
 import me.lucanius.twilight.tools.item.ItemBuilder;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
