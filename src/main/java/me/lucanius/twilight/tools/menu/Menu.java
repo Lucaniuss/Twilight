@@ -9,6 +9,7 @@ import me.lucanius.twilight.tools.menu.handlers.MenuListener;
 import me.lucanius.twilight.tools.menu.handlers.MenuSaver;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
@@ -131,7 +132,7 @@ public abstract class Menu {
         }
 
         Inventory inventory = player.getOpenInventory().getTopInventory();
-        if (inventory == null) {
+        if (inventory == null || inventory instanceof CraftingInventory) {
             return;
         }
 
