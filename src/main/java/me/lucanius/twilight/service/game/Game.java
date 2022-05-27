@@ -224,14 +224,18 @@ public class Game {
             });
             brokenBlocks.clear();
         }
+
+        if (arenaCopy != null) {
+            arenaCopy.resetCopy(arena);
+        }
     }
 
     public DestroyCallback isBreakable(Block block) {
-        if (!arena.isInside(block.getLocation())) return DestroyCallback.NOT_INSIDE;
+        if (!arenaCopy.isInside(block.getLocation())) return DestroyCallback.NOT_INSIDE;
         if (placedBlocks.contains(block.getLocation())) return DestroyCallback.PLACED;
         if (loadout.getType() != LoadoutType.BRIDGES) return DestroyCallback.INVALID_TYPE;
         if (block.getType() != Material.STAINED_CLAY) return DestroyCallback.INVALID_BLOCK;
-        if (block.getLocation().getY() > arena.getBuildHeight()) return DestroyCallback.ABOVE_LIMIT;
+        if (block.getLocation().getY() > arenaCopy.getBuildHeight()) return DestroyCallback.ABOVE_LIMIT;
 
         byte data = block.getData();
         return (data == 0 || data == 11 || data == 14) ? DestroyCallback.VALID : DestroyCallback.INVALID;
