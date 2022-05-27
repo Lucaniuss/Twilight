@@ -17,6 +17,6 @@ public class SetSpawnCommand extends AbstractCommand {
     public void onCommand(CommandArgs cmd) {
         Player player = cmd.getPlayer();
         plugin.getLobby().setLobbyLocation(new SerializableLocation(player.getLocation()));
-        player.sendMessage(CC.SECOND + "Successfully set the new lobby location!");
+        player.sendMessage(CC.SECOND + "Successfully set the new lobby location.");
     }
 }

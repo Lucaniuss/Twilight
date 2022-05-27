@@ -2,7 +2,6 @@ package me.lucanius.twilight.commands.impl.defaults.party.modules;
 
 import me.lucanius.twilight.commands.abstr.AbstractCommand;
 import me.lucanius.twilight.service.party.PartyService;
-import me.lucanius.twilight.service.profile.Profile;
 import me.lucanius.twilight.tools.CC;
 import me.lucanius.twilight.tools.command.Command;
 import me.lucanius.twilight.tools.command.CommandArgs;
@@ -24,16 +23,12 @@ public class AcceptCommand extends AbstractCommand {
 
         PartyService party = plugin.getParties();
         if (party.isParty(uuid)) {
-            player.sendMessage(CC.translate("&cYou are already in a party!"));
+            player.sendMessage(CC.RED + "You are already in a party...");
             return;
         }
 
-        Profile profile = plugin.getProfiles().get(uuid);
-        if (profile.getPartyInvite() == null) {
-            player.sendMessage(CC.translate("&cYou don't have any party invites!"));
-            return;
+        if (plugin.getParties().accept(player) == null) {
+            player.sendMessage(CC.RED + "You don't have any party invites...");
         }
-
-        party.joinParty(player, profile.getPartyLeader());
     }
 }

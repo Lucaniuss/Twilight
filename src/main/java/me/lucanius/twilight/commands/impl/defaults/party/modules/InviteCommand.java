@@ -2,9 +2,7 @@ package me.lucanius.twilight.commands.impl.defaults.party.modules;
 
 import me.lucanius.twilight.commands.abstr.AbstractCommand;
 import me.lucanius.twilight.service.party.PartyService;
-import me.lucanius.twilight.service.profile.Profile;
 import me.lucanius.twilight.tools.CC;
-import me.lucanius.twilight.tools.Clickable;
 import me.lucanius.twilight.tools.command.Command;
 import me.lucanius.twilight.tools.command.CommandArgs;
 import org.bukkit.entity.Player;
@@ -31,29 +29,23 @@ public class InviteCommand extends AbstractCommand {
 
         PartyService parties = plugin.getParties();
         if (!parties.isParty(uuid)) {
-            player.sendMessage(CC.translate("&cYou are not in a party..."));
+            player.sendMessage(CC.RED + "You are not in a party...");
             return;
         }
 
         if (!parties.isLeader(uuid)) {
-            player.sendMessage(CC.translate("&cYou are not the leader of your party..."));
+            player.sendMessage(CC.RED + "You are not the leader of your party...");
             return;
         }
 
         Player target = plugin.getServer().getPlayer(args[0]);
         if (target == null) {
-            player.sendMessage(CC.translate("&cPlayer not found..."));
+            player.sendMessage(CC.RED + "Player not found...");
             return;
         }
 
-        Profile profile = plugin.getProfiles().get(target.getUniqueId());
-        profile.setPartyLeader(uuid);
-        profile.setPartyInvite(parties.getParty(uuid));
-
-        new Clickable(
-                CC.translate("&aYou've been invited to join &e" + player.getName() + "'s &aparty"),
-                CC.translate("&a&lClick to Join"),
-                "/party accept"
-        ).send(target);
+        if (plugin.getParties().invite(target, player) == null) {
+            player.sendMessage(CC.RED + "Player is already in a party...");
+        }
     }
 }

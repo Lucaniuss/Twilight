@@ -20,7 +20,7 @@ public class CreateCommand extends AbstractCommand {
 
         PartyService party = plugin.getParties();
         if (party.isParty(player.getUniqueId())) {
-            player.sendMessage(CC.translate("&cYou are already in a party!"));
+            player.sendMessage(CC.RED + "You are already in a party...");
             return;
         }
 

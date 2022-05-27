@@ -21,7 +21,7 @@ public class SpawnCommand extends AbstractCommand {
         Profile profile = plugin.getProfiles().get(player.getUniqueId());
 
         if (profile.getState() == ProfileState.PLAYING) {
-            player.sendMessage(CC.translate("&cYou can't use this command while playing!"));
+            player.sendMessage(CC.RED + "You can't use this command while playing...");
             return;
         }
 

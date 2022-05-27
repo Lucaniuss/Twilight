@@ -8,6 +8,7 @@ import me.lucanius.twilight.service.party.PartyService;
 import me.lucanius.twilight.service.profile.Profile;
 import me.lucanius.twilight.service.profile.ProfileState;
 import me.lucanius.twilight.tools.CC;
+import me.lucanius.twilight.tools.Clickable;
 import org.bukkit.entity.Player;
 
 import java.util.*;
@@ -21,10 +22,12 @@ public class StandardPartyService implements PartyService {
 
     private final Twilight plugin;
     private final Map<UUID, Party> parties;
+    private final Map<UUID, UUID> invites;
 
     public StandardPartyService(Twilight plugin) {
         this.plugin = plugin;
         this.parties = new HashMap<>();
+        this.invites = new HashMap<>();
     }
 
     @Override
@@ -117,8 +120,39 @@ public class StandardPartyService implements PartyService {
     }
 
     @Override
+    public PartyService invite(Player receiver, Player sender) {
+        UUID uuid = receiver.getUniqueId();
+        if (isParty(uuid)) {
+            return null;
+        }
+
+        invites.put(uuid, sender.getUniqueId());
+        new Clickable(
+                CC.SECOND + "You've been invited to join " + CC.MAIN + sender.getName() + "'s " + CC.SECOND + "party",
+                CC.SECOND + CC.ITALIC + "Click to join",
+                "/party accept"
+        ).send(receiver);
+        return this;
+    }
+
+    @Override
+    public PartyService accept(Player player) {
+        UUID uuid = player.getUniqueId();
+        if (!invites.containsKey(uuid)) {
+            return null;
+        }
+
+        return joinParty(player, invites.remove(uuid));
+    }
+
+    @Override
     public Collection<Party> getParties() {
         return parties.values();
+    }
+
+    @Override
+    public Map<UUID, UUID> getInvites() {
+        return invites;
     }
 
     @Override

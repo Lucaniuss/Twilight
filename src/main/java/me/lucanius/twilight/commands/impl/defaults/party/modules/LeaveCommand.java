@@ -23,7 +23,7 @@ public class LeaveCommand extends AbstractCommand {
 
         PartyService parties = plugin.getParties();
         if (!parties.isParty(uuid)) {
-            player.sendMessage(CC.translate("&cYou are not in a party..."));
+            player.sendMessage(CC.RED + "You are not in a party...");
             return;
         }
 

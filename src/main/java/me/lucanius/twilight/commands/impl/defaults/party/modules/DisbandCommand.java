@@ -23,12 +23,12 @@ public class DisbandCommand extends AbstractCommand {
 
         PartyService party = plugin.getParties();
         if (!party.isParty(uuid)) {
-            player.sendMessage(CC.translate("&cYou are not in a party..."));
+            player.sendMessage(CC.RED + "You are not in a party...");
             return;
         }
 
         if (!party.isLeader(uuid)) {
-            player.sendMessage(CC.translate("&cYou are not the leader of your party..."));
+            player.sendMessage(CC.RED + "You are not the leader of your party...");
             return;
         }
 

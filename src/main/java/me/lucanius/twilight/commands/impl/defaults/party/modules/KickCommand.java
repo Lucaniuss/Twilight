@@ -29,28 +29,28 @@ public class KickCommand extends AbstractCommand {
 
         PartyService parties = plugin.getParties();
         if (!parties.isParty(uuid)) {
-            player.sendMessage(CC.translate("&cYou are not in a party..."));
+            player.sendMessage(CC.RED + "You are not in a party...");
             return;
         }
 
         if (!parties.isLeader(uuid)) {
-            player.sendMessage(CC.translate("&cYou are not the leader of your party..."));
+            player.sendMessage(CC.RED + "You are not the leader of your party...");
             return;
         }
 
         Player target = plugin.getServer().getPlayer(args[0]);
         if (target == null) {
-            player.sendMessage(CC.translate("&cPlayer not found..."));
+            player.sendMessage(CC.RED + "Player not found...");
             return;
         }
 
         if (!parties.isParty(target.getUniqueId())) {
-            player.sendMessage(CC.translate("&cPlayer is in a party..."));
+            player.sendMessage(CC.RED + "That player is in another party...");
             return;
         }
 
         if (!parties.getParty(uuid).equals(parties.getParty(target.getUniqueId()))) {
-            player.sendMessage(CC.translate("&cPlayer is not in your party..."));
+            player.sendMessage(CC.RED + "That player is not in your party...");
             return;
         }
 

@@ -26,13 +26,13 @@ public class ExecuteCommand extends AbstractCommand {
 
         Player target = plugin.getServer().getPlayer(args[0]);
         if (target == null) {
-            player.sendMessage(CC.RED + "Player not found!");
+            player.sendMessage(CC.RED + "Player not found...");
             return;
         }
 
         Profile profile = plugin.getProfiles().get(target.getUniqueId());
         if (profile.getState() != ProfileState.PLAYING) {
-            player.sendMessage(CC.RED + "Player is not playing!");
+            player.sendMessage(CC.RED + "That player is not playing...");
             return;
         }
 

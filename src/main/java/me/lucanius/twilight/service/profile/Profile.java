@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.Setter;
 import me.lucanius.twilight.Twilight;
 import me.lucanius.twilight.service.loadout.personal.PersonalLoadout;
-import me.lucanius.twilight.service.party.Party;
 import me.lucanius.twilight.service.profile.modules.GameProfile;
 import me.lucanius.twilight.tools.Scheduler;
 import me.lucanius.twilight.tools.Tools;
@@ -35,9 +34,6 @@ public class Profile {
 
     private int pingRange;
     private boolean loaded;
-
-    private Party partyInvite; // caching party invite
-    private UUID partyLeader; // caching party leader
 
     public Profile(UUID uniqueId) {
         this.uniqueId = uniqueId;
