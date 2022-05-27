@@ -40,6 +40,10 @@ public class GameTeam {
         this.color = color;
         this.name = Tools.getEnumName(color.name());
         this.prefix = color + "[" + color.name().charAt(0) + "] ";
+
+        this.spawn = null;
+        this.points = 0;
+        this.allowedToScore = true;
     }
 
     public TeamMember getSpecific(UUID uniqueId) {
