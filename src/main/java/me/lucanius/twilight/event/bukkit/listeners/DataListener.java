@@ -3,6 +3,7 @@ package me.lucanius.twilight.event.bukkit.listeners;
 import me.lucanius.twilight.Twilight;
 import me.lucanius.twilight.event.bukkit.Events;
 import me.lucanius.twilight.service.game.Game;
+import me.lucanius.twilight.service.loadout.type.LoadoutType;
 import me.lucanius.twilight.service.profile.Profile;
 import me.lucanius.twilight.service.profile.ProfileService;
 import me.lucanius.twilight.tools.CC;
@@ -55,7 +56,7 @@ public class DataListener {
             Optional<Game> game = Optional.ofNullable(plugin.getGames().get(profile));
             switch (profile.getState()) {
                 case PLAYING:
-                    game.ifPresent(value -> value.getLoadout().getType().getCallable().execute(plugin, player, plugin.getDamages().get(uniqueId), value));
+                    game.ifPresent(value -> LoadoutType.NONE.getCallable().execute(plugin, player, plugin.getDamages().get(uniqueId), value));
                     break;
                 case SPECTATING:
                     game.ifPresent(value -> value.removeSpectator(uniqueId));
