@@ -4,6 +4,7 @@ import me.lucanius.twilight.Twilight;
 import me.lucanius.twilight.event.bukkit.Events;
 import me.lucanius.twilight.service.arena.Arena;
 import me.lucanius.twilight.service.game.Game;
+import me.lucanius.twilight.service.game.context.callback.DestroyCallback;
 import me.lucanius.twilight.service.profile.Profile;
 import me.lucanius.twilight.service.profile.ProfileState;
 import org.bukkit.GameMode;
@@ -37,18 +38,25 @@ public class WorldListener {
             }
 
             Block block = event.getBlock();
-            if (!game.isBreakable(block)) {
-                event.setCancelled(true);
+            DestroyCallback callback = game.isBreakable(block);
+            switch (callback) {
+                case NOT_INSIDE:
+                case INVALID:
+                case ABOVE_LIMIT:
+                case INVALID_TYPE:
+                case INVALID_BLOCK:
+                    event.setCancelled(true);
+                    break;
+                case PLACED:
+                    game.getPlacedBlocks().remove(block.getLocation());
+                    break;
+            }
+
+            if (callback != DestroyCallback.VALID) {
                 return;
             }
 
-            Location location = block.getLocation();
-            if (location.getY() > game.getArena().getBuildHeight()) {
-                event.setCancelled(true);
-                return;
-            }
-
-            game.getBrokenBlocks().put(location, block.getState());
+            game.getBrokenBlocks().put(block.getLocation(), block.getState());
         });
 
         Events.subscribe(BlockPlaceEvent.class, event -> {

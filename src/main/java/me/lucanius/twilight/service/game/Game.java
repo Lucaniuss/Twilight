@@ -7,6 +7,7 @@ import me.lucanius.twilight.Twilight;
 import me.lucanius.twilight.service.arena.Arena;
 import me.lucanius.twilight.service.game.context.GameContext;
 import me.lucanius.twilight.service.game.context.GameState;
+import me.lucanius.twilight.service.game.context.callback.DestroyCallback;
 import me.lucanius.twilight.service.game.task.GameTask;
 import me.lucanius.twilight.service.game.team.GameTeam;
 import me.lucanius.twilight.service.game.team.member.TeamMember;
@@ -225,13 +226,15 @@ public class Game {
         }
     }
 
-    public boolean isBreakable(Block block) {
-        if (!arena.isInside(block.getLocation())) return false;
-        if (placedBlocks.contains(block.getLocation())) return true;
-        if (loadout.getType() != LoadoutType.BRIDGES || block.getType() != Material.STAINED_CLAY) return false;
+    public DestroyCallback isBreakable(Block block) {
+        if (!arena.isInside(block.getLocation())) return DestroyCallback.NOT_INSIDE;
+        if (placedBlocks.contains(block.getLocation())) return DestroyCallback.PLACED;
+        if (loadout.getType() != LoadoutType.BRIDGES) return DestroyCallback.INVALID_TYPE;
+        if (block.getType() != Material.STAINED_CLAY) return DestroyCallback.INVALID_BLOCK;
+        if (block.getLocation().getY() > arena.getBuildHeight()) return DestroyCallback.ABOVE_LIMIT;
 
         byte data = block.getData();
-        return data == 0 || data == 11 || data == 14;
+        return (data == 0 || data == 11 || data == 14) ? DestroyCallback.VALID : DestroyCallback.INVALID;
     }
 
     public int decrement() {
