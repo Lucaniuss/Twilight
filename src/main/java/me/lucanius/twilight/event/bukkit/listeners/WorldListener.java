@@ -75,7 +75,7 @@ public class WorldListener {
 
             Block block = event.getBlock();
             Location location = block.getLocation();
-            Arena arena = game.getArena();
+            Arena arena = game.getArenaCopy();
             if (!arena.isInside(location)) {
                 event.setCancelled(true);
                 return;
