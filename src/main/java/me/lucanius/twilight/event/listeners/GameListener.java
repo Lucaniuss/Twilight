@@ -20,8 +20,8 @@ import me.lucanius.twilight.tools.Scheduler;
 import me.lucanius.twilight.tools.Tools;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author Lucanius
@@ -51,8 +51,8 @@ public class GameListener {
                 new AsyncMovementListener();
             }
 
-            Collection<Player> players = new ArrayList<>();
-            Collection<TeamMember> members = game.getMembers();
+            Set<Player> players = new HashSet<>();
+            Set<TeamMember> members = new HashSet<>(game.getMembers());
             members.forEach(member -> {
                 Profile profile = member.getProfile();
                 profile.setState(ProfileState.PLAYING);
