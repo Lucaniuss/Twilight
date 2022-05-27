@@ -3,6 +3,7 @@ package me.lucanius.twilight.event.bukkit.listeners;
 import me.lucanius.twilight.Twilight;
 import me.lucanius.twilight.event.bukkit.Events;
 import me.lucanius.twilight.service.cooldown.Cooldown;
+import me.lucanius.twilight.service.editor.select.EditorSelectMenu;
 import me.lucanius.twilight.service.game.Game;
 import me.lucanius.twilight.service.game.context.GameState;
 import me.lucanius.twilight.service.loadout.Loadout;
@@ -70,6 +71,7 @@ public class InteractListener {
                             plugin.getQueues().getRanked().getMenu().open(player);
                             break;
                         case LOADOUT_EDITOR:
+                            new EditorSelectMenu().open(player);
                             break;
                         case CREATE_PARTY:
                             if (party.isPresent()) {
@@ -173,7 +175,7 @@ public class InteractListener {
                     }
 
                     Loadout loadout = game.getLoadout();
-                    PersonalLoadout personal = Arrays.stream(profile.getPersonalLoadouts(loadout.getName()))
+                    PersonalLoadout personal = Arrays.stream(profile.getEditorProfile().getAll(loadout.getName()))
                             .filter(Objects::nonNull).filter(l -> CC.translate(l.getDisplayName()).equalsIgnoreCase(stack.getItemMeta().getDisplayName()))
                             .findFirst().orElse(null);
                     if (personal != null) {

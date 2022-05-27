@@ -37,6 +37,11 @@ public class MainListener {
         Events.subscribe(PlayerDropItemEvent.class, event -> {
             Player player = event.getPlayer();
             Profile profile = plugin.getProfiles().get(player.getUniqueId());
+            if (profile.getEditorProfile().isEditing()) {
+                event.getItemDrop().remove();
+                return;
+            }
+
             if (profile.getState() != ProfileState.PLAYING) {
                 event.setCancelled(true);
                 return;

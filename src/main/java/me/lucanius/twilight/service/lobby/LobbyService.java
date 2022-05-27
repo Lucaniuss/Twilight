@@ -40,6 +40,7 @@ public class LobbyService extends AbstractHider {
 
         updateView();
         profile.getGameProfile().reset();
+        profile.getEditorProfile().setEditing(false);
 
         if (teleport) {
             player.teleport(lobbyLocation.getBukkitLocation());

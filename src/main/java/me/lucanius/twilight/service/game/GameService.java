@@ -65,7 +65,7 @@ public class GameService {
     public int getSize() {
         return games.values()
                 .stream()
-                .map(Game::getEveryone)
+                .map(Game::getAlive)
                 .map(Collection::size)
                 .reduce(0, Integer::sum);
     }
@@ -74,7 +74,7 @@ public class GameService {
         return games.values()
                 .stream()
                 .filter(game -> game.getLoadout().equals(loadout) && game.getQueue().equals(queue))
-                .map(Game::getEveryone)
+                .map(Game::getAlive)
                 .map(Collection::size)
                 .reduce(0, Integer::sum);
     }
@@ -89,9 +89,9 @@ public class GameService {
         }
 
         ItemStack defaultBook = plugin.getLobby().get(HotbarContext.DEFAULT_BOOK).getItem();
-        if (profile.hasPersonalLoadouts(loadout.getName())) {
+        if (profile.getEditorProfile().has(loadout.getName())) {
             int i = -2;
-            for (PersonalLoadout personalLoadout : profile.getPersonalLoadouts(loadout.getName())) {
+            for (PersonalLoadout personalLoadout : profile.getEditorProfile().getAll(loadout.getName())) {
                 if (personalLoadout != null) {
                     player.getInventory().setItem(i += 2, new ItemBuilder(Material.ENCHANTED_BOOK).setName(personalLoadout.getDisplayName()).build());
                     player.getInventory().setItem(8, defaultBook);
