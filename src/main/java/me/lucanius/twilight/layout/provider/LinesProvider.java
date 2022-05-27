@@ -58,8 +58,8 @@ public abstract class LinesProvider extends AbstractProvider {
         List<String> lines = new ArrayList<>();
         UUID uniqueId = player.getUniqueId();
         Game game = plugin.getGames().get(profile);
-        GameTeam opposingTeam = game.getOpposingTeam(uniqueId);
-        Optional<Player> enemy = Optional.ofNullable(opposingTeam.getFirstPlayer());
+        Optional<GameTeam> opposingTeam = Optional.ofNullable(game.getOpposingTeam(uniqueId));
+        Optional<Player> enemy = opposingTeam.map(GameTeam::getFirstPlayer);
         boolean isPresent = enemy.isPresent();
         Profile enemyProfile = isPresent ? plugin.getProfiles().get(enemy.get().getUniqueId()) : plugin.getProfiles().getDummy();
         String enemyName = isPresent ? enemy.get().getName() : "...";

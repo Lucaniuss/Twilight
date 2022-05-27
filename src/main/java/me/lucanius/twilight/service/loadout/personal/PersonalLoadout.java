@@ -13,7 +13,7 @@ public class PersonalLoadout {
 
     private final int number;
 
-    private String kitName;
+    private String loadoutName;
     private ItemStack[] contents;
     private String displayName;
 

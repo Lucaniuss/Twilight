@@ -11,7 +11,6 @@ import me.lucanius.twilight.service.game.Game;
 import me.lucanius.twilight.service.game.context.GameState;
 import me.lucanius.twilight.service.game.task.GameTask;
 import me.lucanius.twilight.service.game.team.GameTeam;
-import me.lucanius.twilight.service.game.team.member.TeamMember;
 import me.lucanius.twilight.service.loadout.Loadout;
 import me.lucanius.twilight.service.profile.Profile;
 import me.lucanius.twilight.service.profile.ProfileState;
@@ -52,8 +51,7 @@ public class GameListener {
             }
 
             Set<Player> players = new HashSet<>();
-            Set<TeamMember> members = new HashSet<>(game.getMembers());
-            members.forEach(member -> {
+            game.getMembers().forEach(member -> {
                 Profile profile = member.getProfile();
                 profile.setState(ProfileState.PLAYING);
                 GameProfile gameProfile = profile.getGameProfile();

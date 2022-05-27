@@ -29,31 +29,33 @@ public class GameTask extends BukkitRunnable {
 
         switch (game.getState()) {
             case STARTING:
-                if (game.decrement() == 0) {
-                    game.setTimeStamp(System.currentTimeMillis());
-                    game.setState(GameState.ONGOING);
-                    game.sendMessageWithSound(CC.SECOND + "The game has been started!", Sound.FIREWORK_TWINKLE);
-                } else {
+                if (game.decrement() > 0) {
                     game.sendMessageWithSound(CC.SECOND + "Starting in " + CC.MAIN + game.getCountdown() + CC.SECOND + "s...", Sound.NOTE_STICKS);
+                    return;
                 }
+
+                game.setTimeStamp(System.currentTimeMillis());
+                game.setState(GameState.ONGOING);
+                game.sendMessageWithSound(CC.SECOND + "The game has been started!", Sound.FIREWORK_TWINKLE);
                 break;
             case TERMINATED:
-                if (game.decrement() == 0) {
-                    game.clearArena();
-
-                    game.getAlive().forEach(member -> plugin.getLobby().toLobby(member, true));
-                    game.getSpectators().forEach(game::removeSpectator);
-
-                    plugin.getGames().removeGame(game);
-
-                    // we remove the movement listener for optimization purposes
-                    if (game.getLoadout().needsMovement() && !plugin.getGames().needsMovement() && plugin.getEvents().subbed(AsyncMovementEvent.class)) {
-                        plugin.getEvents().unsubscribe(AsyncMovementEvent.class);
-                        Tools.log("Unsubscribed from AsyncMovementEvent");
-                    }
-
-                    cancel();
+                if (game.decrement() > 0) {
+                    return;
                 }
+
+                game.clearArena();
+                game.getAlive().forEach(member -> plugin.getLobby().toLobby(member, true));
+                game.getSpectators().forEach(game::removeSpectator);
+
+                plugin.getGames().removeGame(game);
+
+                // we remove the movement listener for optimization purposes
+                if (game.getLoadout().needsMovement() && !plugin.getGames().needsMovement() && plugin.getEvents().subbed(AsyncMovementEvent.class)) {
+                    plugin.getEvents().unsubscribe(AsyncMovementEvent.class);
+                    Tools.log("Unsubscribed from AsyncMovementEvent");
+                }
+
+                cancel();
                 break;
         }
     }

@@ -184,7 +184,7 @@ public class Loadout {
 
         gameProfile.setPersonalContents(finalContents);
 
-        apply(player, finalArmor, finalArmor);
+        apply(player, finalContents, finalArmor);
 
         player.sendMessage(CC.SECOND + "Successfully applied your " + CC.MAIN + loadout.getDisplayName() + CC.SECOND + " loadout!");
     }

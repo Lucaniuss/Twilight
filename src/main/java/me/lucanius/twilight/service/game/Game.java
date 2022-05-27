@@ -165,7 +165,7 @@ public class Game {
         return teams.stream().flatMap(team -> team.getMembers().stream()).filter(TeamMember::isAlive).map(TeamMember::getPlayer).collect(Collectors.toList());
     }
 
-    public Collection<TeamMember> getMembers() {
+    public List<TeamMember> getMembers() {
         return teams.stream().flatMap(team -> team.getMembers().stream()).collect(Collectors.toList());
     }
 

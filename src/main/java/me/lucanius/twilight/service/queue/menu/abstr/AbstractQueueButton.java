@@ -26,6 +26,7 @@ public abstract class AbstractQueueButton extends Button {
         int playing = plugin.getGames().getSize(loadout, queue);
 
         builder.setName(CC.MAIN + CC.BOLD + loadout.getName());
+
         builder.addLore(CC.MEDIUM_BAR);
         builder.addLore(CC.ICON + CC.WHITE + "In Game: " + CC.SECOND + playing);
         builder.addLore(CC.ICON + CC.WHITE + "In Queue: " + CC.SECOND + plugin.getQueues().getSize(loadout, queue));
