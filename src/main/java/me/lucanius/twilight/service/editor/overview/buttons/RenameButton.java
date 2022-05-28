@@ -29,7 +29,7 @@ public class RenameButton extends Button {
     public ItemStack getItem(Player player) {
         return new ItemBuilder(Material.NAME_TAG)
                 .setName(CC.MAIN + CC.BOLD + "Rename")
-                .setLore(CC.SECOND + CC.ITALIC + "Click to rename " + personal.getDisplayName())
+                .addLore(CC.SECOND + CC.ITALIC + "Click to rename " + personal.getDisplayName())
                 .build();
     }
 

@@ -31,7 +31,7 @@ public class BackButton extends Button {
     public ItemStack getItem(Player player) {
         return new ItemBuilder(Material.BED)
                 .setName("&cBack")
-                .setLore("&e&oClick to go back")
+                .addLore("&e&oClick to go back")
                 .build();
     }
 

@@ -28,7 +28,7 @@ public class DestroyButton extends Button {
     public ItemStack getItem(Player player) {
         return new ItemBuilder(Material.REDSTONE)
                 .setName(CC.MAIN + CC.BOLD + "Destroy")
-                .setLore(CC.SECOND + CC.ITALIC + "Click to destroy " + personal.getDisplayName())
+                .addLore(CC.SECOND + CC.ITALIC + "Click to destroy " + personal.getDisplayName())
                 .build();
     }
 

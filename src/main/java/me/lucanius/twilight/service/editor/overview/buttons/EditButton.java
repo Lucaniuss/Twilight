@@ -28,7 +28,7 @@ public class EditButton extends Button {
     public ItemStack getItem(Player player) {
         return new ItemBuilder(Material.BOAT)
                 .setName(CC.MAIN + CC.BOLD + "Edit")
-                .setLore(CC.SECOND + CC.ITALIC + "Click to edit loadout " + (number + 1))
+                .addLore(CC.SECOND + CC.ITALIC + "Click to edit loadout " + (number + 1))
                 .build();
     }
 

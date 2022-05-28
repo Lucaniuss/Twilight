@@ -28,7 +28,7 @@ public class CreateButton extends Button {
     public ItemStack getItem(Player player) {
         return new ItemBuilder(Material.MINECART)
                 .setName(CC.MAIN + CC.BOLD + "Create")
-                .setLore(CC.SECOND + CC.ITALIC + "Click to create loadout " + (number + 1))
+                .addLore(CC.SECOND + CC.ITALIC + "Click to create loadout " + (number + 1))
                 .build();
     }
 
