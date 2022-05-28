@@ -33,10 +33,10 @@ public abstract class AbstractHotbar {
         this.items = new ArrayList<>(Arrays.asList(
                 new HotbarItem(new ItemBuilder(Material.IRON_SWORD).setName(CC.MAIN + "Unranked" + click).build(), 0, HotbarContext.UNRANKED, HotbarType.LOBBY),
                 new HotbarItem(new ItemBuilder(Material.DIAMOND_SWORD).setName(CC.MAIN + "Ranked" + click).build(), 1, HotbarContext.RANKED, HotbarType.LOBBY),
-                new HotbarItem(new ItemBuilder(Material.BOOK).setName(CC.MAIN + "Loadout Editor" + click).build(), 2, HotbarContext.LOADOUT_EDITOR, HotbarType.LOBBY),
+                new HotbarItem(new ItemBuilder(Material.BOOK).setName(CC.MAIN + "Editor" + click).build(), 2, HotbarContext.LOADOUT_EDITOR, HotbarType.LOBBY),
                 new HotbarItem(new ItemBuilder(Material.NAME_TAG).setName(CC.MAIN + "Create Party" + click).build(), 4, HotbarContext.CREATE_PARTY, HotbarType.LOBBY),
                 new HotbarItem(new ItemBuilder(Material.EMERALD).setName(CC.MAIN + "Leaderboards" + click).build(), 7, HotbarContext.LEADERBOARDS, HotbarType.LOBBY),
-                new HotbarItem(new ItemBuilder(Material.NETHER_STAR).setName(CC.MAIN + "Your Settings" + click).build(), 8, HotbarContext.PERSONAL_SETTINGS, HotbarType.LOBBY),
+                new HotbarItem(new ItemBuilder(Material.NETHER_STAR).setName(CC.MAIN + "Settings" + click).build(), 8, HotbarContext.PERSONAL_SETTINGS, HotbarType.LOBBY),
 
                 new HotbarItem(new ItemBuilder(Material.GOLD_SWORD).setName(CC.MAIN + "Duos" + click).build(), 0, HotbarContext.DUOS, HotbarType.PARTY),
                 new HotbarItem(new ItemBuilder(Material.GOLD_AXE).setName(CC.MAIN + "Party Games" + click).build(), 1, HotbarContext.PARTY_GAMES, HotbarType.PARTY),
