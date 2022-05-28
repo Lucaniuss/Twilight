@@ -19,6 +19,7 @@ public abstract class AbstractQueueData<E> {
     protected final static String[] messages = new String[]{
             " ",
             CC.MAIN + CC.BOLD + "Searching for a game...",
+            CC.ICON + CC.WHITE + "Queue: " + CC.SECOND + "<queue>",
             CC.ICON + CC.WHITE + "Loadout: " + CC.SECOND + "<loadout>",
             " "
     };

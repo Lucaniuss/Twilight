@@ -21,7 +21,10 @@ public class DuoQueueData extends AbstractQueueData<Set<Player>> {
     public void sendMessage() {
         for (Player player : element) {
             for (String s : messages) {
-                player.sendMessage(s.replace("<loadout>", loadout.getName()));
+                player.sendMessage(s
+                        .replace("<loadout>", loadout.getName())
+                        .replace("<queue>", queue.getName())
+                );
             }
         }
     }

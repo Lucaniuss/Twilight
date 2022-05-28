@@ -18,7 +18,10 @@ public class RankedQueueData extends AbstractQueueData<Player> {
     @Override
     public void sendMessage() {
         for (String s : messages) {
-            element.sendMessage(s.replace("<loadout>", loadout.getName()));
+            element.sendMessage(s
+                    .replace("<loadout>", loadout.getName())
+                    .replace("<queue>", queue.getName())
+            );
         }
     }
 
