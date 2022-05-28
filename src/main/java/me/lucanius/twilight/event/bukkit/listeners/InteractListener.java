@@ -11,6 +11,8 @@ import me.lucanius.twilight.service.loadout.personal.PersonalLoadout;
 import me.lucanius.twilight.service.lobby.hotbar.HotbarItem;
 import me.lucanius.twilight.service.lobby.hotbar.context.HotbarContext;
 import me.lucanius.twilight.service.party.Party;
+import me.lucanius.twilight.service.party.menus.games.PartyGameMenu;
+import me.lucanius.twilight.service.party.menus.other.OtherPartiesMenu;
 import me.lucanius.twilight.service.profile.Profile;
 import me.lucanius.twilight.tools.CC;
 import org.bukkit.Material;
@@ -94,10 +96,23 @@ public class InteractListener {
                             plugin.getQueues().getDuos().getMenu().open(player);
                             break;
                         case PARTY_GAMES:
+                            if (!party.isPresent() || !party.get().getLeader().equals(uniqueId)) {
+                                player.sendMessage(CC.RED + "You are not the leader of your party!");
+                                return;
+                            }
+
+                            new PartyGameMenu(party.get()).open(player);
                             break;
                         case OTHER_PARTIES:
+                            if (!party.isPresent() || !party.get().getLeader().equals(uniqueId)) {
+                                player.sendMessage(CC.RED + "You are not the leader of your party!");
+                                return;
+                            }
+
+                            new OtherPartiesMenu(party.get()).open(player);
                             break;
                         case PARTY_INFO:
+                            player.performCommand("party info");
                             break;
                         case LEAVE_PARTY:
                             if (plugin.getParties().leaveParty(player) == null) {
@@ -158,7 +173,7 @@ public class InteractListener {
                                 if (cd.active()) {
                                     event.setCancelled(true);
                                     player.updateInventory();
-                                    player.sendMessage(CC.RED + "You shoot arrows for another " + cd.remaining() + " seconds!");
+                                    player.sendMessage(CC.RED + "You can't shoot arrows for another " + cd.remaining() + " seconds!");
                                 }
                             });
                             break;
@@ -178,11 +193,12 @@ public class InteractListener {
                     PersonalLoadout personal = Arrays.stream(profile.getEditorProfile().getAll(loadout.getName()))
                             .filter(Objects::nonNull).filter(l -> CC.translate(l.getDisplayName()).equalsIgnoreCase(stack.getItemMeta().getDisplayName()))
                             .findFirst().orElse(null);
-                    if (personal != null) {
-                        loadout.apply(player, profile, personal);
-                    } else {
+                    if (personal == null) {
                         loadout.apply(player, profile);
+                        return;
                     }
+
+                    loadout.apply(player, profile, personal);
                     break;
                 case QUEUE:
                     if (nullItem) {

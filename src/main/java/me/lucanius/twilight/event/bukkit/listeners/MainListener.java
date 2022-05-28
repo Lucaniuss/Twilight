@@ -9,6 +9,7 @@ import me.lucanius.twilight.service.profile.Profile;
 import me.lucanius.twilight.service.profile.ProfileState;
 import me.lucanius.twilight.tools.CC;
 import me.lucanius.twilight.tools.Scheduler;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.*;
@@ -18,9 +19,11 @@ import org.bukkit.event.block.BlockSpreadEvent;
 import org.bukkit.event.block.LeavesDecayEvent;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.hanging.HangingBreakEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.UUID;
@@ -173,6 +176,29 @@ public class MainListener {
             if (event.getEntityType() == EntityType.ARROW) {
                 projectile.remove();
             }
+        });
+
+        Events.subscribe(InventoryClickEvent.class, event -> {
+            Inventory inventory = event.getInventory();
+            if (inventory == null) {
+                return;
+            }
+
+            Player player = (Player) event.getWhoClicked();
+            if (inventory != player.getInventory()) {
+                return;
+            }
+
+            if (player.getGameMode() == GameMode.CREATIVE) {
+                return;
+            }
+
+            Profile profile = plugin.getProfiles().get(player.getUniqueId());
+            if (profile.getEditorProfile().isEditing()) {
+                return;
+            }
+
+            event.setCancelled(profile.getState() != ProfileState.PLAYING);
         });
 
         Events.subscribe(ItemSpawnEvent.class, event -> Scheduler.runLaterAsync(() -> event.getEntity().remove(), 20L * 10L));
