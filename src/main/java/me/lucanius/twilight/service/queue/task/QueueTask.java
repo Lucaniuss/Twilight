@@ -21,13 +21,15 @@ public class QueueTask extends BukkitRunnable {
 
     @Override
     public void run() {
-        plugin.getQueues().getAll().forEach(queue -> {
-
+        if (!MenuSaver.isEmpty()) {
             MenuSaver.getCached().forEach((key, value) -> {
                 if (value instanceof AbstractQueueMenu) {
                     Optional.ofNullable(plugin.getServer().getPlayer(key)).ifPresent(value::update);
                 }
             });
+        }
+
+        plugin.getQueues().getAll().forEach(queue -> {
 
             Iterator<AbstractQueueData<?>> iterator = queue.getQueue().iterator();
             while (iterator.hasNext()) {

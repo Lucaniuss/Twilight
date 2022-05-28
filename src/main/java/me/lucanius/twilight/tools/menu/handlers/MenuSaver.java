@@ -28,4 +28,8 @@ public final class MenuSaver {
     public Menu get(UUID uniqueId) {
         return cached.get(uniqueId);
     }
+
+    public boolean isEmpty() {
+        return cached.isEmpty();
+    }
 }
