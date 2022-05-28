@@ -24,7 +24,7 @@ public class EditorSelectMenu extends Menu {
         Map<Integer, Button> buttons = new HashMap<>();
 
         plugin.getLoadouts().getAll().forEach(loadout ->
-                buttons.put(buttons.size(), new EditorSelectButton(loadout, plugin.getProfiles().get(player.getUniqueId()).getEditorProfile()))
+                buttons.put(loadout.getSlot(), new EditorSelectButton(loadout, plugin.getProfiles().get(player.getUniqueId()).getEditorProfile()))
         );
 
         fillEmptyWithGlass(buttons);
