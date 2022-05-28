@@ -43,6 +43,10 @@ public class Party {
         toPlayers().forEach(player -> player.sendMessage(CC.translate(message)));
     }
 
+    public Player getLeaderPlayer() {
+        return plugin.getServer().getPlayer(leader);
+    }
+
     public List<GameTeam> split() {
         List<UUID> first = new ArrayList<>();
         List<UUID> second = new ArrayList<>();

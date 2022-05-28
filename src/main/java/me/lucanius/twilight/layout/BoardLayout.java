@@ -1,12 +1,15 @@
 package me.lucanius.twilight.layout;
 
 import me.lucanius.twilight.layout.provider.LinesProvider;
+import me.lucanius.twilight.service.party.Party;
 import me.lucanius.twilight.service.profile.Profile;
 import me.lucanius.twilight.tools.CC;
 import me.lucanius.twilight.tools.board.BoardAdapter;
 import org.bukkit.entity.Player;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 /**
  * @author Lucanius
@@ -21,11 +24,13 @@ public class BoardLayout extends LinesProvider implements BoardAdapter {
 
     @Override
     public List<String> getLines(Player player) {
-        Profile profile = plugin.getProfiles().get(player.getUniqueId());
+        UUID uuid = player.getUniqueId();
+        Profile profile = plugin.getProfiles().get(uuid);
+        Optional<Party> party = Optional.ofNullable(plugin.getParties().getParty(uuid));
 
         switch (profile.getState()) {
             case LOBBY:
-                return getLobby();
+                return getLobby(party);
             case PLAYING:
                 return getPlaying(profile, player);
             case QUEUE:

@@ -2,6 +2,7 @@ package me.lucanius.twilight.layout.provider;
 
 import me.lucanius.twilight.service.game.Game;
 import me.lucanius.twilight.service.game.team.GameTeam;
+import me.lucanius.twilight.service.party.Party;
 import me.lucanius.twilight.service.profile.Profile;
 import me.lucanius.twilight.service.queue.abstr.AbstractQueueData;
 import me.lucanius.twilight.tools.CC;
@@ -21,13 +22,14 @@ public abstract class LinesProvider extends AbstractProvider {
 
     private final String signature = CC.GRAY + CC.ITALIC + "lucanius.me";
 
-    public List<String> getLobby() {
+    public List<String> getLobby(Optional<Party> party) {
         List<String> lines = new ArrayList<>();
 
         lines.add(CC.SMALL_BAR);
-        lines.add(CC.WHITE + "&fOnline: " + CC.SECOND + plugin.getOnline().size());
+        lines.add(CC.WHITE + "Online: " + CC.SECOND + plugin.getOnline().size());
         lines.add(CC.WHITE + "In Game: " + CC.SECOND + plugin.getGames().getSize());
         lines.add(CC.WHITE + "In Queue: " + CC.SECOND + plugin.getQueues().getSize());
+        party.ifPresent(value -> lines.addAll(getParty(value)));
         lines.add(" ");
         lines.add(signature);
         lines.add(CC.SMALL_BAR);
