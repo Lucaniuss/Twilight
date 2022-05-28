@@ -7,7 +7,6 @@ import me.lucanius.twilight.service.editor.select.EditorSelectMenu;
 import me.lucanius.twilight.service.game.Game;
 import me.lucanius.twilight.service.game.context.GameState;
 import me.lucanius.twilight.service.loadout.Loadout;
-import me.lucanius.twilight.service.loadout.personal.PersonalLoadout;
 import me.lucanius.twilight.service.lobby.hotbar.HotbarItem;
 import me.lucanius.twilight.service.lobby.hotbar.context.HotbarContext;
 import me.lucanius.twilight.service.party.Party;
@@ -15,6 +14,7 @@ import me.lucanius.twilight.service.party.menus.games.PartyGameMenu;
 import me.lucanius.twilight.service.party.menus.other.OtherPartiesMenu;
 import me.lucanius.twilight.service.profile.Profile;
 import me.lucanius.twilight.tools.CC;
+import me.lucanius.twilight.tools.functions.Voluntary;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
@@ -190,15 +190,11 @@ public class InteractListener {
                     }
 
                     Loadout loadout = game.getLoadout();
-                    PersonalLoadout personal = Arrays.stream(profile.getEditorProfile().getAll(loadout.getName()))
+                    Voluntary.of(Arrays.stream(profile.getEditorProfile().getAll(loadout.getName()))
                             .filter(Objects::nonNull).filter(l -> CC.translate(l.getDisplayName()).equalsIgnoreCase(stack.getItemMeta().getDisplayName()))
-                            .findFirst().orElse(null);
-                    if (personal == null) {
-                        loadout.apply(player, profile);
-                        return;
-                    }
-
-                    loadout.apply(player, profile, personal);
+                            .findFirst().orElse(null))
+                            .ifPresent(l -> loadout.apply(player, profile, l))
+                            .orElseDo(l -> loadout.apply(player, profile));
                     break;
                 case QUEUE:
                     if (nullItem) {
