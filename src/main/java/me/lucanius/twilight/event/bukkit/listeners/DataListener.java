@@ -8,12 +8,12 @@ import me.lucanius.twilight.service.profile.Profile;
 import me.lucanius.twilight.service.profile.ProfileService;
 import me.lucanius.twilight.tools.CC;
 import me.lucanius.twilight.tools.Scheduler;
+import me.lucanius.twilight.tools.functions.Voluntary;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -53,7 +53,7 @@ public class DataListener {
                 return;
             }
 
-            Optional<Game> game = Optional.ofNullable(plugin.getGames().get(profile));
+            Voluntary<Game> game = Voluntary.ofNull(plugin.getGames().get(profile));
             switch (profile.getState()) {
                 case PLAYING:
                     game.ifPresent(value -> LoadoutType.NONE.getCallable().execute(plugin, player, plugin.getDamages().get(uniqueId), value));

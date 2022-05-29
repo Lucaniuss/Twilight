@@ -1,12 +1,12 @@
 package me.lucanius.twilight.service.cooldown;
 
 import me.lucanius.twilight.Twilight;
+import me.lucanius.twilight.tools.functions.Voluntary;
 import me.lucanius.twilight.tools.functions.pair.Triad;
 import me.lucanius.twilight.tools.functions.pair.Triads;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -36,6 +36,6 @@ public class CooldownService {
     }
 
     public void clear(UUID uuid, String name) {
-        Optional.ofNullable(get(uuid, name)).ifPresent(Cooldown::cancel);
+        Voluntary.ofNull(get(uuid, name)).ifPresent(Cooldown::cancel);
     }
 }

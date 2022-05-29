@@ -2,10 +2,10 @@ package me.lucanius.twilight.service.loadout;
 
 import me.lucanius.twilight.Twilight;
 import me.lucanius.twilight.tools.config.ConfigFile;
+import me.lucanius.twilight.tools.functions.Voluntary;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -28,7 +28,7 @@ public class LoadoutService {
 
     public void load() {
         loadouts.clear();
-        Optional.ofNullable(config.getConfigurationSection("LOADOUTS")).ifPresent(section ->
+        Voluntary.ofNull(config.getConfigurationSection("LOADOUTS")).ifPresent(section ->
                 section.getKeys(false).forEach(key -> loadouts.add(new Loadout(config, key))));
     }
 

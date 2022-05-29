@@ -9,9 +9,13 @@ import me.lucanius.twilight.service.profile.Profile;
 import me.lucanius.twilight.service.profile.ProfileState;
 import me.lucanius.twilight.tools.CC;
 import me.lucanius.twilight.tools.Clickable;
+import me.lucanius.twilight.tools.functions.Voluntary;
 import org.bukkit.entity.Player;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * @author Clouke
@@ -92,7 +96,7 @@ public class StandardPartyService implements PartyService {
         }
 
         Profile profile = plugin.getProfiles().get(uniqueId);
-        Optional<Game> game = Optional.ofNullable(plugin.getGames().get(profile));
+        Voluntary<Game> game = Voluntary.ofNull(plugin.getGames().get(profile));
         switch (profile.getState()) {
             case PLAYING:
                 game.ifPresent(value -> value.getLoadout().getType().getCallable().execute(plugin, player, plugin.getDamages().get(uniqueId), value));

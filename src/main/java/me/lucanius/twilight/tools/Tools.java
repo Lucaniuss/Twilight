@@ -1,6 +1,7 @@
 package me.lucanius.twilight.tools;
 
 import lombok.experimental.UtilityClass;
+import me.lucanius.twilight.tools.functions.Voluntary;
 import me.lucanius.twilight.tools.item.ItemBuilder;
 import net.minecraft.server.v1_8_R3.EntityPlayer;
 import net.minecraft.server.v1_8_R3.Packet;
@@ -10,8 +11,6 @@ import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
-
-import java.util.Optional;
 
 /**
  * @author Lucanius
@@ -100,7 +99,7 @@ public final class Tools {
         }
 
         String str = builder.toString();
-        return Optional.of(str).filter(s -> s.length() != 0).map(s -> s.substring(0, s.length() - 1)).orElse(str);
+        return Voluntary.of(str).filter(s -> s.length() != 0).map(s -> s.substring(0, s.length() - 1)).orElse(str);
     }
 
     public ItemStack[] getColoredItems(ItemStack[] items, int color, int i) {

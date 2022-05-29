@@ -3,10 +3,9 @@ package me.lucanius.twilight.tools.location;
 import lombok.Getter;
 import lombok.Setter;
 import me.lucanius.twilight.Twilight;
+import me.lucanius.twilight.tools.functions.Voluntary;
 import org.bukkit.Location;
 import org.bukkit.World;
-
-import java.util.Optional;
 
 /**
  * @author Lucanius
@@ -69,7 +68,7 @@ public class SerializableLocation {
     }
 
     public World getBukkitWorld() {
-        return bukkitWorld = bukkitWorld != null ? bukkitWorld : world != null ? Optional.ofNullable(plugin.getServer().getWorld(world)).orElse(plugin.getServer().getWorlds().get(0)) : plugin.getServer().getWorlds().get(0);
+        return bukkitWorld = bukkitWorld != null ? bukkitWorld : world != null ? Voluntary.ofNull(plugin.getServer().getWorld(world)).orElse(plugin.getServer().getWorlds().get(0)) : plugin.getServer().getWorlds().get(0);
     }
 
     public Location getBukkitLocation() {

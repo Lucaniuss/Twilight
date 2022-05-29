@@ -3,10 +3,10 @@ package me.lucanius.twilight.service.arena;
 import me.lucanius.twilight.Twilight;
 import me.lucanius.twilight.service.loadout.Loadout;
 import me.lucanius.twilight.tools.config.ConfigFile;
+import me.lucanius.twilight.tools.functions.Voluntary;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -29,7 +29,7 @@ public class ArenaService {
 
     public void load() {
         arenas.clear();
-        Optional.ofNullable(config.getConfigurationSection("ARENAS")).ifPresent(section ->
+        Voluntary.ofNull(config.getConfigurationSection("ARENAS")).ifPresent(section ->
                 section.getKeys(false).forEach(key -> arenas.add(new Arena(config, key))));
     }
 

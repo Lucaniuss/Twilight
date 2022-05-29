@@ -7,11 +7,11 @@ import me.lucanius.twilight.service.profile.Profile;
 import me.lucanius.twilight.service.queue.abstr.AbstractQueueData;
 import me.lucanius.twilight.tools.CC;
 import me.lucanius.twilight.tools.Tools;
+import me.lucanius.twilight.tools.functions.Voluntary;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -22,7 +22,7 @@ public abstract class LinesProvider extends AbstractProvider {
 
     private final String signature = CC.GRAY + CC.ITALIC + "lucanius.me";
 
-    public List<String> getLobby(Optional<Party> party) {
+    public List<String> getLobby(Voluntary<Party> party) {
         List<String> lines = new ArrayList<>();
 
         lines.add(CC.SMALL_BAR);
@@ -60,8 +60,8 @@ public abstract class LinesProvider extends AbstractProvider {
         List<String> lines = new ArrayList<>();
         UUID uniqueId = player.getUniqueId();
         Game game = plugin.getGames().get(profile);
-        Optional<GameTeam> opposingTeam = Optional.ofNullable(game.getOpposingTeam(uniqueId));
-        Optional<Player> enemy = opposingTeam.map(GameTeam::getFirstPlayer);
+        Voluntary<GameTeam> opposingTeam = Voluntary.ofNull(game.getOpposingTeam(uniqueId));
+        Voluntary<Player> enemy = opposingTeam.map(GameTeam::getFirstPlayer);
         boolean isPresent = enemy.isPresent();
         Profile enemyProfile = isPresent ? plugin.getProfiles().get(enemy.get().getUniqueId()) : plugin.getProfiles().getDummy();
         String enemyName = isPresent ? enemy.get().getName() : "...";

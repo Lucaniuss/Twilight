@@ -5,10 +5,10 @@ import me.lucanius.twilight.service.party.Party;
 import me.lucanius.twilight.service.profile.Profile;
 import me.lucanius.twilight.tools.CC;
 import me.lucanius.twilight.tools.board.BoardAdapter;
+import me.lucanius.twilight.tools.functions.Voluntary;
 import org.bukkit.entity.Player;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -26,7 +26,7 @@ public class BoardLayout extends LinesProvider implements BoardAdapter {
     public List<String> getLines(Player player) {
         UUID uuid = player.getUniqueId();
         Profile profile = plugin.getProfiles().get(uuid);
-        Optional<Party> party = Optional.ofNullable(plugin.getParties().getParty(uuid));
+        Voluntary<Party> party = Voluntary.ofNull(plugin.getParties().getParty(uuid));
 
         switch (profile.getState()) {
             case LOBBY:

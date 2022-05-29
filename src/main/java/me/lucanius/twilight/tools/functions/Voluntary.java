@@ -1,5 +1,6 @@
 package me.lucanius.twilight.tools.functions;
 
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -79,5 +80,9 @@ public class Voluntary<V> {
 
     public <U> Voluntary<U> flatMap(Function<? super V, ? extends Voluntary<U>> mapper) {
         return value != null ? mapper.apply(value) : empty();
+    }
+
+    public Optional<V> toOptional() {
+        return Optional.ofNullable(value);
     }
 }

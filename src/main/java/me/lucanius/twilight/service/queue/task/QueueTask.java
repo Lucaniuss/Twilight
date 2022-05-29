@@ -4,12 +4,12 @@ import me.lucanius.twilight.Twilight;
 import me.lucanius.twilight.service.queue.abstr.AbstractQueueData;
 import me.lucanius.twilight.service.queue.callback.QueueCallback;
 import me.lucanius.twilight.service.queue.menu.abstr.AbstractQueueMenu;
+import me.lucanius.twilight.tools.functions.Voluntary;
 import me.lucanius.twilight.tools.menu.handlers.MenuSaver;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Arrays;
 import java.util.Iterator;
-import java.util.Optional;
 
 /**
  * @author Lucanius
@@ -24,7 +24,7 @@ public class QueueTask extends BukkitRunnable {
         if (!MenuSaver.isEmpty()) {
             MenuSaver.getCached().forEach((key, value) -> {
                 if (value instanceof AbstractQueueMenu) {
-                    Optional.ofNullable(plugin.getServer().getPlayer(key)).ifPresent(value::update);
+                    Voluntary.ofNull(plugin.getServer().getPlayer(key)).ifPresent(value::update);
                 }
             });
         }

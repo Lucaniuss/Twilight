@@ -23,7 +23,6 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -57,8 +56,8 @@ public class InteractListener {
             boolean nullItem = item == null;
 
             event.setCancelled(!nullItem);
-            Optional<Game> optionalGame = Optional.ofNullable(plugin.getGames().get(profile));
-            Optional<Party> party = Optional.ofNullable(plugin.getParties().getParty(uniqueId));
+            Voluntary<Game> vGame = Voluntary.ofNull(plugin.getGames().get(profile));
+            Voluntary<Party> party = Voluntary.ofNull(plugin.getParties().getParty(uniqueId));
             switch (profile.getState()) {
                 case LOBBY:
                     if (nullItem) {
@@ -88,28 +87,38 @@ public class InteractListener {
                         case PERSONAL_SETTINGS:
                             break;
                         case DUOS:
-                            if (!party.isPresent() || !party.get().getLeader().equals(uniqueId)) {
-                                player.sendMessage(CC.RED + "You are not the leader of your party!");
-                                return;
-                            }
+                            party.ifPresent(value -> {
+                                if (!value.getLeader().equals(uniqueId)) {
+                                    player.sendMessage(CC.RED + "You are not the leader of your party!");
+                                    return;
+                                }
+                                if (!(value.getMembers().size() > 1)) {
+                                    player.sendMessage(CC.RED + "You need at least 2 members to play duos!");
+                                    return;
+                                }
 
-                            plugin.getQueues().getDuos().getMenu().open(player);
+                                plugin.getQueues().getDuos().getMenu().open(player);
+                            }).orElseDo(value -> player.sendMessage(CC.RED + "You are not in a party!"));
                             break;
                         case PARTY_GAMES:
-                            if (!party.isPresent() || !party.get().getLeader().equals(uniqueId)) {
-                                player.sendMessage(CC.RED + "You are not the leader of your party!");
-                                return;
-                            }
+                            party.ifPresent(value -> {
+                                if (!value.getLeader().equals(uniqueId)) {
+                                    player.sendMessage(CC.RED + "You are not the leader of your party!");
+                                    return;
+                                }
 
-                            new PartyGameMenu(party.get()).open(player);
+                                new PartyGameMenu(value).open(player);
+                            }).orElseDo(value -> player.sendMessage(CC.RED + "You are not in a party!"));
                             break;
                         case OTHER_PARTIES:
-                            if (!party.isPresent() || !party.get().getLeader().equals(uniqueId)) {
-                                player.sendMessage(CC.RED + "You are not the leader of your party!");
-                                return;
-                            }
+                            party.ifPresent(value -> {
+                                if (!value.getLeader().equals(uniqueId)) {
+                                    player.sendMessage(CC.RED + "You are not the leader of your party!");
+                                    return;
+                                }
 
-                            new OtherPartiesMenu(party.get()).open(player);
+                                new OtherPartiesMenu(value).open(player);
+                            }).orElseDo(value -> player.sendMessage(CC.RED + "You are not in a party!"));
                             break;
                         case PARTY_INFO:
                             player.performCommand("party info");
@@ -122,11 +131,11 @@ public class InteractListener {
                     }
                     break;
                 case PLAYING:
-                    if (!optionalGame.isPresent()) {
+                    if (!vGame.isPresent()) {
                         return;
                     }
 
-                    Game game = optionalGame.get();
+                    Game game = vGame.get();
                     switch (stack.getType()) {
                         case MUSHROOM_SOUP:
                             double health = player.getHealth();
@@ -153,12 +162,8 @@ public class InteractListener {
                                 return;
                             }
 
-                            Cooldown cooldown = plugin.getCooldowns().get(uniqueId, "ENDERPEARL");
-                            if (cooldown == null) {
-                                cooldown = new Cooldown(15 * 1000L, () -> player.sendMessage(CC.GREEN + "You can now use pearls again!"));
-                                plugin.getCooldowns().add(uniqueId, "ENDERPEARL", cooldown);
-                            }
-
+                            Cooldown cooldown = Voluntary.ofNull(plugin.getCooldowns().get(uniqueId, "ENDERPEARL"))
+                                    .orElse(new Cooldown(15 * 1000L, () -> player.sendMessage(CC.GREEN + "You can now use pearls again!")));
                             if (cooldown.active()) {
                                 event.setCancelled(true);
                                 player.updateInventory();
@@ -169,7 +174,7 @@ public class InteractListener {
                             cooldown.reset();
                             break;
                         case BOW:
-                            Optional.ofNullable(plugin.getCooldowns().get(uniqueId, "BRIDGES")).ifPresent(cd -> {
+                            Voluntary.ofNull(plugin.getCooldowns().get(uniqueId, "BRIDGES")).ifPresent(cd -> {
                                 if (cd.active()) {
                                     event.setCancelled(true);
                                     player.updateInventory();
@@ -214,7 +219,7 @@ public class InteractListener {
                         case VIEW_PLAYERS:
                             break;
                         case STOP_SPECTATING:
-                            optionalGame.ifPresent(value -> value.removeSpectator(uniqueId));
+                            vGame.ifPresent(value -> value.removeSpectator(uniqueId));
                             break;
                     }
                     break;
