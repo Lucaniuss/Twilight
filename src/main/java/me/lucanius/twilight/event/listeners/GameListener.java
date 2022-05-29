@@ -84,6 +84,8 @@ public class GameListener {
 
                 // show players that are in the game to each other
                 players.forEach(player -> players.forEach(player::showPlayer));
+
+                game.getTeams().forEach(GameTeam::spawnCage);
             });
 
             game.setTask(new GameTask(plugin, game)).runTaskTimer(plugin, 20L, 20L);

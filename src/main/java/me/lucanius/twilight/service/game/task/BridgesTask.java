@@ -3,6 +3,7 @@ package me.lucanius.twilight.service.game.task;
 import me.lucanius.twilight.Twilight;
 import me.lucanius.twilight.service.cooldown.Cooldown;
 import me.lucanius.twilight.service.game.Game;
+import me.lucanius.twilight.service.game.team.GameTeam;
 import me.lucanius.twilight.tools.CC;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -32,32 +33,36 @@ public class BridgesTask extends BukkitRunnable {
     @Override
     public void run() {
         if (current <= 1) {
+            game.getTeams().forEach(GameTeam::destroyCage);
             cancel();
         }
 
         if (current == initial) {
-            game.getAliveMembers().forEach(member -> {
-                Player player = member.getPlayer();
-                player.teleport(member.getTeam().getSpawn());
+            game.getTeams().forEach(team -> {
+                team.getAliveMembers().forEach(member -> {
+                    Player player = member.getPlayer();
+                    player.teleport(team.getSpawn());
 
-                game.getLoadout().apply(player, member.getProfile());
+                    game.getLoadout().apply(player, member.getProfile());
 
-                player.resetMaxHealth();
-                player.setHealth(player.getMaxHealth());
-                player.setFoodLevel(20);
-                player.setLevel(0);
-                player.setExp(0.0f);
-                player.getActivePotionEffects().stream().map(PotionEffect::getType).forEach(player::removePotionEffect);
+                    player.resetMaxHealth();
+                    player.setHealth(player.getMaxHealth());
+                    player.setFoodLevel(20);
+                    player.setLevel(0);
+                    player.setExp(0.0f);
+                    player.getActivePotionEffects().stream().map(PotionEffect::getType).forEach(player::removePotionEffect);
 
-                Cooldown cooldown = plugin.getCooldowns().get(member.getUniqueId(), "BRIDGES");
-                if (cooldown != null && cooldown.active()) {
-                    cooldown.cancel();
-                }
+                    Cooldown cooldown = plugin.getCooldowns().get(member.getUniqueId(), "BRIDGES");
+                    if (cooldown != null && cooldown.active()) {
+                        cooldown.cancel();
+                    }
+                });
+
+                team.spawnCage();
             });
         }
 
-        current--;
-        boolean cancelled = current <= 0;
+        boolean cancelled = --current <= 0;
         game.sendMessageWithSound(
                 cancelled ? CC.SECOND + "The next round has started!" : CC.SECOND + "Starting next round " + CC.MAIN + current + CC.SECOND + "s...",
                 cancelled ? Sound.FIREWORK_TWINKLE : Sound.NOTE_STICKS

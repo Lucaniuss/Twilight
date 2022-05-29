@@ -7,8 +7,10 @@ import me.lucanius.twilight.service.arena.Arena;
 import me.lucanius.twilight.service.game.team.member.TeamMember;
 import me.lucanius.twilight.tools.Scheduler;
 import me.lucanius.twilight.tools.Tools;
+import me.lucanius.twilight.tools.functions.Voluntary;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import java.util.Collection;
@@ -62,6 +64,10 @@ public class GameTeam {
         return members.stream().map(TeamMember::getPlayer).filter(Objects::nonNull).collect(Collectors.toList());
     }
 
+    public Collection<TeamMember> getAliveMembers() {
+        return members.stream().filter(TeamMember::isAlive).collect(Collectors.toList());
+    }
+
     public void killSpecific(UUID uniqueId) {
         getSpecific(uniqueId).setAlive(false);
     }
@@ -83,5 +89,54 @@ public class GameTeam {
         allowedToScore = false;
 
         Scheduler.runLaterAsync(() -> allowedToScore = true, 100L);
+    }
+
+    public void spawnCage() {
+        if (spawn == null) {
+            return;
+        }
+
+        Location loc = spawn.clone().add(0, 5, 0);
+        for (int x = -2; x <= 2; x++) {
+            for (int y = -2; y <= 2; y++) {
+                for (int z = -2; z <= 2; z++) {
+                    Voluntary.of(loc.getWorld().getBlockAt(loc.getBlockX() + x, loc.getBlockY() + y, loc.getBlockZ() + z))
+                            .filter(block -> block.getType() == Material.AIR)
+                            .ifPresent(block -> {
+                                block.setType(Material.STAINED_GLASS);
+                                block.setData(color == ChatColor.BLUE ? (byte) 11 : color == ChatColor.RED ? (byte) 14 : (byte) 0);
+                            });
+                }
+            }
+        }
+
+        for (int x = -1; x <= 1; x++) {
+            for (int y = -1; y <= 1; y++) {
+                for (int z = -1; z <= 1; z++) {
+                    Voluntary.of(loc.getWorld().getBlockAt(loc.getBlockX() + x, loc.getBlockY() + y, loc.getBlockZ() + z))
+                            .filter(block -> block.getType() == Material.STAINED_GLASS)
+                            .ifPresent(block -> block.setType(Material.AIR));
+                }
+            }
+        }
+
+        toPlayers().forEach(player -> player.teleport(loc));
+    }
+
+    public void destroyCage() {
+        if (spawn == null) {
+            return;
+        }
+
+        Location loc = spawn.clone().add(0, 5, 0);
+        for (int x = -2; x <= 2; x++) {
+            for (int y = -2; y <= 2; y++) {
+                for (int z = -2; z <= 2; z++) {
+                    Voluntary.of(loc.getWorld().getBlockAt(loc.getBlockX() + x, loc.getBlockY() + y, loc.getBlockZ() + z))
+                            .filter(block -> block.getType() == Material.STAINED_GLASS)
+                            .ifPresent(block -> block.setType(Material.AIR));
+                }
+            }
+        }
     }
 }

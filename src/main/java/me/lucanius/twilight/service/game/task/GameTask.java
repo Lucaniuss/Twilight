@@ -5,6 +5,8 @@ import me.lucanius.twilight.Twilight;
 import me.lucanius.twilight.event.events.AsyncMovementEvent;
 import me.lucanius.twilight.service.game.Game;
 import me.lucanius.twilight.service.game.context.GameState;
+import me.lucanius.twilight.service.game.team.GameTeam;
+import me.lucanius.twilight.service.loadout.type.LoadoutType;
 import me.lucanius.twilight.tools.CC;
 import me.lucanius.twilight.tools.Tools;
 import org.bukkit.Sound;
@@ -36,7 +38,10 @@ public class GameTask extends BukkitRunnable {
 
                 game.setTimeStamp(System.currentTimeMillis());
                 game.setState(GameState.ONGOING);
-                game.sendMessageWithSound(CC.SECOND + "The game has been started!", Sound.FIREWORK_TWINKLE);
+                game.sendMessageWithSound(CC.SECOND + "The game has started!", Sound.FIREWORK_TWINKLE);
+                if (game.getLoadout().getType() == LoadoutType.BRIDGES) {
+                    game.getTeams().forEach(GameTeam::destroyCage);
+                }
                 break;
             case TERMINATED:
                 if (game.decrement() > 0) {
