@@ -190,7 +190,7 @@ public class InteractListener {
                     }
 
                     Loadout loadout = game.getLoadout();
-                    Voluntary.of(Arrays.stream(profile.getEditorProfile().getAll(loadout.getName()))
+                    Voluntary.ofNull(Arrays.stream(profile.getEditorProfile().getAll(loadout.getName()))
                             .filter(Objects::nonNull).filter(l -> CC.translate(l.getDisplayName()).equalsIgnoreCase(stack.getItemMeta().getDisplayName()))
                             .findFirst().orElse(null))
                             .ifPresent(l -> loadout.apply(player, profile, l))
