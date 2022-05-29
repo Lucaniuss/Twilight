@@ -67,7 +67,9 @@ public class Voluntary<V> {
     }
 
     public void orElseDo(Consumer<? super V> consumer) {
-        consumer.accept(value);
+        if (value == null) {
+            consumer.accept(null);
+        }
     }
 
     public Voluntary<V> filter(Predicate<? super V> predicate) {
