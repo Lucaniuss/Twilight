@@ -2,6 +2,7 @@ package me.lucanius.twilight.tools.functions;
 
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 /**
  * @author Lucanius
@@ -9,6 +10,10 @@ import java.util.function.Function;
  */
 public class Voluntary<V> {
 
+    /**
+     * Empty Voluntary object that we can use to not throw any NullPointerExceptions.
+     * This is static because it's not needed to be created every time.
+     */
     private final static Voluntary<?> EMPTY = new Voluntary<>();
 
     private final V value;
@@ -21,8 +26,18 @@ public class Voluntary<V> {
         this.value = value;
     }
 
+    /**
+     * Will throw a NullPointerException if the value is null.
+     */
     public static <V> Voluntary<V> of(V value) {
         return new Voluntary<>(value);
+    }
+
+    /**
+     * Won't throw a NullPointerException if the value is null.
+     */
+    public static <V> Voluntary<V> ofNull(V value) {
+        return value != null ? new Voluntary<>(value) : empty();
     }
 
     @SuppressWarnings("unchecked")
@@ -43,7 +58,7 @@ public class Voluntary<V> {
     }
 
     public Voluntary<V> ifPresent(Consumer<? super V> consumer) {
-        if (isPresent()) {
+        if (value != null) {
             consumer.accept(value);
         }
 
@@ -54,11 +69,15 @@ public class Voluntary<V> {
         consumer.accept(value);
     }
 
+    public Voluntary<V> filter(Predicate<? super V> predicate) {
+        return value != null && predicate.test(value) ? this : empty();
+    }
+
     public <U> Voluntary<U> map(Function<? super V, ? extends U> mapper) {
-        return isPresent() ? Voluntary.of(mapper.apply(value)) : Voluntary.empty();
+        return value != null ? Voluntary.of(mapper.apply(value)) : empty();
     }
 
     public <U> Voluntary<U> flatMap(Function<? super V, ? extends Voluntary<U>> mapper) {
-        return isPresent() ? mapper.apply(value) : Voluntary.empty();
+        return value != null ? mapper.apply(value) : empty();
     }
 }
