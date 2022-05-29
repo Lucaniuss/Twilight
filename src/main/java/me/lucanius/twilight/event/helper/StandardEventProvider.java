@@ -35,7 +35,7 @@ public class StandardEventProvider implements EventProvider {
     @Override
     public void unsubscribe(Class<? extends AbstractEvent> event) {
         if (subscribers.containsValue(event)) {
-            subscribers.keySet().stream().filter(listener -> subscribers.get(listener).equals(event)).forEach(subscribers::remove);
+            subscribers.entrySet().removeIf(entry -> entry.getValue().equals(event));
         }
     }
 
@@ -51,7 +51,7 @@ public class StandardEventProvider implements EventProvider {
 
     @Override
     public void publish(TwilightEvent event) {
-        this.thread.execute(() -> subscribers.entrySet().stream()
+        thread.execute(() -> subscribers.entrySet().stream()
                 .filter(entry -> entry.getValue().isInstance(event))
                 .forEach(entry -> entry.getKey().onEvent(event))
         );
@@ -59,7 +59,7 @@ public class StandardEventProvider implements EventProvider {
 
     @Override
     public <T extends TwilightEvent> void publish(Class<T> event) {
-        this.thread.execute(() -> subscribers.entrySet().stream()
+        thread.execute(() -> subscribers.entrySet().stream()
                 .filter(entry -> entry.getValue().equals(event))
                 .forEach(entry -> entry.getKey().onEvent(event))
         );
