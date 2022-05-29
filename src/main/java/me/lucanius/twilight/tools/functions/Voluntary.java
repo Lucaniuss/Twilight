@@ -59,17 +59,12 @@ public class Voluntary<V> {
     }
 
     public Voluntary<V> ifPresent(Consumer<? super V> consumer) {
-        if (value != null) {
-            consumer.accept(value);
-        }
-
+        if (value != null) consumer.accept(value);
         return this;
     }
 
     public void orElseDo(Consumer<? super V> consumer) {
-        if (value == null) {
-            consumer.accept(null);
-        }
+        if (value == null) consumer.accept(null);
     }
 
     public Voluntary<V> filter(Predicate<? super V> predicate) {
@@ -77,11 +72,15 @@ public class Voluntary<V> {
     }
 
     public <U> Voluntary<U> map(Function<? super V, ? extends U> mapper) {
-        return value != null ? Voluntary.of(mapper.apply(value)) : empty();
+        return value != null ? new Voluntary<>(mapper.apply(value)) : empty();
     }
 
     public <U> Voluntary<U> flatMap(Function<? super V, ? extends Voluntary<U>> mapper) {
         return value != null ? mapper.apply(value) : empty();
+    }
+
+    public static <V> Voluntary<V> ofOptional(Optional<V> optional) {
+        return optional.map(Voluntary::new).orElseGet(Voluntary::empty);
     }
 
     public Optional<V> toOptional() {
