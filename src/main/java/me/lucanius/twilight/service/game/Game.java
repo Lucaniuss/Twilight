@@ -225,6 +225,10 @@ public class Game {
             brokenBlocks.clear();
         }
 
+        if (loadout.getType() == LoadoutType.BRIDGES) {
+            teams.forEach(GameTeam::destroyCage);
+        }
+
         if (arenaCopy != null) {
             arenaCopy.resetCopy(arena);
         }
