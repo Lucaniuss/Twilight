@@ -12,6 +12,7 @@ import me.lucanius.twilight.service.game.context.GameState;
 import me.lucanius.twilight.service.game.task.GameTask;
 import me.lucanius.twilight.service.game.team.GameTeam;
 import me.lucanius.twilight.service.loadout.Loadout;
+import me.lucanius.twilight.service.loadout.type.LoadoutType;
 import me.lucanius.twilight.service.profile.Profile;
 import me.lucanius.twilight.service.profile.ProfileState;
 import me.lucanius.twilight.service.profile.modules.GameProfile;
@@ -85,7 +86,9 @@ public class GameListener {
                 // show players that are in the game to each other
                 players.forEach(player -> players.forEach(player::showPlayer));
 
-                game.getTeams().forEach(GameTeam::spawnCage);
+                if (loadout.getType() == LoadoutType.BRIDGES) {
+                    game.getTeams().forEach(GameTeam::spawnCage);
+                }
             });
 
             game.setTask(new GameTask(plugin, game)).runTaskTimer(plugin, 20L, 20L);
