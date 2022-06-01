@@ -60,6 +60,10 @@ public abstract class LinesProvider extends AbstractProvider {
         List<String> lines = new ArrayList<>();
         UUID uniqueId = player.getUniqueId();
         Game game = plugin.getGames().get(profile);
+        if (game == null) {
+            return lines;
+        }
+
         Voluntary<GameTeam> opposingTeam = Voluntary.ofNull(game.getOpposingTeam(uniqueId));
         Voluntary<Player> enemy = opposingTeam.map(GameTeam::getFirstPlayer);
         boolean isPresent = enemy.isPresent();
