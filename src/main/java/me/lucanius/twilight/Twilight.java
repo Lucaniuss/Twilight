@@ -1,9 +1,13 @@
 package me.lucanius.twilight;
 
 import lombok.Getter;
+import me.lucanius.edge.Edge;
+import me.lucanius.label.Label;
 import me.lucanius.twilight.event.EventProvider;
 import me.lucanius.twilight.event.helper.StandardEventProvider;
 import me.lucanius.twilight.layout.BoardLayout;
+import me.lucanius.twilight.layout.nametag.NametagLayout;
+import me.lucanius.twilight.layout.tab.TabLayout;
 import me.lucanius.twilight.service.arena.ArenaService;
 import me.lucanius.twilight.service.cooldown.CooldownService;
 import me.lucanius.twilight.service.damage.DamageService;
@@ -60,6 +64,8 @@ public final class Twilight extends JavaPlugin {
 
     private EventProvider events;
     private Board board;
+    private Edge edge;
+    private Label label;
 
     private boolean disabling;
 
@@ -94,6 +100,8 @@ public final class Twilight extends JavaPlugin {
 
         events = new StandardEventProvider();
         board = new Board(this, new BoardLayout());
+        edge = new Edge(this, new TabLayout());
+        label = new Label(this, new NametagLayout());
 
         registration.init("me.lucanius.twilight.event.bukkit.listeners")
                 .init("me.lucanius.twilight.commands.impl")
