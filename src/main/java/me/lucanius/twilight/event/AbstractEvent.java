@@ -14,7 +14,7 @@ public abstract class AbstractEvent implements TwilightEvent {
 
     protected final static Twilight plugin = Twilight.getInstance();
 
-    private boolean cancelled;
+    private boolean cancelled = false;
 
     public AbstractEvent() {
         plugin.getEvents().publish(this);

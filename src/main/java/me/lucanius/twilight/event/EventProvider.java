@@ -21,4 +21,6 @@ public interface EventProvider {
 
     <T extends TwilightEvent> void publish(Class<T> event);
 
+    boolean execute(Runnable runnable);
+
 }

@@ -30,8 +30,6 @@ public class TeamMember {
         this.team = team;
 
         this.alive = true;
-        this.player = plugin.getServer().getPlayer(uniqueId);
-        this.profile = plugin.getProfiles().get(uniqueId);
     }
 
     public Player getPlayer() {

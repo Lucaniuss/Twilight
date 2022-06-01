@@ -64,4 +64,13 @@ public class StandardEventProvider implements EventProvider {
                 .forEach(entry -> entry.getKey().onEvent(event))
         );
     }
+
+    @Override
+    public boolean execute(Runnable runnable) {
+        try {
+            return thread.submit(runnable, true).get();
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }
