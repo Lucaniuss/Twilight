@@ -2,7 +2,6 @@ package me.lucanius.twilight.tools.registration;
 
 import com.google.common.collect.ImmutableSet;
 import lombok.SneakyThrows;
-import me.lucanius.twilight.Twilight;
 
 import java.net.URL;
 import java.security.CodeSource;
@@ -31,7 +30,7 @@ public class ClassRegistration {
     @SneakyThrows
     public Collection<Class<?>> getClassesInPackage(String packageName) {
         final Collection<Class<?>> classes = new ArrayList<>();
-        final CodeSource codeSource = Twilight.class.getProtectionDomain().getCodeSource();
+        final CodeSource codeSource = getClass().getProtectionDomain().getCodeSource();
         final URL resource = codeSource.getLocation();
 
         final String relPath = packageName.replace(".", "/");
