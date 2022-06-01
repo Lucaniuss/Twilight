@@ -22,7 +22,7 @@ import java.util.UUID;
 @Getter @AllArgsConstructor
 public enum LoadoutType {
 
-    NONE(((plugin, victim, killer, game) -> {
+    NONE((plugin, victim, killer, game) -> {
         boolean hasKiller = killer != null;
         if (hasKiller) {
             Scheduler.run(() -> killer.hidePlayer(victim));
@@ -48,14 +48,14 @@ public enum LoadoutType {
         if (!(victimTeam.getAliveSize() > 0)) {
             new GameEndEvent(game, killerTeam, killerTeam);
         }
-    })),
-    SUMO(((plugin, victim, killer, game) -> {
+    }),
+    SUMO((plugin, victim, killer, game) -> {
         NONE.getCallable().execute(plugin, victim, killer, game);
-    })),
-    BOXING(((plugin, victim, killer, game) -> {
+    }),
+    BOXING((plugin, victim, killer, game) -> {
         NONE.getCallable().execute(plugin, victim, killer, game);
-    })),
-    BRIDGES(((plugin, victim, killer, game) -> {
+    }),
+    BRIDGES((plugin, victim, killer, game) -> {
         boolean hasKiller = killer != null;
 
         UUID victimId = victim.getUniqueId();
@@ -85,7 +85,7 @@ public enum LoadoutType {
         if (cooldown != null && cooldown.active()) {
             cooldown.cancel();
         }
-    }));
+    });
 
     private final LoadoutTypeCallable callable;
 
