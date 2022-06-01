@@ -38,7 +38,7 @@ public class GameTeam {
     private boolean allowedToScore;
 
     public GameTeam(List<UUID> members, ChatColor color) {
-        this.members = members.stream().map(member -> new TeamMember(member, this)).collect(Collectors.toList());
+        this.members = members.stream().map(uuid -> new TeamMember(uuid, this)).collect(Collectors.toList());
         this.color = color;
         this.name = Tools.getEnumName(color.name());
         this.prefix = color + "[" + color.name().charAt(0) + "] ";
