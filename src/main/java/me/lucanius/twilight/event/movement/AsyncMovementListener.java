@@ -23,6 +23,7 @@ public class AsyncMovementListener {
 
     public AsyncMovementListener() {
         Tools.log("Initializing AsyncMovementListener...");
+
         Events.subscribe(AsyncMovementEvent.class, event -> {
             Profile profile = event.getProfile();
             if (profile == null || profile.getState() != ProfileState.PLAYING) {
@@ -39,23 +40,20 @@ public class AsyncMovementListener {
                 return;
             }
 
-            Location to = event.getTo();
-            if (!to.getChunk().isLoaded()) {
-                return;
-            }
 
             GameState state = game.getState();
             LoadoutType type = loadout.getType();
 
+            Location to = event.getTo();
             Location from = event.getFrom();
             Player player = event.getPlayer();
             boolean sumo = type == LoadoutType.SUMO;
             if (state == GameState.STARTING && sumo && (to.getX() != from.getX() || to.getZ() != from.getZ())) {
                 player.teleport(from);
+                return;
             }
 
-            boolean bridges = type == LoadoutType.BRIDGES;
-            if ((sumo && to.getBlock().isLiquid()) || (bridges && (profile.getGameProfile().getTeam().getSpawn().getY() - 30) > to.getY())) {
+            if ((sumo && to.getBlock().isLiquid()) || (type == LoadoutType.BRIDGES && (profile.getGameProfile().getTeam().getSpawn().getY() - 30) > to.getY())) {
                 type.getCallable().execute(plugin, player, plugin.getDamages().get(player.getUniqueId()), game);
             }
         });
