@@ -45,6 +45,6 @@ public class NametagLayout implements NametagAdapter {
             return lobby;
         }
 
-        return Collections.singletonList(new NametagData(team.getColor().name(), 15, team.getColor().toString(), ""));
+        return Collections.singletonList(new NametagData(team.getColor().name(), 15, team.getPrefix(), ""));
     }
 }
