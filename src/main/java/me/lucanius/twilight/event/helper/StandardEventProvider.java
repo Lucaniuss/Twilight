@@ -51,26 +51,15 @@ public class StandardEventProvider implements EventProvider {
 
     @Override
     public void publish(TwilightEvent event) {
-        thread.execute(() -> subscribers.entrySet().stream()
+        thread.submit(() -> subscribers.entrySet().stream()
                 .filter(entry -> entry.getValue().isInstance(event))
-                .forEach(entry -> entry.getKey().onEvent(event))
-        );
+                .forEach(entry -> entry.getKey().onEvent(event)));
     }
 
     @Override
     public <T extends TwilightEvent> void publish(Class<T> event) {
-        thread.execute(() -> subscribers.entrySet().stream()
+        thread.submit(() -> subscribers.entrySet().stream()
                 .filter(entry -> entry.getValue().equals(event))
-                .forEach(entry -> entry.getKey().onEvent(event))
-        );
-    }
-
-    @Override
-    public boolean execute(Runnable runnable) {
-        try {
-            return thread.submit(runnable, true).get();
-        } catch (Exception e) {
-            return false;
-        }
+                .forEach(entry -> entry.getKey().onEvent(event)));
     }
 }

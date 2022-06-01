@@ -17,10 +17,8 @@ public interface EventProvider {
 
     boolean subbed(Class<? extends AbstractEvent> event);
 
-    void publish(TwilightEvent abstractEvent);
+    void publish(TwilightEvent event);
 
     <T extends TwilightEvent> void publish(Class<T> event);
-
-    boolean execute(Runnable runnable);
 
 }

@@ -33,14 +33,13 @@ public class GameService {
     }
 
     public boolean startGame(Game game) {
-        return plugin.getEvents().execute(() -> {
-            GameStartEvent event = new GameStartEvent(game);
-            if (event.isCancelled()) {
-                return;
-            }
+        GameStartEvent event = new GameStartEvent(game);
+        if (event.isCancelled()) {
+            return false;
+        }
 
-            games.put(game.getUniqueId(), game);
-        });
+        games.put(game.getUniqueId(), game);
+        return true;
     }
 
     public void removeGame(Game game) {

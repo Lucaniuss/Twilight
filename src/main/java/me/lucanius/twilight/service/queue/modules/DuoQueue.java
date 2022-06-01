@@ -44,7 +44,7 @@ public class DuoQueue extends AbstractQueue<Set<Player>> {
 
         ((DuoQueueData) data).getElement().forEach(player -> {
             player.sendMessage(CC.translate(message));
-            plugin.getQueues().removeData(player, player.getUniqueId());
+            plugin.getQueues().removeData(player, player.getUniqueId(), callback != QueueCallback.ALLOWED);
         });
         remove(data);
     }

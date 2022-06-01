@@ -20,8 +20,8 @@ import me.lucanius.twilight.tools.Scheduler;
 import me.lucanius.twilight.tools.Tools;
 import org.bukkit.entity.Player;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Lucanius
@@ -51,30 +51,29 @@ public class GameListener {
                 new AsyncMovementListener();
             }
 
-            Set<Player> players = new HashSet<>();
-            game.getMembers().forEach(member -> {
+            List<Player> players = new ArrayList<>();
+            game.getTeams().forEach(team -> team.getMembers().forEach(member -> {
+
                 Profile profile = member.getProfile();
                 profile.setState(ProfileState.PLAYING);
-                GameProfile gameProfile = profile.getGameProfile();
 
-                GameTeam team = member.getTeam();
+                GameProfile gameProfile = profile.getGameProfile();
 
                 gameProfile.reset();
                 gameProfile.setGameId(game.getUniqueId());
                 gameProfile.setTeam(team);
 
-                Player player = member.getPlayer();
-                Tools.clearPlayer(player);
-
                 if (team.getSpawn() == null) {
                     team.detectSpawn(game.getArenaCopy() != null ? game.getArenaCopy() : game.getArena());
                 }
-                player.teleport(team.getSpawn());
 
+                Player player = member.getPlayer();
+                player.teleport(team.getSpawn());
+                Tools.clearPlayer(player);
                 plugin.getGames().giveLoadouts(player, profile, loadout);
 
                 players.add(player);
-            });
+            }));
 
             Scheduler.run(() -> {
                 // hide players to prevent players from seeing each other
@@ -91,7 +90,7 @@ public class GameListener {
                 }
             });
 
-            game.setTask(new GameTask(plugin, game)).runTaskTimer(plugin, 20L, 20L);
+            game.setTask(new GameTask(plugin, game)).runTaskTimerAsynchronously(plugin, 20L, 20L);
         });
 
         Events.subscribe(GameEndEvent.class, event -> {
@@ -101,6 +100,12 @@ public class GameListener {
             game.setCountdown(4);
 
             Loadout loadout = game.getLoadout();
+
+            game.getTeams().forEach(team -> team.getMembers().forEach(member -> {
+                Player player = member.getPlayer();
+                Tools.clearPlayer(player);
+
+            }));
         });
     }
 }

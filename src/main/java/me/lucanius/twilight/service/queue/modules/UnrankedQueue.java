@@ -12,9 +12,11 @@ import me.lucanius.twilight.service.queue.data.UnrankedQueueData;
 import me.lucanius.twilight.service.queue.menu.menus.UnrankedQueueMenu;
 import me.lucanius.twilight.tools.CC;
 import me.lucanius.twilight.tools.Tools;
+import me.lucanius.twilight.tools.functions.Voluntary;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -53,22 +55,14 @@ public class UnrankedQueue extends AbstractQueue<Player> {
                 : CC.SECOND + "You have been removed from the " + CC.MAIN + getName() + CC.SECOND + " queue.";
 
         unrankedData.getElement().sendMessage(CC.translate(message));
-        plugin.getQueues().removeData(unrankedData.getElement(), unrankedData.getElement().getUniqueId());
+        plugin.getQueues().removeData(unrankedData.getElement(), unrankedData.getElement().getUniqueId(), callback != QueueCallback.ALLOWED);
         remove(data);
     }
 
     @Override
     public QueueCallback start(AbstractQueueData<?> first, AbstractQueueData<?> second) {
         try {
-            List<GameTeam> teams = Arrays.asList(
-                    new GameTeam(Collections.singletonList(((UnrankedQueueData) first).getElement().getUniqueId()), ChatColor.BLUE),
-                    new GameTeam(Collections.singletonList(((UnrankedQueueData) second).getElement().getUniqueId()), ChatColor.RED)
-            );
-
-            Loadout loadout = first.getLoadout();
-            if (loadout == null) {
-                loadout = second.getLoadout();
-            }
+            Loadout loadout = Voluntary.ofNull(first.getLoadout()).orElse(second.getLoadout());
             if (loadout == null) {
                 return QueueCallback.NO_LOADOUT;
             }
@@ -78,9 +72,14 @@ public class UnrankedQueue extends AbstractQueue<Player> {
                 return QueueCallback.NO_ARENA;
             }
 
-            Game game = new Game(GameContext.NORMAL, loadout, arena, this, teams);
+            List<GameTeam> teams = new ArrayList<>(Arrays.asList(
+                    new GameTeam(Collections.singletonList(((UnrankedQueueData) first).getElement().getUniqueId()), ChatColor.BLUE),
+                    new GameTeam(Collections.singletonList(((UnrankedQueueData) second).getElement().getUniqueId()), ChatColor.RED)
+            ));
 
-            return plugin.getGames().startGame(game) ? QueueCallback.ALLOWED : QueueCallback.DENIED;
+            return plugin.getGames().startGame(new Game(GameContext.NORMAL, loadout, arena, this, teams))
+                    ? QueueCallback.ALLOWED
+                    : QueueCallback.DENIED;
         } catch (final Exception e) {
             e.printStackTrace();
             return QueueCallback.DENIED;

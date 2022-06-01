@@ -75,9 +75,12 @@ public class QueueService {
         plugin.getLobby().getQueueItems().forEach(item -> player.getInventory().setItem(item.getSlot(), item.getItem()));
     }
 
-    public void removeData(Player player, UUID uniqueId) {
+    public void removeData(Player player, UUID uniqueId, boolean lobby) {
         queueing.remove(uniqueId);
-        plugin.getLobby().toLobby(player, false);
+
+        if (lobby) {
+            plugin.getLobby().toLobby(player, false);
+        }
     }
 
     @SneakyThrows

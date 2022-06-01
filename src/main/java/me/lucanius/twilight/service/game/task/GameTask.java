@@ -8,6 +8,7 @@ import me.lucanius.twilight.service.game.context.GameState;
 import me.lucanius.twilight.service.game.team.GameTeam;
 import me.lucanius.twilight.service.loadout.type.LoadoutType;
 import me.lucanius.twilight.tools.CC;
+import me.lucanius.twilight.tools.Scheduler;
 import me.lucanius.twilight.tools.Tools;
 import org.bukkit.Sound;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -40,7 +41,7 @@ public class GameTask extends BukkitRunnable {
                 game.setState(GameState.ONGOING);
                 game.sendMessageWithSound(CC.SECOND + "The game has started!", Sound.FIREWORK_TWINKLE);
                 if (game.getLoadout().getType() == LoadoutType.BRIDGES) {
-                    game.getTeams().forEach(GameTeam::destroyCage);
+                    Scheduler.run(() -> game.getTeams().forEach(GameTeam::destroyCage));
                 }
                 break;
             case TERMINATED:
@@ -48,7 +49,8 @@ public class GameTask extends BukkitRunnable {
                     return;
                 }
 
-                game.clearArena();
+                Scheduler.run(game::clearArena);
+
                 game.getAlive().forEach(member -> plugin.getLobby().toLobby(member, true));
                 game.getSpectators().forEach(game::removeSpectator);
 
