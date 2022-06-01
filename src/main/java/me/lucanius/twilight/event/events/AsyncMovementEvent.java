@@ -1,7 +1,6 @@
 package me.lucanius.twilight.event.events;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import me.lucanius.twilight.event.AbstractEvent;
 import me.lucanius.twilight.service.profile.Profile;
 import org.bukkit.Location;
@@ -12,7 +11,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
  * @author Lucanius
  * @since May 25, 2022
  */
-@Getter @RequiredArgsConstructor
+@Getter
 public class AsyncMovementEvent extends AbstractEvent {
 
     private final PlayerMoveEvent originalEvent;
@@ -27,5 +26,7 @@ public class AsyncMovementEvent extends AbstractEvent {
         this.profile = plugin.getProfiles().get(player.getUniqueId());
         this.to = originalEvent.getTo();
         this.from = originalEvent.getFrom();
+
+        plugin.getEvents().publish(this);
     }
 }
