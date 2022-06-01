@@ -21,6 +21,14 @@
             <id>fawe-repo</id>
             <url>https://ci.athion.net/job/FastAsyncWorldEdit/ws/mvn/</url>
         </repository>
+        <repository>
+            <id>edge-repo</id>
+            <url>https://raw.github.com/Lucaniuss/Edge/repository/</url>
+        </repository>
+        <repository>
+            <id>label-repo</id>
+            <url>https://raw.github.com/Lucaniuss/Label/repository/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -45,15 +53,25 @@
             <groupId>com.sk89q</groupId>
             <artifactId>worldedit</artifactId>
             <version>6.0.0-SNAPSHOT</version>
-            <systemPath>${project.basedir}/libs/worldedit-6.0.0-SNAPSHOT.jar</systemPath>
-            <scope>system</scope>
+            <scope>provided</scope>
         </dependency>
         <dependency> <!-- FastAsyncWorldEdit -->
             <groupId>com.boydti</groupId>
             <artifactId>fawe-api</artifactId>
             <version>latest</version>
-            <systemPath>${project.basedir}/libs/FastAsyncWorldEdit.jar</systemPath>
-            <scope>system</scope>
+            <scope>provided</scope>
+        </dependency>
+        <dependency> <!-- Edge -->
+            <groupId>me.lucanius.edge</groupId>
+            <artifactId>Edge</artifactId>
+            <version>1.0</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency> <!-- Label -->
+            <groupId>me.lucanius.label</groupId>
+            <artifactId>Label</artifactId>
+            <version>1.0</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 
