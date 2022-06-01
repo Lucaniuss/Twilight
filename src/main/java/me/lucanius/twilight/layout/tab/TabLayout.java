@@ -1,7 +1,7 @@
 package me.lucanius.twilight.layout.tab;
 
 import me.lucanius.edge.adapter.TabAdapter;
-import me.lucanius.edge.context.TabColumn;
+import me.lucanius.edge.column.TabColumn;
 import me.lucanius.edge.entry.TabData;
 import me.lucanius.twilight.Twilight;
 import me.lucanius.twilight.tools.CC;
