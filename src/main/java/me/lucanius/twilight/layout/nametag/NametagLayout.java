@@ -25,7 +25,7 @@ public class NametagLayout implements NametagAdapter {
     @Override
     public List<NametagData> getData(Player player) {
         Profile profile = plugin.getProfiles().get(player.getUniqueId());
-        List<NametagData> lobby = Collections.singletonList(new NametagData("LOBBY", 10, CC.GOLD, ""));
+        List<NametagData> lobby = Collections.singletonList(new NametagData("LOBBY", 10, CC.GOLD, "", false));
 
         if (profile == null) {
             return lobby;
@@ -45,6 +45,6 @@ public class NametagLayout implements NametagAdapter {
             return lobby;
         }
 
-        return Collections.singletonList(new NametagData(team.getColor().name(), 15, team.getPrefix(), ""));
+        return Collections.singletonList(new NametagData(team.getColor().name(), 15, team.getPrefix(), "", game.getLoadout().isHealthShow()));
     }
 }
