@@ -8,6 +8,7 @@ import me.lucanius.twilight.Twilight;
 import me.lucanius.twilight.service.loadout.personal.PersonalLoadout;
 import me.lucanius.twilight.service.profile.modules.EditorProfile;
 import me.lucanius.twilight.service.profile.modules.GameProfile;
+import me.lucanius.twilight.service.profile.modules.StatsProfile;
 import me.lucanius.twilight.tools.Scheduler;
 import me.lucanius.twilight.tools.Tools;
 import org.bson.Document;
@@ -33,6 +34,7 @@ public class Profile {
     private ProfileState state;
     private GameProfile gameProfile;
     private EditorProfile editorProfile;
+    private StatsProfile statsProfile;
 
     private int pingRange;
     private boolean loaded;
