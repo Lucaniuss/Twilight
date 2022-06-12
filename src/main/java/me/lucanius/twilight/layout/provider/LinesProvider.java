@@ -20,8 +20,6 @@ import java.util.UUID;
  */
 public abstract class LinesProvider extends AbstractProvider {
 
-    private final String signature = CC.GRAY + CC.ITALIC + "lucanius.me";
-
     public List<String> getLobby(Voluntary<Party> party) {
         List<String> lines = new ArrayList<>();
 
@@ -31,7 +29,7 @@ public abstract class LinesProvider extends AbstractProvider {
         lines.add(CC.WHITE + "In Queue: " + CC.SECOND + plugin.getQueues().getSize());
         party.ifPresent(value -> lines.addAll(getParty(value)));
         lines.add(" ");
-        lines.add(signature);
+        lines.add(CC.SIGNATURE);
         lines.add(CC.SMALL_BAR);
 
         return lines;
@@ -50,7 +48,7 @@ public abstract class LinesProvider extends AbstractProvider {
         lines.add(CC.ICON + CC.WHITE + "Time: " + CC.SECOND + data.getTime());
         lines.add(CC.ICON + CC.WHITE + "Loadout: " + CC.SECOND + data.getLoadout().getName());
         lines.add(" ");
-        lines.add(signature);
+        lines.add(CC.SIGNATURE);
         lines.add(CC.SMALL_BAR);
 
         return lines;
@@ -95,7 +93,7 @@ public abstract class LinesProvider extends AbstractProvider {
                 break;
         }
         lines.add(" ");
-        lines.add(signature);
+        lines.add(CC.SIGNATURE);
         lines.add(CC.SMALL_BAR);
 
         return lines;

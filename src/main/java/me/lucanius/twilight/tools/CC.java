@@ -46,6 +46,7 @@ public final class CC {
     public final String THIRD = YELLOW;
     public final String ICON = GRAY + BOLD + " ◈ ";
     public final String GAME_PREFIX = GRAY + "(" + MAIN + "Game" + GRAY + ") ";
+    public final String SIGNATURE = CC.GRAY + CC.ITALIC + "lucanius.me";
 
     public String translate(String string) {
         return ChatColor.translateAlternateColorCodes('&', string);
