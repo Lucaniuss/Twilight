@@ -5,6 +5,7 @@ import com.mongodb.client.model.UpdateOptions;
 import lombok.Getter;
 import lombok.Setter;
 import me.lucanius.twilight.Twilight;
+import me.lucanius.twilight.service.loadout.Loadout;
 import me.lucanius.twilight.service.loadout.personal.PersonalLoadout;
 import me.lucanius.twilight.service.profile.modules.EditorProfile;
 import me.lucanius.twilight.service.profile.modules.GameProfile;
@@ -13,6 +14,7 @@ import me.lucanius.twilight.tools.Scheduler;
 import me.lucanius.twilight.tools.Tools;
 import org.bson.Document;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -44,9 +46,11 @@ public class Profile {
         this.idToString = uniqueId.toString();
         this.loadouts = new HashMap<>();
 
+        Collection<Loadout> loadouts = plugin.getLoadouts().getAll();
         this.state = ProfileState.LOBBY;
         this.gameProfile = new GameProfile();
-        this.editorProfile = new EditorProfile(plugin.getLoadouts().getAll());
+        this.editorProfile = new EditorProfile(loadouts);
+        this.statsProfile = new StatsProfile(loadouts);
 
         this.pingRange = -1;
 
