@@ -4,13 +4,14 @@ import me.lucanius.edge.adapter.TabAdapter;
 import me.lucanius.edge.column.TabColumn;
 import me.lucanius.edge.entry.TabData;
 import me.lucanius.twilight.Twilight;
+import me.lucanius.twilight.service.loadout.Loadout;
+import me.lucanius.twilight.service.profile.Profile;
 import me.lucanius.twilight.tools.CC;
+import me.lucanius.twilight.tools.atomic.TwilightNumber;
 import org.bukkit.entity.Player;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author Lucanius
@@ -23,27 +24,43 @@ public class TabLayout implements TabAdapter {
 
     @Override
     public List<String> getHeader(Player player) {
-        return Arrays.asList(" ", CC.BLUE + CC.BOLD + "Edge", " ");
+        return Arrays.asList(" ", CC.MAIN + CC.BOLD + "Twilight", " ");
     }
 
     @Override
     public List<String> getFooter(Player player) {
-        return Arrays.asList(" ", CC.GRAY + CC.ITALIC + "lucanius.me", " ");
+        return Arrays.asList(" ", CC.SIGNATURE, " ");
     }
 
     @Override
     public Set<TabData> getEntries(Player player) {
         Set<TabData> entries = new HashSet<>();
+        Profile profile = plugin.getProfiles().get(player.getUniqueId());
 
-        entries.add(new TabData(TabColumn.MIDDLE, 1, CC.BLUE + CC.BOLD + "Edge"));
-        entries.add(new TabData(TabColumn.MIDDLE, 2, CC.GRAY + CC.ITALIC + "lucanius.me"));
+        entries.add(new TabData(TabColumn.LEFT, 2, CC.WHITE + "Online: " + CC.SECOND + plugin.getOnline().size()));
+        entries.add(new TabData(TabColumn.MIDDLE, 2, CC.WHITE + "In Game: " + CC.SECOND + plugin.getGames().getSize()));
+        entries.add(new TabData(TabColumn.RIGHT, 2, CC.WHITE + "In Queue: " + CC.SECOND + plugin.getQueues().getSize()));
 
-        entries.add(new TabData(TabColumn.LEFT, 4, "Left"));
-        entries.add(new TabData(TabColumn.MIDDLE, 4, "Center"));
-        entries.add(new TabData(TabColumn.RIGHT, 4, "Right"));
-        entries.add(new TabData(TabColumn.FAR_RIGHT, 4, "Far Right"));
+        entries.add(new TabData(TabColumn.LEFT, 19, CC.SIGNATURE));
+        entries.add(new TabData(TabColumn.MIDDLE, 19, CC.GRAY + CC.ITALIC + "github.com/Lucaniuss"));
+        entries.add(new TabData(TabColumn.RIGHT, 19, CC.GRAY + CC.ITALIC + "lucA#0999"));
 
-        entries.add(new TabData(TabColumn.MIDDLE, 19, "Your Skin", plugin.getEdge().getSkin(player.getUniqueId())));
+        TwilightNumber number = new TwilightNumber();
+
+        switch (profile.getState()) {
+            case LOBBY:
+                Collection<Loadout> loadouts = plugin.getLoadouts().getAll().stream().filter(Loadout::isRanked).collect(Collectors.toList());
+                loadouts.forEach(loadout -> {
+
+                });
+                break;
+            case QUEUE:
+                break;
+            case PLAYING:
+                break;
+            case SPECTATING:
+                break;
+        }
 
         return entries;
     }
