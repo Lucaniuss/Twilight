@@ -4,9 +4,8 @@ An open-sourced simple Practice Plugin made for the Spigot API (Unfinished)
 ***
 
 ### Contact
-You can contact me on discord via my tag or server:
+You can contact me on discord via my tag:
 * My discord - lucA#0999
-* My server - https://discord.biove.dev/
 
 ### Contributing
 You're free to contribute to this project by making any kind of pull requests. If I find your pull request useful I will approve it and merge them in the main project.
